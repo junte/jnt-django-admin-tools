@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "jnt-django-admin-tools"
+version = "0.8.2"
+description="A collection of tools for the django administration interface"
+authors = ["Junte <tech@junte.it>"]
+classifiers=[
+        'Development Status :: 4 - Beta',
+        'Environment :: Web Environment',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Framework :: Django :: 1.7',
+        'Framework :: Django :: 1.8',
+        'Framework :: Django :: 1.9',
+        'Framework :: Django :: 1.10',
+        'Framework :: Django :: 1.11',
+        'Topic :: Software Development :: Libraries :: Python Modules'
+]
+
+packages = [
+    { include = "admin_tools", from ="src" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+django = "2.*"
+sphinx = "*"
+
+[tool.poetry.dev-dependencies]
+"flake8" = "*"
+pytest = "*"
+pytest-django = "*"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
