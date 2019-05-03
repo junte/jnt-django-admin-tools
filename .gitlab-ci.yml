@@ -1,0 +1,29 @@
+image: docker:latest
+
+variables:
+  DOCKER_DRIVER: overlay2
+  GIT_STRATEGY: none
+
+services:
+  - docker:dind
+
+stages:
+  - docs
+
+pages:
+  image: python:3.6-alpine
+  stage: docs
+  variables:
+    GIT_DEPTH: 5
+    GIT_STRATEGY: fetch
+  script:
+    - pip install sphinx
+    - cd docs
+    - make html
+    - mv _build/html public
+  artifacts:
+    paths:
+      - public
+
+
+
