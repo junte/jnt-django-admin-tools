@@ -17,6 +17,7 @@ pages:
     GIT_DEPTH: 5
     GIT_STRATEGY: fetch
   script:
+    - apt-get install build-essential
     - pip install sphinx
     - cd docs
     - make html
