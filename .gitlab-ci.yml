@@ -11,7 +11,7 @@ stages:
   - docs
 
 pages:
-  image: python:3.6-alpine
+  image: python:3.6-slim
   stage: docs
   variables:
     GIT_DEPTH: 5
