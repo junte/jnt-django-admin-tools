@@ -24,10 +24,13 @@ pages:
     - pip install sphinx
     - cd docs
     - make html
-    - mv _build/html public
+    - mkdir public
+    - mv _build/html ../public
   artifacts:
     paths:
       - public
+  only:
+    - master
 
 
 
