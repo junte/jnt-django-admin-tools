@@ -20,8 +20,7 @@ pages:
     - apt-get update && apt-get install -y build-essential
     - pip install poetry
     - poetry config settings.virtualenvs.create false
-    - poetry install --no-dev --no-interaction --no-ansi
-    - pip install sphinx
+    - poetry install --no-dev --no-interaction --no-ansi -E sphinx
     - cd docs
     - make html
     - mkdir public
