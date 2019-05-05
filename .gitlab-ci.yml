@@ -11,20 +11,13 @@ stages:
   - docs
 
 pages:
-  image: python:3.6-slim
+  image: junte/sphinx-build
   stage: docs
   variables:
     GIT_DEPTH: 5
     GIT_STRATEGY: fetch
   script:
-    - apt-get update && apt-get install -y build-essential
-    - pip install poetry
-    - poetry config settings.virtualenvs.create false
-    - poetry install --no-dev --no-interaction --no-ansi -E sphinx
-    - cd docs
-    - make html
-    - mkdir public
-    - mv _build/html ../public
+    - build_docs
   artifacts:
     paths:
       - public
