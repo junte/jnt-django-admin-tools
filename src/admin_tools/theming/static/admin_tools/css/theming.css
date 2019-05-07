@@ -15,6 +15,9 @@
       (need to restore 40px on branding+user-tools instead) */
     padding-left: 0;
     padding-right: 0;
+    display: block;
+    line-height: 40px;
+    height: 40px;
 }
 
 #header #branding h1 {
