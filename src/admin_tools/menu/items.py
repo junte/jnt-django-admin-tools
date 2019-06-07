@@ -1,14 +1,10 @@
+from admin_tools.utils import AppListElementMixin
 from django.apps import apps as django_apps
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from admin_tools.utils import AppListElementMixin
 
 
-class MenuItem(object):
+class MenuItem:
     """
     This is the base class for custom menu items.
     A menu item can have the following properties:
@@ -116,7 +112,7 @@ class MenuItem(object):
         """
         current_url = request.get_full_path()
         return self.url == current_url or \
-            len([c for c in self.children if c.is_selected(request)]) > 0
+               len([c for c in self.children if c.is_selected(request)]) > 0
 
     def is_empty(self):
         """
