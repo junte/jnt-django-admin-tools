@@ -8,3 +8,5 @@ build:
 
 publish:
 	poetry publish
+
+release: build publish
