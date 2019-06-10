@@ -1,6 +1,7 @@
-from admin_tools.decorators import admin_changelist_link, admin_link
+from admin_tools.decorators import admin_changelist_link, admin_field, admin_link
 from django.contrib import admin
 from django.contrib.auth.models import Group
+from django.utils.safestring import mark_safe
 
 from test_app.forms import GroupAdminForm
 from test_app.models import Bar, Foo
@@ -26,9 +27,13 @@ class FooAdmin(admin.ModelAdmin):
 
 @admin.register(Bar)
 class BarAdmin(admin.ModelAdmin):
-    fields = ('name', 'foos')
-    readonly_fields = ('foos',)
+    fields = ('name', 'foos', 'custom_field')
+    readonly_fields = ('foos', 'custom_field')
 
     @admin_changelist_link('foos', query_string=lambda bar: f'bar_id={bar.pk}')
     def foos(self, foos):
         return ', '.join(str(foo) for foo in foos.all())
+
+    @admin_field('Custom field')
+    def custom_field(self, obj):
+        return mark_safe('<h1>custom field</h1>')

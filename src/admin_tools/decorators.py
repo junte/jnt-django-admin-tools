@@ -78,3 +78,32 @@ def admin_changelist_link(attr, short_description=None, empty_description="-", q
         return field_func
 
     return wrap
+
+
+def admin_field(short_description=None, empty_description='-', allow_tags=True):
+    """Decorator used for rendering a link to a related model in
+    the admin detail page.
+    attr (str):
+        Name of the related field.
+    short_description (str):
+        Name if the field.
+    allow_tags (bool):
+        Allow tags.
+    The wrapped method receives the related object and should
+    return the link text.
+    Usage:
+        @admin_link('change password', _('Change password'))
+        def change_password(self, obj):
+            return format_html(f'<a href="{obj.id}/password/">change password</a>')
+    """
+
+    def wrap(func):
+        @wraps(func)
+        def field_func(self, obj):
+            return func(self, obj)
+
+        field_func.short_description = short_description
+        field_func.allow_tags = allow_tags
+        return field_func
+
+    return wrap
