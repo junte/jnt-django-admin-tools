@@ -111,8 +111,8 @@ class MenuItem:
         descendants URL is equals to the current URL.
         """
         current_url = request.get_full_path()
-        return self.url == current_url or \
-               len([c for c in self.children if c.is_selected(request)]) > 0
+        return (self.url == current_url or
+                len([c for c in self.children if c.is_selected(request)]) > 0)
 
     def is_empty(self):
         """

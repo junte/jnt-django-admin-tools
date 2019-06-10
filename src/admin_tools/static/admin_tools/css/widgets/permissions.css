@@ -1,0 +1,10 @@
+tbody th {
+    background-color: #f3f4f9;
+    color: #59677e;
+}
+
+.table tbody td label {
+    width: 12px;
+    padding: 0 5px 0 0;
+    margin-top: 2px;
+}

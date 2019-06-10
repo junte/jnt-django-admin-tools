@@ -8,16 +8,12 @@ Menu template tags, the following menu tags are available:
 To load the menu tags in your templates: ``{% load admin_tools_menu_tags %}``.
 """
 
-from django import template
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
-
-from admin_tools.utils import get_admin_site_name
 from admin_tools.menu import items
 from admin_tools.menu.models import Bookmark
 from admin_tools.menu.utils import get_admin_menu
+from admin_tools.utils import get_admin_site_name
+from django import template
+from django.urls import reverse
 
 register = template.Library()
 tag_func = register.inclusion_tag(
@@ -56,6 +52,8 @@ def admin_tools_render_menu(context, menu=None):
         'admin_url': reverse('%s:index' % get_admin_site_name(context)),
     })
     return context
+
+
 admin_tools_render_menu = tag_func(admin_tools_render_menu)
 
 
@@ -74,6 +72,8 @@ def admin_tools_render_menu_item(context, item, index=None):
         'admin_url': reverse('%s:index' % get_admin_site_name(context)),
     })
     return context
+
+
 admin_tools_render_menu_item = tag_func(admin_tools_render_menu_item)
 
 
@@ -91,4 +91,6 @@ def admin_tools_render_menu_css(context, menu=None):
         'css_files': menu.Media.css,
     })
     return context
+
+
 admin_tools_render_menu_css = tag_func(admin_tools_render_menu_css)

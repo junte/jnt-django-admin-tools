@@ -11,6 +11,7 @@ import math
 
 from django import template
 from django.db import IntegrityError
+
 try:
     from django.urls import reverse
 except ImportError:
@@ -77,6 +78,8 @@ def admin_tools_render_dashboard(context, location='index', dashboard=None):
         'admin_url': reverse('%s:index' % get_admin_site_name(context)),
     })
     return context
+
+
 admin_tools_render_dashboard = tag_func(admin_tools_render_dashboard)
 
 
@@ -92,6 +95,8 @@ def admin_tools_render_dashboard_module(context, module):
         'admin_url': reverse('%s:index' % get_admin_site_name(context)),
     })
     return context
+
+
 admin_tools_render_dashboard_module = tag_func(
     admin_tools_render_dashboard_module
 )
@@ -121,4 +126,6 @@ def admin_tools_render_dashboard_css(
         'css_files': dashboard.Media.css,
     })
     return context
+
+
 admin_tools_render_dashboard_css = tag_func(admin_tools_render_dashboard_css)

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jnt-django-admin-tools"
-version = "0.8.5"
+version = "0.8.6"
 description="A collection of tools for the django administration interface"
 authors = ["Junte <tech@junte.it>"]
 classifiers=[
@@ -25,7 +25,7 @@ python = "^3.6"
 django = "2.*"
 
 [tool.poetry.dev-dependencies]
-"flake8" = "*"
+flake8 = "*"
 pytest = "*"
 pytest-django = "*"
 sphinx = "*"

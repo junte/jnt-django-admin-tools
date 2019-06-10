@@ -2,21 +2,13 @@
 Module where admin tools dashboard modules classes are defined.
 """
 
+from admin_tools.utils import AppListElementMixin, uniquify
 from django.apps import apps as django_apps
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
 from django.forms.utils import flatatt
-
-from django.utils.itercompat import is_iterable
-from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
 
-from admin_tools.utils import AppListElementMixin, uniquify
 
-
-class DashboardModule(object):
+class DashboardModule:
     """
     Base class for all dashboard modules.
     Dashboard modules have the following properties:
@@ -150,8 +142,8 @@ class DashboardModule(object):
         True
         """
         return self.pre_content is None and \
-            self.post_content is None and \
-            len(self.children) == 0
+               self.post_content is None and \
+               len(self.children) == 0
 
     def render_css_classes(self):
         """
@@ -279,7 +271,7 @@ class Group(DashboardModule):
         # and then prepends them with this group's id
         seen = set()
         for id, module in enumerate(self.children):
-            proposed_id = "%s_%s" % (self.id, module.id or id+1)
+            proposed_id = "%s_%s" % (self.id, module.id or id + 1)
             module.id = uniquify(proposed_id, seen)
             module._prepare_children()
 

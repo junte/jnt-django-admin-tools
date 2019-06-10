@@ -1,4 +1,3 @@
-from __future__ import with_statement
 import warnings
 from unittest import TestCase
 
@@ -11,7 +10,7 @@ class DeprecationTest(TestCase):
         if hasattr(warnings, 'catch_warnings'):
             with warnings.catch_warnings(record=True) as w:
                 warnings.simplefilter("always")
-                obj = cls(*args, **kwargs)
+                cls(*args, **kwargs)
 
                 assert len(w) == 1
                 assert issubclass(w[-1].category, DeprecationWarning)
@@ -21,7 +20,7 @@ class DeprecationTest(TestCase):
         if hasattr(warnings, 'catch_warnings'):
             with warnings.catch_warnings(record=True) as w:
                 warnings.simplefilter("always")
-                obj = cls(*args, **kwargs)
+                cls(*args, **kwargs)
                 assert len(w) == 0
 
     def test_dashboard(self):

@@ -1,7 +1,16 @@
 from admin_tools.decorators import admin_changelist_link, admin_link
 from django.contrib import admin
+from django.contrib.auth.models import Group
 
+from test_app.forms import GroupAdminForm
 from test_app.models import Bar, Foo
+
+admin.site.unregister(Group)
+
+
+@admin.register(Group)
+class GroupAdmin(admin.ModelAdmin):
+    form = GroupAdminForm
 
 
 @admin.register(Foo)

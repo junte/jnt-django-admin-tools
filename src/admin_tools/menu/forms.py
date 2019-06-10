@@ -1,12 +1,7 @@
-try:
-    from urllib.parse import unquote
-except ImportError:
-    # Python 2 compatibility
-    from urllib import unquote
-
-from django import forms
+from urllib.parse import unquote
 
 from admin_tools.menu.models import Bookmark
+from django import forms
 
 
 class BookmarkForm(forms.ModelForm):
