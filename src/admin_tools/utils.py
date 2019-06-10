@@ -1,20 +1,13 @@
 """
 Admin ui common utilities.
 """
+import warnings
 from fnmatch import fnmatch
+from importlib import import_module
 
 from django.conf import settings
 from django.contrib import admin
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
-try:
-    from importlib import import_module
-except ImportError:
-    # Django < 1.9 and Python < 2.7
-    from django.utils.importlib import import_module
-import warnings
+from django.urls import reverse
 
 
 def uniquify(value, seen_values):
@@ -120,7 +113,7 @@ def filter_models(request, models, exclude):
     return result
 
 
-class AppListElementMixin(object):
+class AppListElementMixin:
     """
     Mixin class used by both the AppListDashboardModule and the
     AppListMenuItem (to honor the DRY concept).
@@ -132,25 +125,25 @@ class AppListElementMixin(object):
 
         if self.include_list:
             warnings.warn(
-               "`include_list` is deprecated for ModelList and AppList and "
-               "will be removed in future releases. Please use `models` "
-               "instead.",
-               DeprecationWarning
+                "`include_list` is deprecated for ModelList and AppList and "
+                "will be removed in future releases. Please use `models` "
+                "instead.",
+                DeprecationWarning
             )
 
         if self.exclude_list:
             warnings.warn(
-               "`exclude_list` is deprecated for ModelList and AppList and "
-               "will be removed in future releases. Please use `exclude` "
-               "instead.",
-               DeprecationWarning
+                "`exclude_list` is deprecated for ModelList and AppList and "
+                "will be removed in future releases. Please use `exclude` "
+                "instead.",
+                DeprecationWarning
             )
 
         included = self.models[:]
-        included.extend([elem+"*" for elem in self.include_list])
+        included.extend([elem + "*" for elem in self.include_list])
 
         excluded = self.exclude[:]
-        excluded.extend([elem+"*" for elem in self.exclude_list])
+        excluded.extend([elem + "*" for elem in self.exclude_list])
         if self.exclude_list and not included:
             included = ["*"]
         return filter_models(request, included, excluded)

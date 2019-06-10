@@ -5,6 +5,6 @@ class AdminToolsConfig(AppConfig):
     name = 'admin_tools'
 
     def ready(self):
-        super(AdminToolsConfig, self).ready()
+        super().ready()
         # load admin_tools checks
         from . import checks
