@@ -1,18 +1,8 @@
-image: docker:latest
-
 variables:
   DOCKER_DRIVER: overlay2
-  GIT_STRATEGY: none
-
-services:
-  - docker:dind
-
-stages:
-  - docs
 
 pages:
   image: junte/sphinx-build
-  stage: docs
   variables:
     GIT_DEPTH: 5
     GIT_STRATEGY: fetch
@@ -23,6 +13,3 @@ pages:
       - public
   only:
     - master
-
-
-

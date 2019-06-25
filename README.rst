@@ -1,6 +1,8 @@
 jnt-django-admin-tools
 ======================
 
+`docs <https://junte.gitlab.io/packages/public/django/jnt-django-admin-tools>`_
+
 django-admin-tools is a collection of extensions/tools for the default django 
 administration interface, it includes:
 
