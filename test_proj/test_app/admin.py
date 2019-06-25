@@ -1,8 +1,9 @@
-from admin_tools.admin import AdminAutocompleteFieldsMixin
 from admin_tools.decorators import admin_changelist_link, admin_field, admin_link
+from admin_tools.mixins import AdminAutocompleteFieldsMixin
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
+
 from test_app.forms import GroupAdminForm
 from test_app.models import Bar, Foo
 
