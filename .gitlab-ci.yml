@@ -1,11 +1,5 @@
-variables:
-  DOCKER_DRIVER: overlay2
-
 pages:
   image: junte/sphinx-build
-  variables:
-    GIT_DEPTH: 5
-    GIT_STRATEGY: fetch
   script:
     - build_docs
   artifacts:
