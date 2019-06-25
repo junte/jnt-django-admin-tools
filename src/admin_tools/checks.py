@@ -1,8 +1,8 @@
 from itertools import chain
 
 from django.contrib.admin.checks import ModelAdminChecks
-from django.core.checks import register, Warning
-from django.template.loader import get_template, TemplateDoesNotExist
+from django.core.checks import Warning, register
+from django.template.loader import TemplateDoesNotExist, get_template
 
 W001 = Warning(
     'You must add "admin_tools.template_loaders.Loader" in your '
@@ -35,6 +35,6 @@ class AutoCompleteModelAdminChecks(ModelAdminChecks):
             return []
 
         return list(chain.from_iterable([
-            self._check_autocomplete_fields_item(obj, field_name, 'autocomplete_fields[%d]' % index)
+            self._check_autocomplete_fields_item(obj, field_name, f'autocomplete_fields[{index:d}]')
             for index, field_name in enumerate(obj.get_autocomplete_fields(None))
         ]))
