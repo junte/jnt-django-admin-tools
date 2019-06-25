@@ -1,8 +1,8 @@
+from admin_tools.admin import AdminAutocompleteFieldsMixin
 from admin_tools.decorators import admin_changelist_link, admin_field, admin_link
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
-
 from test_app.forms import GroupAdminForm
 from test_app.models import Bar, Foo
 
@@ -15,7 +15,7 @@ class GroupAdmin(admin.ModelAdmin):
 
 
 @admin.register(Foo)
-class FooAdmin(admin.ModelAdmin):
+class FooAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
     list_display = ('name', 'bar_link')
     fields = ('name', 'bar', 'bar_link')
     readonly_fields = ('bar_link',)
@@ -29,6 +29,7 @@ class FooAdmin(admin.ModelAdmin):
 class BarAdmin(admin.ModelAdmin):
     fields = ('name', 'foos', 'custom_field')
     readonly_fields = ('foos', 'custom_field')
+    search_fields = ('name',)
 
     @admin_changelist_link('foos', query_string=lambda bar: f'bar_id={bar.pk}')
     def foos(self, foos):
