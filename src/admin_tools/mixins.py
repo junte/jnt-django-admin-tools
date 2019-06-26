@@ -1,11 +1,11 @@
-from admin_tools.checks import AutoCompleteModelAdminChecks
+from itertools import chain
+
+from django.contrib.admin.checks import BaseModelAdminChecks
 from django.contrib.admin.utils import flatten_fieldsets
 from django.db.models import ForeignKey, ManyToManyField
 
 
 class AdminAutocompleteFieldsMixin:
-    checks_class = AutoCompleteModelAdminChecks
-
     def get_autocomplete_fields(self, request):
         autocomplete_fields = super().get_autocomplete_fields(request)
 
@@ -38,3 +38,20 @@ class AdminAutocompleteFieldsMixin:
 
     def is_registered_model(self, model):
         return bool(self.admin_site._registry.get(model))
+
+    def check(self, **kwargs):
+        return [
+            *super().check(**kwargs),
+            *self._check_autocomplete_mixin(),
+        ]
+
+    def _check_autocomplete_mixin(self):
+        if 'autocomplete_fields' in self.__class__.__dict__.keys():
+            return []
+
+        check_autocomplete_fields_item = BaseModelAdminChecks()._check_autocomplete_fields_item
+
+        return list(chain.from_iterable([
+            check_autocomplete_fields_item(self, field_name, f'autocomplete_fields[{index:d}]')
+            for index, field_name in enumerate(self.get_autocomplete_fields(None))
+        ]))
