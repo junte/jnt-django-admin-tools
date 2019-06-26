@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
 
 from test_app.forms import GroupAdminForm
-from test_app.models import Bar, Foo
+from test_app.models import Bar, Foo, Baz
 
 admin.site.unregister(Group)
 
@@ -20,6 +20,7 @@ class FooAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
     list_display = ('name', 'bar_link')
     fields = ('name', 'bar', 'bar_link')
     readonly_fields = ('bar_link',)
+    search_fields = ('name',)
 
     @admin_link('bar')
     def bar_link(self, obj):
@@ -27,7 +28,7 @@ class FooAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
 
 
 @admin.register(Bar)
-class BarAdmin(admin.ModelAdmin):
+class BarAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
     fields = ('name', 'foos', 'custom_field')
     readonly_fields = ('foos', 'custom_field')
     search_fields = ('name',)
@@ -39,3 +40,8 @@ class BarAdmin(admin.ModelAdmin):
     @admin_field('Custom field')
     def custom_field(self, obj):
         return mark_safe('<h1>custom field</h1>')
+
+
+@admin.register(Baz)
+class BazAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
+    pass
