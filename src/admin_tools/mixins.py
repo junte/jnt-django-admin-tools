@@ -26,12 +26,14 @@ class AdminAutocompleteFieldsMixin(admin.ModelAdmin):
             field.name
             for field in self.model._meta.get_fields()
             if isinstance(field, (ForeignKey, ManyToManyField)) and
-               self.admin_site._registry.get(field.remote_field.model)
+               self.is_registered_model(field.remote_field.model)
         )
 
     def _get_admin_fields(self, request):
         if self.fields:
             return self.get_fields(request)
-
-        if self.fieldsets:
+        elif self.fieldsets:
             return flatten_fieldsets(self.get_fieldsets(request))
+
+    def is_registered_model(self, model):
+        return bool(self.admin_site._registry.get(model))
