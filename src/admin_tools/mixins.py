@@ -24,7 +24,7 @@ class AdminAutocompleteFieldsMixin:
         return (
             field.name
             for field in self.model._meta.get_fields()
-            if self.is_relation_field(field)
+            if self._is_relation_field(field)
         )
 
     def _get_admin_fields(self, request):
@@ -33,11 +33,9 @@ class AdminAutocompleteFieldsMixin:
         elif self.fieldsets:
             return flatten_fieldsets(self.get_fieldsets(request))
 
-    def is_relation_field(self, field):
-        return isinstance(field, (ForeignKey, ManyToManyField)) and self.is_registered_model(field.remote_field.model)
-
-    def is_registered_model(self, model):
-        return bool(self.admin_site._registry.get(model))
+    def _is_relation_field(self, field):
+        return (isinstance(field, (ForeignKey, ManyToManyField))
+                and bool(self.admin_site._registry.get(field.remote_field.model)))
 
     def check(self, **kwargs):
         return [
