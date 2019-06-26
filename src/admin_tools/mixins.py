@@ -25,7 +25,8 @@ class AdminAutocompleteFieldsMixin(admin.ModelAdmin):
         return (
             field.name
             for field in self.model._meta.get_fields()
-            if isinstance(field, (ForeignKey, ManyToManyField))
+            if isinstance(field, (ForeignKey, ManyToManyField)) and
+               self.admin_site._registry.get(field.remote_field.model)
         )
 
     def _get_admin_fields(self, request):

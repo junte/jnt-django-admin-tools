@@ -26,7 +26,7 @@ def check_admin_tools_configuration(app_configs=None, **kwargs):
 class AutoCompleteModelAdminChecks(ModelAdminChecks):
     def check(self, admin_obj, **kwargs):
         return [
-            *super().check(admin_obj),
+            *super().check(admin_obj, **kwargs),
             *self._check_autocomplete_fields_auto(admin_obj),
         ]
 
