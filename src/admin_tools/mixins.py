@@ -1,10 +1,9 @@
 from admin_tools.checks import AutoCompleteModelAdminChecks
-from django.contrib import admin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.db.models import ForeignKey, ManyToManyField
 
 
-class AdminAutocompleteFieldsMixin(admin.ModelAdmin):
+class AdminAutocompleteFieldsMixin:
     checks_class = AutoCompleteModelAdminChecks
 
     def get_autocomplete_fields(self, request):
