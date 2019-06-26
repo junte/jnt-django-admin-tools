@@ -13,7 +13,7 @@ class AdminAutocompleteFieldsMixin(admin.ModelAdmin):
         if autocomplete_fields:
             return autocomplete_fields
 
-        admin_fields = flatten_fieldsets(self.get_fieldsets(request))
+        admin_fields = self._get_admin_fields(request)
         relation_fields = self._get_relation_fields()
 
         if not admin_fields:
@@ -27,3 +27,10 @@ class AdminAutocompleteFieldsMixin(admin.ModelAdmin):
             for field in self.model._meta.get_fields()
             if isinstance(field, (ForeignKey, ManyToManyField))
         )
+
+    def _get_admin_fields(self, request):
+        if self.fields:
+            return self.get_fields(request)
+
+        if self.fieldsets:
+            return flatten_fieldsets(self.get_fieldsets(request))
