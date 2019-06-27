@@ -34,6 +34,7 @@ Contents:
    multiple_admin_sites
    menu
    dashboard
+   decorators
    integration
    contributing
    testing
