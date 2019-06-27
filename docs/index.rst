@@ -36,6 +36,7 @@ Contents:
    dashboard
    fields
    widgets
+   decorators
    integration
    contributing
    testing
