@@ -24,7 +24,9 @@ def admin_link(attr, short_description=None, empty_description="-"):
 
     The wrapped method receives the related object and should
     return the link text.
+
     Usage::
+
         from django.contrib import admin
         from admin_tools.decorators import admin_link
         from test_app.models import Foo
@@ -76,7 +78,9 @@ def admin_changelist_link(attr, short_description=None, empty_description="-", q
 
     The wrapped method receives the related object and
     should return the link text.
+
     Usage::
+
         from admin_tools.decorators import admin_changelist_link
         from django.contrib import admin
         from test_app.models import Bar
@@ -121,7 +125,9 @@ def admin_field(short_description=None, allow_tags=True):
         Allow tags.
 
     The wrapped method receives the custom field.
+
     Usage::
+
         from admin_tools.decorators import admin_field
         from django.contrib import admin
         from django.utils.safestring import mark_safe
