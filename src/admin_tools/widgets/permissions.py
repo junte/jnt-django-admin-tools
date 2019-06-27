@@ -6,6 +6,36 @@ DEFAULT_PERMISSIONS = ('add', 'change', 'delete', 'view')
 
 
 class PermissionSelectMultipleWidget(forms.CheckboxSelectMultiple):
+    """
+    A Widget for displaying all permissions in system.
+
+    forms.py::
+
+        from admin_tools.widgets import PermissionSelectMultipleWidget
+        from django import forms
+        from django.contrib.auth.models import Group
+
+        class GroupAdminForm(forms.ModelForm):
+            class Meta:
+                model = Group
+                fields = '__all__'
+                widgets = {
+                    'permissions': PermissionSelectMultipleWidget
+                }
+
+    admin.py::
+
+        from django.contrib import admin
+        from django.contrib.auth.models import Group
+        from test_app.forms import GroupAdminForm
+
+        @admin.register(Group)
+        class GroupAdmin(admin.ModelAdmin):
+            form = GroupAdminForm
+
+    .. image:: images/widgets/permission_select_multiple_widget.png
+    """
+
     template_name = 'admin_tools/widgets/permissions.html'
     custom_permission_types: List[str] = []
     groups_permissions: List[str] = []

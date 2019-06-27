@@ -34,6 +34,8 @@ Contents:
    multiple_admin_sites
    menu
    dashboard
+   fields
+   widgets
    integration
    contributing
    testing
