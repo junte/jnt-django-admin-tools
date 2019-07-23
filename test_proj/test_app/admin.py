@@ -1,3 +1,6 @@
+import functools
+import types
+
 from admin_tools.db.fields import GenericForeignKey
 from admin_tools.decorators import admin_changelist_link, admin_field, \
     admin_link
@@ -126,11 +129,39 @@ class BlogAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
     search_fields = ('name',)
 
 
+def copy_func(f):
+    g = types.FunctionType(
+        f.__code__,
+        f.__globals__,
+        name=f.__name__,
+        argdefs=f.__defaults__,
+        closure=f.__closure__
+    )
+    g = functools.update_wrapper(g, f)
+    return g
+
+
+def clean_formfield(self, gfk_field):
+    ct_field = self.cleaned_data.get(gfk_field.ct_field)
+    fk_field = self.cleaned_data.get(gfk_field.fk_field)
+
+    if ct_field and fk_field:
+        return
+    elif not ct_field and not fk_field:
+        return
+
+    msg = 'Both values must be filled or cleared'
+    self.add_error(gfk_field.ct_field, msg)
+
+
 @admin.register(Comment)
 class CommentAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
     def get_form(self, request, obj=None, change=False, **kwargs):
         self.set_hidden_gfk(obj)
-        return super().get_form(request, obj=obj, change=change, **kwargs)
+        form = super().get_form(request, obj=obj, change=change, **kwargs)
+        self.set_validators_gfk(form)
+
+        return form
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         generic_foreign_keys = self.get_generic_foreign_keys()
@@ -184,7 +215,7 @@ class CommentAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
 
     def set_hidden_gfk(self, obj):
         for field in self.get_generic_foreign_keys():
-            field_name = f'generic_{field.name}'
+            field_name = field.name
             init_value = str(getattr(obj, field.name, ''))
 
             form_integer_field = forms.CharField(
@@ -195,3 +226,9 @@ class CommentAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
 
             self.form.declared_fields[field_name] = form_integer_field
 
+    def set_validators_gfk(self, form):
+        for field in self.get_generic_foreign_keys():
+            _copy_func = copy_func(clean_formfield)
+            _copy_func.__defaults__ = (field,)
+
+            setattr(form, f'clean_{field.name}', _copy_func)

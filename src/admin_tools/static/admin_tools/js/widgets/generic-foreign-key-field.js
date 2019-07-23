@@ -123,6 +123,8 @@
         select2Handle(e.target);
       });
 
+      hideFkFields();
+      updateGFKLabels();
       initSelect2();
 
       function select2Handle(target) {
@@ -134,18 +136,41 @@
 
         for (var i = 0; i < fields.length; i++) {
           var $field = $(fields[i]);
-          var fkId = $field.data('fk-Field');
-          var fkValue = $('#id_' + fkId).val();
+          var fkValue = $('#id_' + $field.data('fk-Field')).val();
+          var ctValue = $('#id_' + $field.data('ct-Field')).val();
 
-          if (fkValue) {
-            var fkPresent = $('#id_generic_' + $field.data('gf-Name')).val();
+          if (ctValue || fkValue) {
+            var data;
+            var fkPresent = $('#id_' + $field.data('gf-Name')).val();
 
-            addForeignField($field, {'id': fkValue, 'text': fkPresent});
+            if (fkValue && fkPresent) {
+              data = {'id': fkValue, 'text': fkPresent};
+            }
+
+            addForeignField($field, data);
           }
 
         }
-
       };
+
+      function hideFkFields() {
+        var fields = $('.generic-foreign-key-field');
+        for (var i = 0; i < fields.length; i++) {
+          $('div.form-row.field-' + $(fields[i]).data('fk-Field')).hide();
+        };
+      };
+
+      function updateGFKLabels() {
+        var fields = $('.generic-foreign-key-field');
+        for (var i = 0; i < fields.length; i++) {
+          var $field = $(fields[i]);
+          var name = $field.data('gf-Name');
+          name = name.substr(0, 1).toUpperCase() + name.substr(1);
+          var ctField = $field.data('ct-Field');
+          $('div.form-row.field-' + ctField + ' label').text(name + ':');
+        };
+      };
+
     });
 
     function addForeignField(target, data) {
@@ -158,6 +183,12 @@
       }
 
       var selected = $(target).find(':selected').first();
+
+      if (selected == undefined || !selected.val()){
+        $('#id_' + $(target).data('fk-Field')).val('');
+        return;
+      };
+
       var $sel = $('<select>');
 
       if (data){
@@ -193,13 +224,12 @@
         width: '300px',
       };
 
-      $('#id_' + $(target).data('fk-Field')).val('');
-
       $sel.addClass(selectClass);
       $sel.appendTo($(target).parent());
       $sel.data('fk-Field', $(target).data('fk-Field'));
       $sel.select2(settings);
 
+      $sel.parent().find('.select2-container').addClass('select2-container--admin-autocomplete');
 
       $sel.on('change', function(e){
         var newValue = $(e.target).find(':selected').first();

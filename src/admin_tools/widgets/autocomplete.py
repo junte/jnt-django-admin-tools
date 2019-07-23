@@ -29,9 +29,6 @@ class AutocompleteSelect(BaseAutocompleteSelect):
         return result
 
     def get_autocomplete_url(self, ct_id):
-        if not ct_id:
-            return ''
-
         url_name = 'admin:%s_%s_autocomplete'
         meta = ContentType.objects.get(id=ct_id).model_class()._meta
 
