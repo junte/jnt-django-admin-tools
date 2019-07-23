@@ -221,7 +221,7 @@
         },
         minimumInputLength: 0,
         placeholder: 'Select the ' + selected.text(),
-        width: '300px',
+        width: '280px',
       };
 
       $sel.addClass(selectClass);
