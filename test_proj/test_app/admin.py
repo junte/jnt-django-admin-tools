@@ -1,11 +1,14 @@
-from admin_tools.decorators import admin_changelist_link, admin_field, admin_link
-from admin_tools.mixins import AdminAutocompleteFieldsMixin
+from admin_tools.decorators import (
+    admin_changelist_link, admin_field, admin_link
+)
+from admin_tools.mixins import (
+    AdminAutocompleteFieldsMixin, GenericForeignKeyMixin
+)
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
-
 from test_app.forms import GroupAdminForm
-from test_app.models import Bar, Foo, Baz
+from test_app.models import Bar, Foo, Baz, Blog, Comment
 
 admin.site.unregister(Group)
 
@@ -44,4 +47,16 @@ class BarAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
 
 @admin.register(Baz)
 class BazAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
+    search_fields = ('name',)
+
+
+@admin.register(Blog)
+class BlogAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
+    search_fields = ('name',)
+
+
+@admin.register(Comment)
+class CommentAdmin(GenericForeignKeyMixin,
+                   AdminAutocompleteFieldsMixin,
+                   admin.ModelAdmin):
     pass
