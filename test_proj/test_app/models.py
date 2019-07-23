@@ -50,13 +50,11 @@ class Comment(models.Model):
         related_name='comments'
     )
 
-    owner_id = models.IntegerField(null=True, blank=True)
-    owner_content_type = models.ForeignKey(
+    object_id = models.IntegerField(null=True, blank=True)
+    content_type = models.ForeignKey(
         ContentType, models.CASCADE, related_name='+', null=True, blank=True
     )
     owner = GenericForeignKey(
-        ct_field='owner_content_type',
-        fk_field='owner_id',
         related_models=get_related_models
     )
 

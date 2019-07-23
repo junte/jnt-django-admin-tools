@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 
 
-class AutocompleteSelect(BaseAutocompleteSelect):
+class ContentTypeAutocompleteSelect(BaseAutocompleteSelect):
     @property
     def media(self):
         media = super().media

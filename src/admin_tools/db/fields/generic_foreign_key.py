@@ -11,6 +11,7 @@ class GenericForeignKey(BaseGenericForeignKey):
         super().__init__(*args, **kwargs)
 
     def get_related_models(self):
+        # TODO: all models from apps
         if self.related_models is None:
             self.related_models = [
                 m

@@ -7,6 +7,7 @@ from django.utils.text import capfirst
 
 
 class ContentTypeAutocompleteView(AutocompleteJsonView):
+    # copied from base class
     def get(self, request, *args, **kwargs):
         if not self.model_admin.get_search_fields(request):
             raise Http404(
@@ -25,6 +26,7 @@ class ContentTypeAutocompleteView(AutocompleteJsonView):
                 {
                     'id': str(obj.pk),
                     'text': capfirst(obj.model),
+                    # modify
                     'autocompleteUrl': self.get_autocomplete_ul(obj)
                 }
                 for obj in context['object_list']

@@ -2,12 +2,13 @@ from itertools import chain
 
 from admin_tools.db.fields import GenericForeignKey
 from admin_tools.services.objects import copy_func
-from admin_tools.widgets.autocomplete import AutocompleteSelect
+from admin_tools.widgets.autocomplete import ContentTypeAutocompleteSelect
+from django import forms
 from django.contrib.admin.checks import BaseModelAdminChecks
 from django.contrib.admin.utils import flatten_fieldsets
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import ForeignKey, ManyToManyField
-from django import forms
+from django.utils.translation import gettext_lazy as _
 
 
 class AdminAutocompleteFieldsMixin:
@@ -40,7 +41,8 @@ class AdminAutocompleteFieldsMixin:
 
     def _is_relation_field(self, field):
         return (isinstance(field, (ForeignKey, ManyToManyField))
-                and bool(self.admin_site._registry.get(field.remote_field.model)))
+                and bool(
+                self.admin_site._registry.get(field.remote_field.model)))
 
     def check(self, **kwargs):
         return [
@@ -55,8 +57,10 @@ class AdminAutocompleteFieldsMixin:
         check_autocomplete_fields_item = BaseModelAdminChecks()._check_autocomplete_fields_item
 
         return list(chain.from_iterable([
-            check_autocomplete_fields_item(self, field_name, f'autocomplete_fields[{index:d}]')
-            for index, field_name in enumerate(self.get_autocomplete_fields(None))
+            check_autocomplete_fields_item(self, field_name,
+                                           f'autocomplete_fields[{index:d}]')
+            for index, field_name in
+            enumerate(self.get_autocomplete_fields(None))
         ]))
 
 
@@ -92,7 +96,7 @@ class GenericForeignKeyMixin:
             )
         }
         db = kwargs.get('using')
-        form_field.widget = AutocompleteSelect(
+        form_field.widget = ContentTypeAutocompleteSelect(
             db_field.remote_field,
             self.admin_site,
             using=db,
@@ -102,12 +106,15 @@ class GenericForeignKeyMixin:
         return form_field
 
     def get_generic_foreign_keys(self):
-        return [f for f in self.model._meta.get_fields() if
-                isinstance(f, GenericForeignKey)]
+        return [
+            f
+            for f in self.model._meta.get_fields()
+            if isinstance(f, GenericForeignKey)
+        ]
 
     def is_generic_foreign_key(self, field_name, generic_foreign_keys):
         for gfk in generic_foreign_keys:
-            if field_name in [gfk.name, gfk.ct_field, gfk.fk_field]:
+            if field_name in (gfk.name, gfk.ct_field, gfk.fk_field):
                 return True, gfk
         return False, None
 
@@ -147,5 +154,5 @@ class GenericForeignKeyMixin:
         elif not ct_field and not fk_field:
             return
 
-        msg = 'Both values must be filled or cleared'
+        msg = _('Both values must be filled or cleared')
         self.add_error(gfk_field.ct_field, msg)
