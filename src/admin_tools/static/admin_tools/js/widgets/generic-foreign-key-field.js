@@ -49,8 +49,8 @@
 
         ExtendedAjaxAdapter.prototype.option = function(data){
           result = originalOption.call(this, data);
-          if (result && data.dataAutocompleteUrl) {
-            result.attr('data-autocompleteUrl', data.dataAutocompleteUrl);
+          if (result && data.autocompleteUrl) {
+            result.data('autocompleteUrl', data.autocompleteUrl);
           }
           return result;
         }
@@ -145,7 +145,7 @@
 
       var settings = {
         ajax: {
-          url: selected.data('autocompleteurl'),
+          url: selected.data('autocompleteUrl'),
           dataType: 'json',
           delay: 250,
           data: function (params) {

@@ -20,11 +20,16 @@ class AutocompleteSelect(BaseAutocompleteSelect):
             css=media_css
         )
 
-    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
-        result = super().create_option(name, value, label, selected, index, subindex=subindex, attrs=attrs)
+    def create_option(
+        self, name, value, label, selected, index, subindex=None, attrs=None
+    ):
+        result = super().create_option(
+            name, value, label, selected, index, subindex=subindex, attrs=attrs
+        )
 
         if value:
-            result['attrs']['data-autocompleteUrl'] = self.get_autocomplete_url(value)
+            url = self.get_autocomplete_url(value)
+            result['attrs']['data-autocomplete-url'] = url
 
         return result
 
