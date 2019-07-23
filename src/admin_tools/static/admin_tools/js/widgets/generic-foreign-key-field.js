@@ -3,7 +3,7 @@
 
     function overrideDjangoSelect2() {
       function getIds(targetTag) {
-          return encodeURI($(targetTag).data('gfk-Models'));
+        return encodeURI($(targetTag).data('gfk-Models'));
       }
 
       var init = function($element, options) {
@@ -11,9 +11,9 @@
           ajax: {
             data: function(params) {
               return {
-                  term: params.term,
-                  page: params.page,
-                  ids: getIds(this),
+                term: params.term,
+                page: params.page,
+                ids: getIds(this),
               };
             }
           },
@@ -25,12 +25,12 @@
       };
 
       $.fn.djangoAdminSelect2 = function(options) {
-          var settings = $.extend({}, options);
-          $.each(this, function(i, element) {
-              var $element = $(element);
-              init($element, settings);
-          });
-          return this;
+        var settings = $.extend({}, options);
+        $.each(this, function(i, element) {
+            var $element = $(element);
+            init($element, settings);
+        });
+        return this;
       };
 
       var baseApply = $.fn.select2.amd.define;
@@ -38,78 +38,22 @@
       $.fn.select2.amd.define('select2/data/extended-ajax',['./ajax','../utils','jquery'], function(AjaxAdapter, Utils, $){
 
         function ExtendedAjaxAdapter ($element, options) {
-          //we need explicitly process minimumInputLength value
-          //to decide should we use AjaxAdapter or return defaultResults,
-          //so it is impossible to use MinimumLength decorator here
           this.minimumInputLength = options.get('minimumInputLength');
           this.defaultResults     = options.get('defaultResults');
-
           ExtendedAjaxAdapter.__super__.constructor.call(this,$element,options);
         }
 
-        Utils.Extend(ExtendedAjaxAdapter,AjaxAdapter);
+        Utils.Extend(ExtendedAjaxAdapter, AjaxAdapter);
 
-        //override original query function to support default results
-        var originQuery = AjaxAdapter.prototype.query;
+        var originalOption = ExtendedAjaxAdapter.prototype.option;
 
-        ExtendedAjaxAdapter.prototype.option = function (data) {
-          var option;
-
-          if (data.children) {
-            option = document.createElement('optgroup');
-            option.label = data.text;
-          } else {
-            option = document.createElement('option');
-
-            if (option.textContent !== undefined) {
-              option.textContent = data.text;
-            } else {
-              option.innerText = data.text;
-            }
+        ExtendedAjaxAdapter.prototype.option = function(data){
+          result = originalOption.call(this, data);
+          if (result && data.dataAutocompleteUrl) {
+            result.attr('data-autocompleteUrl', data.dataAutocompleteUrl);
           }
-
-          if (data.id) {
-            option.value = data.id;
-          }
-
-          if (data.disabled) {
-            option.disabled = true;
-          }
-
-          if (data.selected) {
-            option.selected = true;
-          }
-
-          if (data.title) {
-            option.title = data.title;
-          }
-
-          var $option = $(option);
-
-          if (data.dataAutocompleteUrl) {
-            $option.attr('data-autocompleteUrl', data.dataAutocompleteUrl);
-          }
-
-          var normalizedData = this._normalizeItem(data);
-          normalizedData.element = option;
-
-          // Override the option's data with the combined data
-          $.data(option, 'data', normalizedData);
-
-          return $option;
+          return result;
         }
-
-        ExtendedAjaxAdapter.prototype.query = function (params, callback) {
-          var defaultResults = (typeof this.defaultResults == 'function') ? this.defaultResults.call(this) : this.defaultResults;
-          if (defaultResults && defaultResults.length && (!params.term || params.term.length < this.minimumInputLength)){
-            var processedResults = this.processResults(defaultResults,params.term);
-            callback(processedResults);
-          }
-          else {
-            originQuery.call(this, params, callback);
-          }
-        };
-
         return ExtendedAjaxAdapter;
       });
 
@@ -183,10 +127,14 @@
       }
 
       var selected = $(target).find(':selected').first();
+      var hiddenForeignField = $('#id_' + $(target).data('fk-Field'));
 
       if (selected == undefined || !selected.val()){
-        $('#id_' + $(target).data('fk-Field')).val('');
+        hiddenForeignField.val('');
         return;
+      }
+      else if (!data) {
+         hiddenForeignField.val('');
       };
 
       var $sel = $('<select>');
@@ -228,15 +176,12 @@
       $sel.appendTo($(target).parent());
       $sel.data('fk-Field', $(target).data('fk-Field'));
       $sel.select2(settings);
-
       $sel.parent().find('.select2-container').addClass('select2-container--admin-autocomplete');
 
       $sel.on('change', function(e){
         var newValue = $(e.target).find(':selected').first();
-
         var fkField = $(e.target).data('fk-Field');
         $('#id_' + fkField).val(newValue.val());
-
       });
     }
 
