@@ -1,8 +1,6 @@
-from contextlib import suppress
-
+from admin_tools.services.urls import admin_autocomplete_url
 from django.contrib.admin.views.autocomplete import AutocompleteJsonView
 from django.http import Http404, JsonResponse
-from django.urls import reverse, NoReverseMatch
 from django.utils.text import capfirst
 
 
@@ -47,9 +45,4 @@ class ContentTypeAutocompleteView(AutocompleteJsonView):
         return queryset
 
     def get_autocomplete_ul(self, content_type):
-        url_name = 'admin:%s_%s_autocomplete'
-        meta = content_type.model_class()._meta
-
-        with suppress(NoReverseMatch):
-            return reverse(url_name % (meta.app_label, meta.model_name))
-        return ''
+        return admin_autocomplete_url(content_type.model_class())

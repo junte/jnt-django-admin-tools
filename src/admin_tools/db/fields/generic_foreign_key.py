@@ -1,5 +1,5 @@
+from admin_tools.services.urls import admin_autocomplete_url
 from django.apps import apps
-from django.conf import settings
 from django.contrib.contenttypes.fields import (
     GenericForeignKey as BaseGenericForeignKey
 )
@@ -11,12 +11,11 @@ class GenericForeignKey(BaseGenericForeignKey):
         super().__init__(*args, **kwargs)
 
     def get_related_models(self):
-        # TODO: all models from apps
         if self.related_models is None:
             self.related_models = [
                 m
                 for m in apps.get_models()
-                if m._meta.app_label in settings.PROJECT_APPS
+                if self.has_autocomplete_url(m)
             ]
         elif callable(self.related_models):
             self.related_models = list(self.related_models())
@@ -25,3 +24,6 @@ class GenericForeignKey(BaseGenericForeignKey):
                 *m.split('.')
             ) if isinstance(m, str) else m for m in self.related_models
         ]
+
+    def has_autocomplete_url(self, model):
+        return bool(admin_autocomplete_url(model))

@@ -58,5 +58,14 @@ class Comment(models.Model):
         related_models=get_related_models
     )
 
+    link_content_type = models.ForeignKey(
+        ContentType, models.CASCADE, related_name='+', null=True, blank=True
+    )
+    link_object_id = models.IntegerField(null=True, blank=True)
+    link = GenericForeignKey(
+        ct_field='link_content_type',
+        fk_field='link_object_id'
+    )
+
     def __str__(self):
         return self.title
