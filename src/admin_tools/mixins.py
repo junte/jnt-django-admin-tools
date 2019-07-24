@@ -65,17 +65,33 @@ class AdminAutocompleteFieldsMixin:
 
 
 class GenericForeignKeyMixin:
+    def get_fields(self, request, obj=None):
+        fields = super().get_fields(request, obj=obj)
+
+        if fields:
+            fields = self._update_gfk_fields(fields)
+
+        return fields
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj=obj)
+
+        if fieldsets:
+            fieldsets = self._update_gfk_fieldsets(fieldsets)
+
+        return fieldsets
+
     def get_form(self, request, obj=None, change=False, **kwargs):
-        self.set_present_gfk(obj)
+        self._set_present_gfk(obj)
         form = super().get_form(request, obj=obj, change=change, **kwargs)
-        self.set_validators_gfk(form)
+        self._set_validators_gfk(form)
 
         return form
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        generic_foreign_keys = self.get_generic_foreign_keys()
+        generic_foreign_keys = self._get_generic_foreign_keys()
 
-        is_gfk, gfk = self.is_generic_foreign_key(
+        is_gfk, gfk = self._is_generic_foreign_key(
             db_field.name, generic_foreign_keys
         )
 
@@ -92,7 +108,7 @@ class GenericForeignKeyMixin:
             'data-fk--field': gfk.fk_field,
             'data-gf--name': gfk.name,
             'data-gfk--models': ','.join(
-                str(x) for x in self.get_gfk_ids_related_models(gfk)
+                str(x) for x in self._get_gfk_ids_related_models(gfk)
             )
         }
         db = kwargs.get('using')
@@ -105,28 +121,28 @@ class GenericForeignKeyMixin:
 
         return form_field
 
-    def get_generic_foreign_keys(self):
+    def _get_generic_foreign_keys(self):
         return [
             f
             for f in self.model._meta.get_fields()
             if isinstance(f, GenericForeignKey)
         ]
 
-    def is_generic_foreign_key(self, field_name, generic_foreign_keys):
+    def _is_generic_foreign_key(self, field_name, generic_foreign_keys):
         for gfk in generic_foreign_keys:
             if field_name in (gfk.name, gfk.ct_field, gfk.fk_field):
                 return True, gfk
         return False, None
 
-    def get_gfk_ids_related_models(self, gfk):
+    def _get_gfk_ids_related_models(self, gfk):
         related_models = gfk.get_related_models()
 
         content_types = ContentType.objects.get_for_models(*related_models)
 
         return [x.id for x in content_types.values()]
 
-    def set_present_gfk(self, obj):
-        for field in self.get_generic_foreign_keys():
+    def _set_present_gfk(self, obj):
+        for field in self._get_generic_foreign_keys():
             field_name = field.name
             init_value = str(getattr(obj, field.name, ''))
 
@@ -138,8 +154,8 @@ class GenericForeignKeyMixin:
 
             self.form.declared_fields[field_name] = form_integer_field
 
-    def set_validators_gfk(self, form):
-        for field in self.get_generic_foreign_keys():
+    def _set_validators_gfk(self, form):
+        for field in self._get_generic_foreign_keys():
             _copy_func = copy_func(self._clean_formfield)
             _copy_func.__defaults__ = (field,)
 
@@ -156,3 +172,40 @@ class GenericForeignKeyMixin:
 
         msg = _('Both values must be filled or cleared')
         self.add_error(gfk_field.ct_field, msg)
+
+    def _update_gfk_fields(self, fields):
+        gfk_fields = self._get_generic_foreign_keys()
+
+        if not gfk_fields:
+            return fields
+
+        gfk_map = {f.name: f for f in gfk_fields}
+
+        updated = []
+        for field in fields:
+            gfk = gfk_map.get(field)
+
+            updated = self._append_value(updated, field)
+
+            if gfk:
+                updated = self._append_value(updated, gfk.ct_field)
+                updated = self._append_value(updated, gfk.fk_field)
+
+        return tuple(updated)
+
+    def _update_gfk_fieldsets(self, fieldsets):
+        gfk_fields = self._get_generic_foreign_keys()
+
+        if not gfk_fields:
+            return fieldsets
+
+        for fieldset in fieldsets:
+            fields = fieldset[1].get('fields')
+            if fields:
+                fieldset[1]['fields'] = self._update_gfk_fields(fields)
+        return fieldsets
+
+    def _append_value(self, fields, value):
+        if value not in fields:
+            fields.append(value)
+        return fields

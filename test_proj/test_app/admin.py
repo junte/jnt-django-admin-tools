@@ -59,4 +59,14 @@ class BlogAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
 class CommentAdmin(GenericForeignKeyMixin,
                    AdminAutocompleteFieldsMixin,
                    admin.ModelAdmin):
-    pass
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'content')
+        }),
+        ('Advanced options', {
+            'fields': ('user', 'link'),
+        }),
+        (None, {
+            'fields': ('owner',),
+        }),
+    )
