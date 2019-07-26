@@ -20,14 +20,8 @@ class Foo(models.Model):
         return self.name
 
 
-class Baz(models.Model):
-    name = models.CharField(max_length=100, null=True)
-    foos = models.ManyToManyField(Foo, related_name='bazes', blank=True)
-    content_type = models.ForeignKey(ContentType, models.SET_NULL, blank=True,
-                                     null=True, related_name='+')
-
-    def __str__(self):
-        return self.name
+def get_related_models():
+    return (Blog, Bar, Baz)
 
 
 class Blog(models.Model):
@@ -38,8 +32,22 @@ class Blog(models.Model):
         return self.title
 
 
-def get_related_models():
-    return (Blog, Bar, Baz)
+class Baz(models.Model):
+    name = models.CharField(max_length=100, null=True)
+    foos = models.ManyToManyField(Foo, related_name='bazes', blank=True)
+
+    object_id = models.IntegerField(null=True, blank=True)
+    content_type = models.ForeignKey(
+        ContentType, models.CASCADE, related_name='+', null=True, blank=True
+    )
+    owner = GenericForeignKey(
+        related_models=get_related_models
+    )
+
+    blog = models.ForeignKey(Blog, models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Comment(models.Model):

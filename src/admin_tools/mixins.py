@@ -82,14 +82,15 @@ class GenericForeignKeyMixin:
         return fieldsets
 
     def get_form(self, request, obj=None, change=False, **kwargs):
-        self._set_present_gfk(obj)
+        self._set_declared_gfk()
         form = super().get_form(request, obj=obj, change=change, **kwargs)
+        self._set_present_gfk(form, obj)
         self._set_validators_gfk(form)
 
         return form
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        generic_foreign_keys = self._get_generic_foreign_keys()
+        generic_foreign_keys = self._get_generic_foreign_keys(self.model)
 
         is_gfk, gfk = self._is_generic_foreign_key(
             db_field.name, generic_foreign_keys
@@ -102,15 +103,7 @@ class GenericForeignKeyMixin:
         if not is_gfk:
             return form_field
 
-        attrs = {
-            'class': 'generic-foreign-key-field',
-            'data-ct--field': gfk.ct_field,
-            'data-fk--field': gfk.fk_field,
-            'data-gf--name': gfk.name,
-            'data-gfk--models': ','.join(
-                str(x) for x in self._get_gfk_ids_related_models(gfk)
-            )
-        }
+        attrs = self._get_content_type_autocomplete_attrs(gfk)
         db = kwargs.get('using')
         form_field.widget = ContentTypeAutocompleteSelect(
             db_field.remote_field,
@@ -121,10 +114,10 @@ class GenericForeignKeyMixin:
 
         return form_field
 
-    def _get_generic_foreign_keys(self):
+    def _get_generic_foreign_keys(self, model):
         return [
             f
-            for f in self.model._meta.get_fields()
+            for f in model._meta.get_fields()
             if isinstance(f, GenericForeignKey)
         ]
 
@@ -141,21 +134,74 @@ class GenericForeignKeyMixin:
 
         return [x.id for x in content_types.values()]
 
-    def _set_present_gfk(self, obj):
-        for field in self._get_generic_foreign_keys():
-            field_name = field.name
-            init_value = str(getattr(obj, field.name, ''))
-
-            form_integer_field = forms.CharField(
+    def _set_declared_gfk(self):
+        for field in self._get_generic_foreign_keys(self.model):
+            form_char_field = forms.CharField(
                 widget=forms.HiddenInput(),
                 required=False,
-                initial=init_value
             )
 
-            self.form.declared_fields[field_name] = form_integer_field
+            self.form.declared_fields[field.name] = form_char_field
+
+    def _set_present_gfk(self, form, obj):
+        for field in self._get_generic_foreign_keys(self.model):
+            if field.fk_field in form.base_fields:
+                form.base_fields[field.fk_field].widget.attrs['data-present'] = str(getattr(obj, field.name, ''))
+
+    def get_inline_formsets(self, request, formsets, inline_instances, obj=None):
+
+        self.set_widgets_for_inlines(request, formsets, inline_instances, obj)
+
+        return super().get_inline_formsets(request, formsets, inline_instances, obj=obj)
+
+    def set_widgets_for_inlines(self, request, formsets, inline_instances, obj):
+        for formset, inline in zip(formsets, inline_instances):
+            generic_foreign_keys = self._get_generic_foreign_keys(formset.model)
+
+            if not generic_foreign_keys:
+                continue
+
+            inline_fields = inline.get_fields(request, obj)
+
+            for form in formset.forms:
+                for gfk in generic_foreign_keys:
+                    if gfk.ct_field not in inline_fields:
+                        continue
+
+                    widget = form.fields[gfk.ct_field].widget.widget
+
+                    rel = widget.rel
+                    admin_site = widget.admin_site
+                    using = widget.db
+                    choices = widget.choices
+                    attrs = widget.attrs
+
+                    attrs.update(
+                        self._get_content_type_autocomplete_attrs(gfk)
+                    )
+
+                    new_widget = ContentTypeAutocompleteSelect(
+                        rel, admin_site, attrs=attrs,
+                        choices=choices, using=using
+                    )
+
+                    form.fields[gfk.ct_field].widget = new_widget
+                    form.fields[gfk.fk_field].widget.attrs['data-present'] = str(getattr(form.instance, gfk.name, ''))
+
+    def _get_content_type_autocomplete_attrs(self, gfk):
+        return {
+            'class': 'generic-foreign-key-field',
+            'data-ct--field': gfk.ct_field,
+            'data-fk--field': gfk.fk_field,
+            'data-gf--name': gfk.name,
+            'data-gfk--models': ','.join(
+                str(x) for x in self._get_gfk_ids_related_models(gfk)
+            )
+        }
+
 
     def _set_validators_gfk(self, form):
-        for field in self._get_generic_foreign_keys():
+        for field in self._get_generic_foreign_keys(self.model):
             _copy_func = copy_func(self._clean_formfield)
             _copy_func.__defaults__ = (field,)
 
@@ -174,7 +220,7 @@ class GenericForeignKeyMixin:
         self.add_error(gfk_field.ct_field, msg)
 
     def _update_gfk_fields(self, fields):
-        gfk_fields = self._get_generic_foreign_keys()
+        gfk_fields = self._get_generic_foreign_keys(self.model)
 
         if not gfk_fields:
             return fields
@@ -194,7 +240,7 @@ class GenericForeignKeyMixin:
         return tuple(updated)
 
     def _update_gfk_fieldsets(self, fieldsets):
-        gfk_fields = self._get_generic_foreign_keys()
+        gfk_fields = self._get_generic_foreign_keys(self.model)
 
         if not gfk_fields:
             return fieldsets
