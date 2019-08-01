@@ -13,6 +13,15 @@ from test_app.models import Bar, Foo, Baz, Blog, Comment
 admin.site.unregister(Group)
 
 
+class BazInline(
+    # GenericForeignKeyMixin,
+    AdminAutocompleteFieldsMixin,
+                admin.StackedInline):
+    model = Baz
+    extra = 0
+
+
+
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
     form = GroupAdminForm
@@ -51,8 +60,14 @@ class BazAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
 
 
 @admin.register(Blog)
-class BlogAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
+class BlogAdmin(
+    GenericForeignKeyMixin,
+    AdminAutocompleteFieldsMixin,
+    admin.ModelAdmin):
+
     search_fields = ('name',)
+    inlines = (BazInline,)
+
 
 
 @admin.register(Comment)
