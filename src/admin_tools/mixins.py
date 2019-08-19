@@ -68,7 +68,6 @@ class AdminAutocompleteFieldsMixin:
 class BaseGenericForeignKeyMixin:
     def get_fields(self, request, obj=None):
         fields = super().get_fields(request, obj=obj)
-
         if fields:
             fields = self._update_gfk_fields(fields)
 
@@ -158,14 +157,14 @@ class BaseGenericForeignKeyMixin:
 
         return [x.id for x in content_types.values()]
 
-    def _set_declared_gfk(self):
+    def _set_declared_gfk_to_form(self, form):
         for field in self._get_generic_foreign_keys(self.model):
             form_char_field = forms.CharField(
                 widget=forms.HiddenInput(),
                 required=False,
             )
 
-            self.form.declared_fields[field.name] = form_char_field
+            form.declared_fields[field.name] = form_char_field
 
     def _is_generic_foreign_key(self, field_name, generic_foreign_keys):
         for gfk in generic_foreign_keys:
@@ -187,8 +186,8 @@ class BaseGenericForeignKeyMixin:
 
 class GenericForeignKeyInlineAdminMixin(BaseGenericForeignKeyMixin):
     def get_formset(self, request, obj, **kwargs):
-        self._set_declared_gfk()
         formset = super().get_formset(request, obj, **kwargs)
+        self._set_declared_gfk_to_form(formset.form)
         self._set_validators_gfk(formset.form)
 
         return formset
@@ -204,7 +203,7 @@ class GenericForeignKeyAdminMixin(BaseGenericForeignKeyMixin):
         return fieldsets
 
     def get_form(self, request, obj=None, change=False, **kwargs):
-        self._set_declared_gfk()
+        self._set_declared_gfk_to_form(self.form)
         form = super().get_form(request, obj=obj, change=change, **kwargs)
         self._set_present_gfk(form, obj)
         self._set_validators_gfk(form)
