@@ -276,39 +276,6 @@ class GenericForeignKeyAdminMixin(GenericForeignKeyMixin):
             request, formsets, inline_instances, obj=obj
         )
 
-    # def set_widgets_for_inlines(self, request, formsets, inline_instances, obj):
-    #     for formset, inline in zip(formsets, inline_instances):
-    #         generic_foreign_keys = self._get_generic_foreign_keys(formset.model)
-    #
-    #         if not generic_foreign_keys:
-    #             continue
-    #
-    #         inline_fields = inline.get_fields(request, obj)
-    #
-    #         for form in formset.forms:
-    #             for gfk in generic_foreign_keys:
-    #                 if gfk.ct_field not in inline_fields:
-    #                     continue
-    #
-    #                 widget = form.fields[gfk.ct_field].widget.widget
-    #
-    #                 rel = widget.rel
-    #                 admin_site = widget.admin_site
-    #                 using = widget.db
-    #                 choices = widget.choices
-    #                 attrs = widget.attrs
-    #
-    #                 attrs.update(
-    #                     self._get_content_type_autocomplete_attrs(gfk)
-    #                 )
-    #
-    #                 new_widget = ContentTypeAutocompleteSelect(
-    #                     rel, admin_site, attrs=attrs,
-    #                     choices=choices, using=using
-    #                 )
-    #
-    #                 form.fields[gfk.ct_field].widget = new_widget
-    #                 form.fields[gfk.fk_field].widget.attrs['data-present'] = str(getattr(form.instance, gfk.name, ''))
 
     def set_present_for_inlines(self, request, formsets, inline_instances, obj):
         for formset, inline in zip(formsets, inline_instances):
