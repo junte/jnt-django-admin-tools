@@ -2,7 +2,8 @@ from admin_tools.decorators import (
     admin_changelist_link, admin_field, admin_link
 )
 from admin_tools.mixins import (
-    AdminAutocompleteFieldsMixin, GenericForeignKeyMixin
+    AdminAutocompleteFieldsMixin, GenericForeignKeyAdminMixin,
+    GenericForeignKeyInlineAdminMixin
 )
 from django.contrib import admin
 from django.contrib.auth.models import Group
@@ -13,12 +14,14 @@ from test_app.models import Bar, Foo, Baz, Blog, Comment
 admin.site.unregister(Group)
 
 
-class BazInline(
-    # GenericForeignKeyMixin,
+class BazInlineAdmin(
+    GenericForeignKeyInlineAdminMixin,
     AdminAutocompleteFieldsMixin,
                 admin.StackedInline):
     model = Baz
     extra = 0
+
+    fields = ('name', 'owner')
 
 
 
@@ -61,17 +64,16 @@ class BazAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
 
 @admin.register(Blog)
 class BlogAdmin(
-    GenericForeignKeyMixin,
+    GenericForeignKeyAdminMixin,
     AdminAutocompleteFieldsMixin,
     admin.ModelAdmin):
 
     search_fields = ('name',)
-    inlines = (BazInline,)
-
+    inlines = (BazInlineAdmin,)
 
 
 @admin.register(Comment)
-class CommentAdmin(GenericForeignKeyMixin,
+class CommentAdmin(GenericForeignKeyAdminMixin,
                    AdminAutocompleteFieldsMixin,
                    admin.ModelAdmin):
     fieldsets = (

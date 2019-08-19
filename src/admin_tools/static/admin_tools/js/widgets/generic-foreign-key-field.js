@@ -104,7 +104,7 @@
           var gfValue = $('#' + fkFieldId).data('present');
 
           if (ctValue || fkValue) {
-            var data;
+            var data = undefined;
 
             if (fkValue && gfValue) {
               data = {'id': fkValue, 'text': gfValue};
