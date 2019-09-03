@@ -23,7 +23,6 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.6"
 django = "2.*"
-django-admin-autocomplete-filter = "*"
 
 [tool.poetry.dev-dependencies]
 flake8 = "*"
