@@ -10,6 +10,7 @@ from django.contrib.auth.models import Group
 from django.utils.safestring import mark_safe
 from test_app.forms import GroupAdminForm
 from test_app.models import Bar, Foo, Baz, Blog, Comment
+from test_app.filters import BarAutocompleteFilter
 
 admin.site.unregister(Group)
 
@@ -36,10 +37,14 @@ class FooAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
     fields = ('name', 'bar', 'bar_link')
     readonly_fields = ('bar_link',)
     search_fields = ('name',)
+    list_filter = (BarAutocompleteFilter,)
 
     @admin_link('bar')
     def bar_link(self, obj):
         return obj.name
+
+    class Media:
+        pass
 
 
 @admin.register(Bar)
