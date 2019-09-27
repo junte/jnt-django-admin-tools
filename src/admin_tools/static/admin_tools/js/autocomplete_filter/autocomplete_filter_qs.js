@@ -1,28 +1,22 @@
-if (!$) {
-    $ = django.jQuery;
-};
+(function($) {
+  $(document).ready(function () {
+    $('#changelist-filter select').on('change', function (e, choice) {
+      var val = $(e.target).val() || '';
+      var class_name = this.className;
+      var param = this.name;
+      if (class_name.includes('admin-autocomplete')) {
+        window.location.search = search_replace(param, val);
+      }
+    });
+  });
 
-$(document).ready(function () {
-  $('#changelist-filter select').on(
-      'change',
-      function (e, choice) {
-          var val = $(e.target).val() || '';
-          var class_name = this.className;
-          var param = this.name;
-          if (class_name.includes('admin-autocomplete'))
-          {
-              window.location.search = search_replace(param, val);
-          }
-      });
-});
-
-function search_replace(name, value) {
+  function search_replace(name, value) {
     var new_search_hash = search_to_hash();
     new_search_hash[decodeURIComponent(name)] = [];
     new_search_hash[decodeURIComponent(name)].push(decodeURIComponent(value));
     return hash_to_search(new_search_hash);
   }
-  
+
   function search_add(name, value) {
     var new_search_hash = search_to_hash();
     if ( ! (decodeURIComponent(name) in new_search_hash)) {
@@ -32,7 +26,7 @@ function search_replace(name, value) {
     return hash_to_search(new_search_hash);
   }
   // pduey: remove a variable/value pair from the current query string and return updated href
-function search_remove(name, value) {
+  function search_remove(name, value) {
     var new_search_hash = search_to_hash();
     if (new_search_hash[name].indexOf(value) >= 0) {
       new_search_hash[name].splice(new_search_hash[name].indexOf(value), 1);
@@ -41,9 +35,9 @@ function search_remove(name, value) {
       }
     }
     return hash_to_search(new_search_hash);
-}
-  
-function search_to_hash() {
+  }
+
+  function search_to_hash() {
     var h={};
     if (window.location.search == undefined || window.location.search.length < 1) { return h;}
     q = window.location.search.slice(1).split('&');
@@ -58,9 +52,9 @@ function search_to_hash() {
       h[hkey].push(hval);
     }
     return h;
-}
-  
-function hash_to_search(h) {
+  }
+
+  function hash_to_search(h) {
     var search = String("?");
     for (var k in h) {
       for (var i = 0; i < h[k].length; i++) {
@@ -69,4 +63,5 @@ function hash_to_search(h) {
       }
     }
     return search;
-}
+  }
+})(django.jQuery);

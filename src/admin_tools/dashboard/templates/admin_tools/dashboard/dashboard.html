@@ -1,14 +1,13 @@
 {% load i18n staticfiles admin_tools_dashboard_tags %}
 
 {% block dashboard_scripts %}
-<script type="text/javascript" src="{% static "admin_tools/js/utils.js" %}"></script>
-
+<script type="text/javascript" src="{% static 'admin_tools/js/utils.js' %}"></script>
 <script type="text/javascript" charset="utf-8">
     // Load js files syncronously and conditionally
 
     var js_files = [
         {
-            src : '{% static "admin_tools/js/jquery/jquery.min.js" %}',
+            src : '{% static "admin/js/vendor/jquery/jquery.min.js" %}',
             test: function() { return typeof(jQuery) == 'undefined'; }
         },
         {
