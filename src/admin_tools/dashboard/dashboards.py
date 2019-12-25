@@ -85,7 +85,7 @@ class Dashboard(object):
     children = None
 
     class Media:
-        css = ()
+        css = {}
         js = ()
 
     def __init__(self, **kwargs):
