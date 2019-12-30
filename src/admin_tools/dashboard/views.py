@@ -1,6 +1,6 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.contrib import messages
 
 try:
@@ -45,7 +45,8 @@ def set_preferences(request, dashboard_id):
             dashboard_id=dashboard_id,
             instance=preferences
         )
-    return render_to_response(
+    return render(
+        request,
         'admin_tools/dashboard/preferences_form.html',
          {'form': form}
     )

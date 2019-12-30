@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jnt-django-admin-tools"
-version = "0.8.13"
+version = "0.9.0"
 description="A collection of tools for the django administration interface"
 authors = ["Junte <tech@junte.it>"]
 classifiers=[
@@ -13,6 +13,7 @@ classifiers=[
         'Framework :: Django :: 2.0',
         'Framework :: Django :: 2.1',
         'Framework :: Django :: 2.2',
+        'Framework :: Django :: 3.0',
         'Topic :: Software Development :: Libraries :: Python Modules'
 ]
 
@@ -22,7 +23,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.6"
-django = "2.*"
+django = "3.*"
 
 [tool.poetry.dev-dependencies]
 flake8 = "*"
