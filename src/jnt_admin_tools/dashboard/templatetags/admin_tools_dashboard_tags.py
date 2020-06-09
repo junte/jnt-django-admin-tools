@@ -12,7 +12,6 @@ import math
 from django import template
 from django.db import IntegrityError
 
-
 from django.urls import reverse
 from jnt_admin_tools.utils import get_admin_site_name
 from jnt_admin_tools.dashboard.utils import get_dashboard
@@ -49,12 +48,11 @@ def admin_tools_render_dashboard(context, location="index", dashboard=None):
             user=context["request"].user, dashboard_id=dashboard.get_id()
         ).data
     except DashboardPreferences.DoesNotExist:
-        preferences = "{}"
         try:
             DashboardPreferences(
                 user=context["request"].user,
                 dashboard_id=dashboard.get_id(),
-                data=preferences,
+                data="{}",  # noqa: P103
             ).save()
         except IntegrityError:
             # dashboard already was saved for that (user, dashboard)

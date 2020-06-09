@@ -1,13 +1,9 @@
-import sys
 import json
+import sys
 
-from django.test import TestCase
 from django.contrib.auth.models import User
-
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
+from django.test import TestCase
+from django.urls import reverse
 
 from jnt_admin_tools.dashboard.models import DashboardPreferences
 from jnt_admin_tools.menu.models import Bookmark
@@ -108,7 +104,7 @@ class AdminBasicTest(TestCase):
         self._login("superuser", "123")
         user = User.objects.get(username="superuser")
         pref = DashboardPreferences.objects.create(
-            user=user, dashboard_id="test-dashboard", data=json.dumps("{}")
+            user=user, dashboard_id="test-dashboard", data=json.dumps({})
         )
         new_pref_data = {"bar": "baz"}
         res = self.client.post(

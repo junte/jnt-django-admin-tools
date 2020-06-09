@@ -45,10 +45,10 @@ class AutocompleteFilter(admin.SimpleListFilter):
     def __init__(self, request, params, model, model_admin):
         if self.parameter_name:
             raise AttributeError(
-                "Rename attribute `parameter_name` to "
-                "`field_name` for {}".format(self.__class__)
+                "Rename attribute 'parameter_name' to "
+                "'field_name' for {0}".format(self.__class__)
             )
-        self.parameter_name = "{}__id__exact".format(self.field_name)
+        self.parameter_name = "{0}__id__exact".format(self.field_name)
         super().__init__(request, params, model, model_admin)
 
         if self.rel_model:
@@ -66,7 +66,7 @@ class AutocompleteFilter(admin.SimpleListFilter):
 
         self._add_media(model_admin)
 
-        attrs["id"] = "id-%s-dal-filter" % self.field_name
+        attrs["id"] = "id-{0}-dal-filter".format(self.field_name)
 
         if self.is_placeholder_title:
             attrs["data-placeholder"] = "By " + self.title
