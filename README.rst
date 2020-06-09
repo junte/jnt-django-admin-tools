@@ -1,24 +1,26 @@
 jnt-django-admin-tools
 ======================
 
+Based on https://github.com/django-admin-tools/django-admin-tools
+
 `docs <https://junte.gitlab.io/packages/public/django/jnt-django-admin-tools>`_
 
-django-admin-tools is a collection of extensions/tools for the default django 
+django-admin-tools is a collection of extensions/tools for the default django
 administration interface, it includes:
 
 * a full featured and customizable dashboard;
 * a customizable menu bar;
 * tools to make admin theming easier.
 
-The code is hosted on `Github <https://github.com/django-admin-tools/django-admin-tools/>`_. 
+The code is hosted on `Github <https://github.com/django-admin-tools/django-admin-tools/>`_.
 
-Django-admin-tools is generously documented, you can 
-`browse the documentation online 
+Django-admin-tools is generously documented, you can
+`browse the documentation online
 <https://django-admin-tools.readthedocs.io/>`_.
-a good start is to read `the quickstart guide 
+a good start is to read `the quickstart guide
 <https://django-admin-tools.readthedocs.io/en/latest/quickstart.html>`_.
 
-The project was created by `David Jean Louis <http://www.izimobil.org/>`_ and was previously hosted on `Bitbucket <http://bitbucket.org/izi/django-admin-tools/>`_. 
+The project was created by `David Jean Louis <http://www.izimobil.org/>`_ and was previously hosted on `Bitbucket <http://bitbucket.org/izi/django-admin-tools/>`_.
 
 Please join the `mailing list <http://groups.google.fr/group/django-admin-tools>`_ if you want to discuss of the future of django-admin-tools.
 
@@ -42,8 +44,8 @@ Or if you're using **pip**::
 
     pip install jnt-django-admin-tools
 
-Or if you'd prefer you can simply place the included "admin_tools" directory 
-somewhere on your python path, or symlink to it from somewhere on your Python 
+Or if you'd prefer you can simply place the included "admin_tools" directory
+somewhere on your python path, or symlink to it from somewhere on your Python
 path; this is useful if you're working from a Mercurial checkout.
 
 An `installation guide <https://django-admin-tools.readthedocs.io/en/latest/installation.html>`_ is available in the documentation.
@@ -84,7 +86,7 @@ The admin menu:
 Dashboard modules can be dragged, collapsed, closed etc.:
 
 .. image:: http://www.izimobil.org/django-admin-tools/images/capture-4.png
-   :alt: Dashboard modules can be dragged, collapsed, closed etc. 
+   :alt: Dashboard modules can be dragged, collapsed, closed etc.
 
 The app index dashboard:
 
