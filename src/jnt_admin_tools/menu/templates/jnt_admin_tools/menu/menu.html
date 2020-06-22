@@ -10,11 +10,11 @@
             test: function() { return typeof(jQuery) == 'undefined'; }
         },
         {
-            src : '{% static "admin_tools/js/json.min.js" %}',
+            src : '{% static "jnt_admin_tools/js/json.min.js" %}',
             test: function() { return typeof(JSON.stringify) == 'undefined'; }
         },
         {
-            src : '{% static "admin_tools/js/menu.js" %}',
+            src : '{% static "jnt_admin_tools/js/menu.js" %}',
             test: function() { return true; }
         }{% for js in menu.Media.js %},
         {
@@ -50,9 +50,9 @@ jQuery(document).ready(function() {
 {% if has_bookmark_item %}
 
 {% if bookmark %}
-{% include "admin_tools/menu/remove_bookmark_form.html" %}
+{% include "jnt_admin_tools/menu/remove_bookmark_form.html" %}
 {% else %}
-{% include "admin_tools/menu/add_bookmark_form.html" %}
+{% include "jnt_admin_tools/menu/add_bookmark_form.html" %}
 {% endif %}
 
 {% endif %}

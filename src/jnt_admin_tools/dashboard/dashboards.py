@@ -261,7 +261,7 @@ class DefaultAppIndexDashboard(AppIndexDashboard):
 
     def __init__(self, *args, **kwargs):
         """Initializing."""
-        super().__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # append a model list module and a recent actions module
         self.children += [
