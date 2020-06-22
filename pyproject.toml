@@ -1,15 +1,16 @@
 [tool.poetry]
 name = "jnt-django-admin-tools"
-version = "0.9.2"
+version = "0.9.3"
 description="A collection of tools for the django administration interface"
-authors = ["Junte <tech@junte.it>"]
+authors = ["Junte <tech@junte.ru>"]
 classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-        'Framework :: Django :: 2',
-        'Framework :: Django :: 3',
+        'Framework :: Django :: 2.0',
+        'Framework :: Django :: 3.0',
+        'Framework :: Django :: 3.1',
         'Topic :: Software Development :: Libraries :: Python Modules'
 ]
 
