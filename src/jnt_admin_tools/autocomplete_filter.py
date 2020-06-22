@@ -3,6 +3,7 @@ from django import forms
 from django.contrib import admin
 from django.conf import settings
 from django.contrib.admin.widgets import SELECT2_TRANSLATIONS, get_language
+from django.db.models.fields.related_descriptors import ManyToManyDescriptor
 from django.forms.widgets import Media, MEDIA_TYPES
 
 
@@ -59,7 +60,7 @@ class AutocompleteFilter(admin.SimpleListFilter):
         attrs = self.widget_attrs.copy()
 
         field = forms.ModelChoiceField(
-            queryset=getattr(model, self.field_name).get_queryset(),
+            queryset=self.get_field_queryset(model),
             widget=AutocompleteSelect(remote_field, model_admin.admin_site),
             required=False,
         )
@@ -106,3 +107,10 @@ class AutocompleteFilter(admin.SimpleListFilter):
             return queryset.filter(**{self.parameter_name: self.value()})
         else:
             return queryset
+
+    def get_field_queryset(self, model):
+        field = getattr(model, self.field_name)
+        if isinstance(field, ManyToManyDescriptor):
+            return field.rel.model.objects.all()
+
+        return field.get_queryset()
