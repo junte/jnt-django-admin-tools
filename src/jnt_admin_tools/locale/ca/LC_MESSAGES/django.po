@@ -92,17 +92,17 @@ msgstr ""
 msgid "%(name)s"
 msgstr ""
 
-#: dashboard/templates/admin_tools/dashboard/dashboard.html:55
+#: dashboard/templates/jnt_admin_tools/dashboard/dashboard.html:55
 msgid "Modules"
 msgstr ""
 
-#: dashboard/templates/admin_tools/dashboard/modules/app_list.html:13
-#: dashboard/templates/admin_tools/dashboard/modules/model_list.html:11
+#: dashboard/templates/jnt_admin_tools/dashboard/modules/app_list.html:13
+#: dashboard/templates/jnt_admin_tools/dashboard/modules/model_list.html:11
 msgid "Add"
 msgstr ""
 
-#: dashboard/templates/admin_tools/dashboard/modules/app_list.html:14
-#: dashboard/templates/admin_tools/dashboard/modules/model_list.html:12
+#: dashboard/templates/jnt_admin_tools/dashboard/modules/app_list.html:14
+#: dashboard/templates/jnt_admin_tools/dashboard/modules/model_list.html:12
 msgid "Change"
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr ""
 msgid "Django administration"
 msgstr ""
 
-#: menu/templates/admin_tools/menu/menu.html:32
+#: menu/templates/jnt_admin_tools/menu/menu.html:32
 msgid "Please enter a name for the bookmark"
 msgstr ""
 
