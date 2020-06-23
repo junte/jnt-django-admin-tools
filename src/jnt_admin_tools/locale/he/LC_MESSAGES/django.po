@@ -92,7 +92,7 @@ msgstr ""
 msgid "%(name)s"
 msgstr ""
 
-#: dashboard/templates/admin_tools/dashboard/dashboard.html:55
+#: dashboard/templates/jnt_admin_tools/dashboard/dashboard.html:55
 msgid "Modules"
 msgstr ""
 
