@@ -8,12 +8,12 @@ urlpatterns = [
         name="admin-tools-menu-add-bookmark",
     ),
     path(
-        "edit_bookmark/<int:id>/",
+        "edit_bookmark/<id>/",
         views.edit_bookmark,
         name="admin-tools-menu-edit-bookmark",
     ),
     path(
-        "remove_bookmark/<int:id>/",
+        "remove_bookmark/<id>/",
         views.remove_bookmark,
         name="admin-tools-menu-remove-bookmark",
     ),
