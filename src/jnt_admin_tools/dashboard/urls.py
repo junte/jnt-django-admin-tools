@@ -1,9 +1,9 @@
-from django.conf.urls import url
+from django.urls import path
 from jnt_admin_tools.dashboard import views
 
 urlpatterns = [
-    url(
-        r"^set_preferences/(?P<dashboard_id>.+)/$",
+    path(
+        "set_preferences/<int:dashboard_id>/",
         views.set_preferences,
         name="admin-tools-dashboard-set-preferences",
     ),

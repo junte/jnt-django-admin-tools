@@ -1,12 +1,8 @@
+from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.contrib import messages
-
-try:
-    from django.views.decorators.csrf import csrf_exempt
-except ImportError:
-    from django.contrib.csrf.middleware import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import BookmarkForm
 from .models import Bookmark
@@ -60,7 +56,7 @@ def edit_bookmark(request, id):
             return HttpResponse("Saved")
     else:
         form = BookmarkForm(user=request.user, instance=bookmark)
-    return render_to_response(
+    return render(
         "jnt_admin_tools/menu/form.html",
         {"form": form, "title": "Edit Bookmark"},
     )

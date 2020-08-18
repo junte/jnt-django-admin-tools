@@ -1,10 +1,10 @@
 from functools import reduce, wraps
 
+from django.forms.utils import pretty_name
 from jnt_admin_tools.services.urls import (
     admin_change_url,
     admin_changelist_url,
 )
-from django.forms.forms import pretty_name
 from django.utils.html import format_html
 
 
