@@ -1,9 +1,49 @@
-pages:
-  image: junte/sphinx-build
+image: docker:latest
+
+variables:
+  DOCKER_TEST_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+  DOCKER_CACHE_IMAGE: $CI_REGISTRY_IMAGE:latest
+  GIT_STRATEGY: none
+
+stages:
+  - build
+  - publish
+
+build:
+  stage: build
+  variables:
+    GIT_DEPTH: 5
+    GIT_STRATEGY: fetch
+  services:
+    - docker:dind
   script:
-    - build_docs
-  artifacts:
-    paths:
-      - public
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+    - docker pull $DOCKER_CACHE_IMAGE || true
+    - docker build
+      --cache-from $DOCKER_CACHE_IMAGE
+      -t $DOCKER_TEST_IMAGE
+      -t $DOCKER_CACHE_IMAGE .
+    - docker push $DOCKER_TEST_IMAGE
+    - docker push $DOCKER_CACHE_IMAGE
+
+quality:
+  stage: test
+  image: $DOCKER_TEST_IMAGE
+  script:
+    - cd /app
+    - make check_quality
+
+
+publish_pypi:
+  stage: publish
   only:
     - master
+  image: $DOCKER_TEST_IMAGE
+  allow_failure: true
+  variables:
+    GIT_DEPTH: 5
+    GIT_STRATEGY: fetch
+  script:
+    - poetry config pypi-token.pypi $PYPI_API_TOKEN
+    - poetry build
+    - poetry publish

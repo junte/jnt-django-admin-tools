@@ -42,7 +42,7 @@ def admin_tools_render_dashboard(context, location="index", dashboard=None):
     dashboard.init_with_context(context)
     dashboard._prepare_children()
 
-    preferences = "{}"
+    preferences = "{}"  # noqa: P103
 
     try:
         preferences = DashboardPreferences.objects.get(
