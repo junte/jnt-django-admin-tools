@@ -19,11 +19,10 @@ COPY pyproject.toml poetry.lock ./
 RUN apt update \
     && apt install -y make \
                       curl \
+                      gcc \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/${POETRY_VERSION}/get-poetry.py | python \
     && poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi --no-root \
     && apt autoremove -y
 
 COPY . .
-
-RUN poetry install --no-interaction --no-ansi -E jaeger
