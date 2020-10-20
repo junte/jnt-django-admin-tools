@@ -1,5 +1,13 @@
-make_messages:
-	@./manage.py makemessages -l de -l fr -l en -l it -l es --no-location
+check_quality:
+	@./scripts/quality.sh
+
+build:
+	poetry build
+
+publish:
+	poetry publish
+
+release: build publish
 
 pre_commit:
 	@ pre-commit
