@@ -2,10 +2,7 @@
 Module where admin tools menu classes are defined.
 """
 
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from jnt_admin_tools.menu import items
