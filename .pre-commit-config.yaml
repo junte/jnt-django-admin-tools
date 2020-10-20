@@ -1,0 +1,20 @@
+fail_fast: true
+repos:
+  - repo: local
+    hooks:
+      - id: black
+        name: black
+        language: system
+        entry: poetry run black --check
+        exclude: .*\/migrations
+        types: [ python ]
+      - id: flake8
+        name: flake8
+        language: system
+        entry: poetry run flake8
+        types: [ python ]
+  - repo: https://github.com/Junte/pre-commit
+    rev: dd6e76fdd37e61dd701e378becbbeb3ff1807150
+    hooks:
+      - id: check-commit-message
+        stages: [ commit-msg ]

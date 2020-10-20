@@ -1,10 +1,11 @@
-check_quality:
-	@./scripts/quality.sh
+make_messages:
+	@./manage.py makemessages -l de -l fr -l en -l it -l es --no-location
 
-build:
-	poetry build
+pre_commit:
+	@ pre-commit
 
-publish:
-	poetry publish
+pre_commit_install:
+	@ pre-commit install && pre-commit install --hook-type commit-msg
 
-release: build publish
+pre_commit_update:
+	@ pre-commit autoupdate
