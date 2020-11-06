@@ -4,9 +4,11 @@ Module where admin tools dashboard classes are defined.
 
 from importlib import import_module
 
+from django.db.models import Model
 from django.template.defaultfilters import slugify
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
+
 from jnt_admin_tools.dashboard import modules
 from jnt_admin_tools.utils import uniquify
 
@@ -191,6 +193,9 @@ class AppIndexDashboard(Dashboard):
         """
         models = []
         for model in self.models:
+            if not isinstance(model, Model):
+                continue
+
             mod, cls = model.rsplit(".", 1)
             mod = import_module(mod)
             models.append(getattr(mod, cls))
