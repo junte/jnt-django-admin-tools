@@ -5,7 +5,7 @@ Module where admin tools dashboard modules classes are defined.
 from jnt_admin_tools.utils import AppListElementMixin, uniquify
 from django.apps import apps as django_apps
 from django.forms.utils import flatatt
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 class DashboardModule:

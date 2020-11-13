@@ -3,7 +3,7 @@ Module where admin tools menu classes are defined.
 """
 
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from jnt_admin_tools.menu import items
 from jnt_admin_tools.utils import get_admin_site_name

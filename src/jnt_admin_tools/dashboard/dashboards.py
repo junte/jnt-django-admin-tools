@@ -7,7 +7,7 @@ from importlib import import_module
 from django.db.models import Model
 from django.template.defaultfilters import slugify
 from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from jnt_admin_tools.dashboard import modules
 from jnt_admin_tools.utils import uniquify
@@ -48,7 +48,7 @@ class Dashboard:
     Here's an example of a custom dashboard::
 
         from django.core.urlresolvers import reverse
-        from django.utils.translation import ugettext_lazy as _
+        from django.utils.translation import gettext_lazy as _
         from jnt_admin_tools.dashboard import modules, Dashboard
 
         class MyDashboard(Dashboard):
@@ -152,7 +152,7 @@ class AppIndexDashboard(Dashboard):
     Here's an example of a custom app index dashboard::
 
         from django.core.urlresolvers import reverse
-        from django.utils.translation import ugettext_lazy as _
+        from django.utils.translation import gettext_lazy as _
         from jnt_admin_tools.dashboard import modules, AppIndexDashboard
 
         class MyAppIndexDashboard(AppIndexDashboard):
