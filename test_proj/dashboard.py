@@ -1,4 +1,4 @@
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from jnt_admin_tools.dashboard import Dashboard, AppIndexDashboard
 from jnt_admin_tools.dashboard import modules
