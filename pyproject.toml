@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jnt-django-admin-tools"
-version = "0.9.15"
+version = "0.9.17"
 description="A collection of tools for the django administration interface"
 authors = ["Junte <tech@junte.ru>"]
 classifiers=[
@@ -19,7 +19,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.8"
 django = ">=3"
 
 [tool.poetry.dev-dependencies]
