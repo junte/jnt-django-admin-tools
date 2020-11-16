@@ -165,7 +165,8 @@ class BaseGenericForeignKeyMixin:
     def _set_declared_gfk_to_form(self, form):
         for field in self._get_generic_foreign_keys(self.model):
             form_char_field = forms.CharField(
-                widget=forms.HiddenInput(), required=False,
+                widget=forms.HiddenInput(),
+                required=False,
             )
 
             form.declared_fields[field.name] = form_char_field

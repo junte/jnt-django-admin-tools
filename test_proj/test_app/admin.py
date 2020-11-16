@@ -85,6 +85,16 @@ class CommentAdmin(
 ):
     fieldsets = (
         (None, {"fields": ("title", "content")}),
-        ("Advanced options", {"fields": ("user", "link"),}),
-        (None, {"fields": ("owner",),}),
+        (
+            "Advanced options",
+            {
+                "fields": ("user", "link"),
+            },
+        ),
+        (
+            None,
+            {
+                "fields": ("owner",),
+            },
+        ),
     )

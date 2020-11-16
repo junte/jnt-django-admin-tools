@@ -96,12 +96,12 @@ class PermissionSelectMultipleWidget(forms.CheckboxSelectMultiple):
 
         if is_app_or_model_different:
             created = True
-            row = dict(
-                model=model_verbose_name,
-                model_class=model_class,
-                app=app,
-                permissions={},
-            )
+            row = {
+                "model": model_verbose_name,
+                "model_class": model_class,
+                "app": app,
+                "permissions": {},
+            }
         else:
             row = last_row
 

@@ -57,7 +57,12 @@ def get_avail_models(request):
         perms = model_admin.get_model_perms(request)
         if True not in perms.values():
             continue
-        items.append((model, perms,))
+        items.append(
+            (
+                model,
+                perms,
+            )
+        )
     return items
 
 
