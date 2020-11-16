@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jnt-django-admin-tools"
-version = "0.9.14"
+version = "0.9.15"
 description="A collection of tools for the django administration interface"
 authors = ["Junte <tech@junte.ru>"]
 classifiers=[
@@ -20,7 +20,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.6"
-django = ">=2"
+django = ">=3"
 
 [tool.poetry.dev-dependencies]
 mypy = "*"
@@ -38,7 +38,7 @@ flake8-pytest-style = "*"
 flake8-coding = "*"
 pytest-freezegun = "*"
 wemake-python-styleguide = "*"
-black = "^19.10b0"
+black = "^20.8b1"
 flake8-class-attributes-order = "*"
 
 [tool.black]
