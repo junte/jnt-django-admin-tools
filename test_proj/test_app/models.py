@@ -25,9 +25,17 @@ def get_related_models():
     return (Blog, Bar, Baz)
 
 
+class Tag(models.Model):
+    title = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.title
+
+
 class Blog(models.Model):
     title = models.CharField(max_length=100, null=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE)
+    tags = models.ManyToManyField(Tag, related_name="+")
 
     def __str__(self):
         return self.title

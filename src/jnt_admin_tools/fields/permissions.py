@@ -2,7 +2,10 @@ from django import forms
 from django.contrib.auth.models import Permission
 from django.db.models import QuerySet
 
-from ..widgets import PermissionSelectMultipleWidget
+from jnt_admin_tools.widgets import (
+    PermissionSelectMultipleReadonlyWidget,
+    PermissionSelectMultipleWidget,
+)
 
 
 class PermissionSelectMultipleField(forms.ModelMultipleChoiceField):
@@ -26,8 +29,10 @@ class PermissionSelectMultipleField(forms.ModelMultipleChoiceField):
     """
 
     widget = PermissionSelectMultipleWidget
+    readonly_widget = PermissionSelectMultipleReadonlyWidget
 
-    def __init__(self, queryset: QuerySet = None, *args, **kwargs):
+    def __init__(self, queryset: QuerySet = None, *args, **kwargs) -> None:
+        """Initialize."""
         if queryset is None:
             queryset = Permission.objects.all()
 

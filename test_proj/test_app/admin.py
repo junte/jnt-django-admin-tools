@@ -1,18 +1,13 @@
-from jnt_admin_tools.decorators import (
-    admin_changelist_link,
-    admin_field,
-    admin_link,
-)
 from jnt_admin_tools.mixins import (
     AdminAutocompleteFieldsMixin,
     GenericForeignKeyAdminMixin,
     GenericForeignKeyInlineAdminMixin,
+    AdminClickableLinksMixin,
 )
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from django.utils.safestring import mark_safe
 from test_app.forms import GroupAdminForm
-from test_app.models import Bar, Foo, Baz, Blog, Comment
+from test_app.models import Bar, Foo, Baz, Blog, Comment, Tag
 from test_app.filters import BarAutocompleteFilter
 
 admin.site.unregister(Group)
@@ -25,26 +20,28 @@ class BazInlineAdmin(
 ):
     model = Baz
     extra = 0
-
     fields = ("name", "owner")
 
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
     form = GroupAdminForm
+    readonly_fields = ("permissions",)
+
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ("title",)
+    fields = ("title",)
+    search_fields = ("title",)
 
 
 @admin.register(Foo)
 class FooAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
-    list_display = ("name", "bar_link")
-    fields = ("name", "bar", "bar_link")
-    readonly_fields = ("bar_link",)
+    list_display = ("name",)
+    fields = ("name", "bar")
     search_fields = ("name",)
     list_filter = (BarAutocompleteFilter,)
-
-    @admin_link("bar")
-    def bar_link(self, obj):
-        return obj.name
 
     class Media:
         pass
@@ -52,17 +49,8 @@ class FooAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
 
 @admin.register(Bar)
 class BarAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
-    fields = ("name", "foos", "custom_field")
-    readonly_fields = ("foos", "custom_field")
+    fields = ("name",)
     search_fields = ("name",)
-
-    @admin_changelist_link("foos", query_string=lambda bar: f"bar_id={bar.pk}")
-    def foos(self, foos):
-        return ", ".join(str(foo) for foo in foos.all())
-
-    @admin_field("Custom field")
-    def custom_field(self, obj):
-        return mark_safe("<h1>custom field</h1>")
 
 
 @admin.register(Baz)
@@ -71,11 +59,15 @@ class BazAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
 
 
 @admin.register(Blog)
-class BlogAdmin(
-    GenericForeignKeyAdminMixin, AdminAutocompleteFieldsMixin, admin.ModelAdmin
+class BlogAdmin(  # noqa: WPS215
+    GenericForeignKeyAdminMixin,
+    AdminAutocompleteFieldsMixin,
+    AdminClickableLinksMixin,
+    admin.ModelAdmin,
 ):
-
-    search_fields = ("name",)
+    list_display = ("title", "author", "tags")
+    readonly_fields = ("author", "tags")
+    search_fields = ("title",)
     inlines = (BazInlineAdmin,)
 
 
