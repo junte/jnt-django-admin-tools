@@ -1,6 +1,7 @@
-from jnt_admin_tools.views import ContentTypeAutocompleteView
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
+
+from jnt_admin_tools.views import ContentTypeAutocompleteView
 
 
 @admin.register(ContentType)
