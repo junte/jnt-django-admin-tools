@@ -26,6 +26,7 @@ class BazInlineAdmin(
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
     form = GroupAdminForm
+    readonly_fields = ("permissions",)
 
 
 @admin.register(Tag)

@@ -36,78 +36,81 @@ class PermissionSelectMultipleWidget(forms.CheckboxSelectMultiple):
     .. image:: images/widgets/permission_select_multiple_widget.png
     """
 
+    class Media:
+        css = {
+            "all": ("jnt_admin_tools/css/widgets/permissions.css",),
+        }
+
     template_name = "jnt_admin_tools/widgets/permissions.html"
     custom_permission_types: List[str] = []
     groups_permissions: List[str] = []
+    extra_data: Dict[str, Any] = {}
 
     def get_context(self, name, value, attrs):
         if value is None:
             value = []
 
-        return {
+        context = {
             "name": name,
             "value": value,
             "table": self.get_table(),
             "groups_permissions": self.groups_permissions,
             "default_permission_types": DEFAULT_PERMISSIONS,
             "custom_permission_types": self.custom_permission_types,
+            "is_readonly": False,
         }
+        context.update(self.extra_data)
+
+        return context
 
     def get_table(self):
         table = []
-        row: Dict[str, Any] = {}
+        row = None
+        last_app = None
+        last_model = None
 
-        for permission in self.choices.queryset.select_related(
-            "content_type"
-        ).all():
-            row, created = self._update_or_create_permission_row(
-                permission, row
+        for permission in self.choices.queryset.select_related("content_type").all():
+            model_part = "_{0}".format(permission.content_type.model)
+            permission_type = permission.codename
+            if permission_type.endswith(model_part):
+                permission_type = permission_type[: -len(model_part)]
+
+            app_label = permission.content_type.app_label
+            app = app_label.replace("_", " ")
+            model_class = permission.content_type.model_class()
+            model_verbose_name = (
+                model_class._meta.verbose_name if model_class else None
             )
-            if created:
+            model_class_name = (
+                model_class._meta.model_name if model_class else None
+            )
+
+            all_permissions = list(DEFAULT_PERMISSIONS) + list(
+                self.custom_permission_types,
+            )
+
+            if permission_type not in all_permissions:
+                self.custom_permission_types.append(permission_type)
+
+            is_app_or_model_different = (
+                last_model != model_class or last_app != app
+            )
+            if is_app_or_model_different:
+                row = {
+                    "model": model_verbose_name,
+                    "model_class": model_class,
+                    "model_class_name": model_class_name,
+                    "app": app,
+                    "app_label": app_label,
+                    "permissions": {},
+                }
+
+            row["permissions"][permission_type] = permission
+
+            if is_app_or_model_different:
                 table.append(row)
 
+            last_app = app
+            last_model = model_class
+
         return table
-
-    def _update_or_create_permission_row(
-        self, permission, last_row: Dict[str, Any]
-    ) -> Tuple[Dict[str, Any], bool]:
-        codename = permission.codename
-        model_part = "_" + permission.content_type.model
-        permission_type = codename
-        if permission_type.endswith(model_part):
-            permission_type = permission_type[: -len(model_part)]
-
-        app = permission.content_type.app_label.replace("_", " ")
-        model_class = permission.content_type.model_class()
-        model_verbose_name = (
-            model_class._meta.verbose_name if model_class else None
-        )
-
-        if (
-            permission_type
-            not in list(DEFAULT_PERMISSIONS) + self.custom_permission_types
-        ):
-            self.custom_permission_types.append(permission_type)
-
-        is_app_or_model_different = not last_row or (
-            last_row["model_class"] != model_class or last_row["app"] != app
-        )
-        created = False
-
-        if is_app_or_model_different:
-            created = True
-            row = {
-                "model": model_verbose_name,
-                "model_class": model_class,
-                "app": app,
-                "permissions": {},
-            }
-        else:
-            row = last_row
-
-        row["permissions"][permission_type] = permission
-
-        return row, created
-
-    class Media:
-        css = {"all": ("jnt_admin_tools/css/widgets/permissions.css",)}
