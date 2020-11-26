@@ -69,7 +69,9 @@ class PermissionSelectMultipleWidget(forms.CheckboxSelectMultiple):
         last_app = None
         last_model = None
 
-        for permission in self.choices.queryset.select_related("content_type").all():
+        for permission in self.choices.queryset.select_related(
+            "content_type",
+        ).all():
             model_part = "_{0}".format(permission.content_type.model)
             permission_type = permission.codename
             if permission_type.endswith(model_part):
