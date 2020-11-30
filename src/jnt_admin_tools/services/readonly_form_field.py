@@ -5,7 +5,6 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.core.exceptions import FieldDoesNotExist, ObjectDoesNotExist
 
 from jnt_admin_tools.services.object_links import (
-    EMPTY_VALUE,
     get_display_for_gfk,
     get_display_for_many,
     object_change_link,
@@ -34,8 +33,8 @@ def get_present_admin_readonly_field(  # noqa: WPS212
     except (AttributeError, ValueError, ObjectDoesNotExist, FieldDoesNotExist):
         return None
 
-    if field_value == EMPTY_VALUE:
-        return EMPTY_VALUE
+    if isinstance(field_value, str):
+        return field_value
 
     present = _get_from_readonly_widget(
         model_admin,
