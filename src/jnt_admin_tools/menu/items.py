@@ -52,6 +52,11 @@ class MenuItem:
     template = "jnt_admin_tools/menu/item.html"
     children = None
 
+    # cache
+    cache_timeout = 60 * 10
+    cache_enabled = False
+    cache_key = None
+
     def __init__(self, title=None, url=None, **kwargs):
 
         if title is not None:
