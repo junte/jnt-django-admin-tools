@@ -94,7 +94,10 @@ def get_display_for_many(objects, field_name=None) -> str:
 
 def _get_short_description(model_admin, field_name) -> str:
     """Get verbose name for target field."""
+    default_present = field_name.split("__")[-1].replace("_", " ")
     try:
-        return model_admin.model._meta.get_field(field_name).verbose_name
+        field = model_admin.model._meta.get_field(field_name)
     except FieldDoesNotExist:
-        return field_name.split("__")[-1].replace("_", " ")
+        return default_present
+
+    return getattr(field, "verbose_name", default_present)
