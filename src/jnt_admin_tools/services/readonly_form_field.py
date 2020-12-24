@@ -34,11 +34,6 @@ def get_present_admin_readonly_field(  # noqa: WPS212
     except (AttributeError, ValueError, ObjectDoesNotExist, FieldDoesNotExist):
         return None
 
-    if isinstance(field_value, str):
-        if getattr(field, "choices", None):
-            field_value = _get_choice_present(field, field_value)
-        return field_value
-
     present = _get_from_readonly_widget(
         model_admin,
         field_name,
@@ -47,6 +42,11 @@ def get_present_admin_readonly_field(  # noqa: WPS212
 
     if present:
         return present
+
+    if isinstance(field_value, str):
+        if getattr(field, "choices", None):
+            field_value = _get_choice_present(field, field_value)
+        return field_value
 
     if field.is_relation:
         return _get_display_relation(field, field_value)
