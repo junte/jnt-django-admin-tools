@@ -3,6 +3,7 @@ from typing import Optional
 from django.contrib.admin.utils import lookup_field
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.core.exceptions import FieldDoesNotExist, ObjectDoesNotExist
+from django.db import models
 
 from jnt_admin_tools.services.object_links import (
     get_display_for_gfk,
@@ -34,6 +35,8 @@ def get_present_admin_readonly_field(  # noqa: WPS212
         return None
 
     if isinstance(field_value, str):
+        if getattr(field, "choices", None):
+            field_value = _get_choice_present(field, field_value)
         return field_value
 
     present = _get_from_readonly_widget(
@@ -90,3 +93,17 @@ def _get_display_relation(field, instance) -> Optional[str]:
         return get_display_for_many(instance.all())
 
     return object_change_link(instance)
+
+
+def _get_choice_present(field: models.CharField, field_value: str) -> str:
+    """Get present for choice."""
+    choice = [
+        present
+        for choice_value, present in field.choices
+        if choice_value == field_value
+    ]
+
+    if choice:
+        field_value = choice[0]
+
+    return field_value

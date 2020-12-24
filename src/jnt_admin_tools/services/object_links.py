@@ -1,6 +1,7 @@
 from typing import Tuple
 
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.core.exceptions import FieldDoesNotExist
 from django.urls import NoReverseMatch
 from django.utils.html import format_html
 
@@ -18,7 +19,7 @@ def add_object_link_present_function(model_admin, field_name):
 
     setattr(model_admin, field, copied_func)
     getattr(model_admin, field).__dict__.update(
-        {"short_description": field_name.split("__")[-1].replace("_", " ")},
+        {"short_description": _get_short_description(model_admin, field_name)},
     )
     return format_html(field)
 
@@ -89,3 +90,11 @@ def get_display_for_many(objects, field_name=None) -> str:
             ),
         ),
     )
+
+
+def _get_short_description(model_admin, field_name) -> str:
+    """Get verbose name for target field."""
+    try:
+        return model_admin.model._meta.get_field(field_name).verbose_name
+    except FieldDoesNotExist:
+        return field_name.split("__")[-1].replace("_", " ")
