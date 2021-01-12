@@ -59,7 +59,7 @@ jQuery(document).ready(function() {
 <ul id="navigation-menu">
     {% for item in menu.children %}
     {% if item.cache_enabled and item.cache_key %}
-        {% cache item.cache_timeout item.cache_key %}
+        {% cache item.cache_timeout navigation_menu item.cache_key %}
         {% admin_tools_render_menu_item item forloop.counter %}
         {% endcache %}
     {% else %}
