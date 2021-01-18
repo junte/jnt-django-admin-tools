@@ -99,7 +99,9 @@ class AutocompleteFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value():
-            queryset = queryset.filter(**{self.parameter_name: self.value()}).distinct()
+            queryset = queryset.filter(
+                **{self.parameter_name: self.value()}
+            ).distinct()
         return queryset
 
     def get_field_queryset(self, model):
