@@ -1,14 +1,16 @@
-from jnt_admin_tools.mixins import (
-    AdminAutocompleteFieldsMixin,
-    GenericForeignKeyAdminMixin,
-    GenericForeignKeyInlineAdminMixin,
-    AdminClickableLinksMixin,
-)
 from django.contrib import admin
 from django.contrib.auth.models import Group
+
+from jnt_admin_tools.mixins import (
+    AdminAutocompleteChangelistFiltersMixin,
+    AdminAutocompleteFieldsMixin,
+    AdminClickableLinksMixin,
+    GenericForeignKeyAdminMixin,
+    GenericForeignKeyInlineAdminMixin,
+)
+from test_app.filters import BarAutocompleteFilter, TagsAutocompleteFilter
 from test_app.forms import GroupAdminForm
-from test_app.models import Bar, Foo, Baz, Blog, Comment, Tag
-from test_app.filters import BarAutocompleteFilter
+from test_app.models import Bar, Baz, Blog, Comment, Foo, Tag
 
 admin.site.unregister(Group)
 
@@ -37,14 +39,15 @@ class TagAdmin(admin.ModelAdmin):
 
 
 @admin.register(Foo)
-class FooAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
+class FooAdmin(
+    AdminAutocompleteChangelistFiltersMixin,
+    AdminAutocompleteFieldsMixin,
+    admin.ModelAdmin,
+):
     list_display = ("name",)
     fields = ("name", "bar")
     search_fields = ("name",)
-    list_filter = (BarAutocompleteFilter,)
-
-    class Media:
-        pass
+    list_filter = (BarAutocompleteFilter, "name")
 
 
 @admin.register(Bar)
@@ -61,6 +64,7 @@ class BazAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
 @admin.register(Blog)
 class BlogAdmin(  # noqa: WPS215
     GenericForeignKeyAdminMixin,
+    AdminAutocompleteChangelistFiltersMixin,
     AdminAutocompleteFieldsMixin,
     AdminClickableLinksMixin,
     admin.ModelAdmin,
@@ -69,6 +73,7 @@ class BlogAdmin(  # noqa: WPS215
     readonly_fields = ("author", "tags")
     search_fields = ("title",)
     inlines = (BazInlineAdmin,)
+    list_filter = (TagsAutocompleteFilter,)
 
 
 @admin.register(Comment)
