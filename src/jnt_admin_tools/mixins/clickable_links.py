@@ -19,7 +19,7 @@ def contents(self):
 AdminReadonlyField.contents = contents
 
 
-class AdminClickableLinksMixin:
+class ClickableLinksAdminMixin:
     def get_list_display(self, request):
         list_display = super().get_list_display(request)
         return self._updating_list_display(list_display, request)

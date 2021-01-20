@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
+from jnt_admin_tools.admin.base import (
+    AutocompleteAdminMixin,
+    BaseModelAdmin,
+)
 
 from jnt_admin_tools.mixins import (
-    AdminAutocompleteChangelistFiltersMixin,
-    AdminAutocompleteFieldsMixin,
-    AdminClickableLinksMixin,
+    ClickableLinksAdminMixin,
     GenericForeignKeyAdminMixin,
     GenericForeignKeyInlineAdminMixin,
 )
@@ -17,7 +19,7 @@ admin.site.unregister(Group)
 
 class BazInlineAdmin(
     GenericForeignKeyInlineAdminMixin,
-    AdminAutocompleteFieldsMixin,
+    AutocompleteAdminMixin,
     admin.StackedInline,
 ):
     model = Baz
@@ -39,11 +41,7 @@ class TagAdmin(admin.ModelAdmin):
 
 
 @admin.register(Foo)
-class FooAdmin(
-    AdminAutocompleteChangelistFiltersMixin,
-    AdminAutocompleteFieldsMixin,
-    admin.ModelAdmin,
-):
+class FooAdmin(BaseModelAdmin):
     list_display = ("name",)
     fields = ("name", "bar")
     search_fields = ("name",)
@@ -51,22 +49,21 @@ class FooAdmin(
 
 
 @admin.register(Bar)
-class BarAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
+class BarAdmin(AutocompleteAdminMixin, admin.ModelAdmin):
     fields = ("name",)
     search_fields = ("name",)
 
 
 @admin.register(Baz)
-class BazAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
+class BazAdmin(AutocompleteAdminMixin, admin.ModelAdmin):
     search_fields = ("name",)
 
 
 @admin.register(Blog)
 class BlogAdmin(  # noqa: WPS215
     GenericForeignKeyAdminMixin,
-    AdminAutocompleteChangelistFiltersMixin,
-    AdminAutocompleteFieldsMixin,
-    AdminClickableLinksMixin,
+    AutocompleteAdminMixin,
+    ClickableLinksAdminMixin,
     admin.ModelAdmin,
 ):
     list_display = ("title", "author", "tags")
@@ -78,7 +75,9 @@ class BlogAdmin(  # noqa: WPS215
 
 @admin.register(Comment)
 class CommentAdmin(
-    GenericForeignKeyAdminMixin, AdminAutocompleteFieldsMixin, admin.ModelAdmin
+    GenericForeignKeyAdminMixin,
+    AutocompleteAdminMixin,
+    admin.ModelAdmin,
 ):
     fieldsets = (
         (None, {"fields": ("title", "content")}),

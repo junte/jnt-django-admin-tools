@@ -1,7 +1,7 @@
-from .autocomplete_fields import AdminAutocompleteFieldsMixin
+from .autocomplete_fields import AutocompleteFieldsAdminMixin
 from .generic_foreign_key import GenericForeignKeyAdminMixin
 from .generic_foreign_key_inline import GenericForeignKeyInlineAdminMixin
-from .admin_clickable_links import AdminClickableLinksMixin
+from .clickable_links import ClickableLinksAdminMixin
 from .autocomplete_changelist_filters import (
-    AdminAutocompleteChangelistFiltersMixin,
+    AutocompleteChangelistFiltersAdminMixin,
 )
