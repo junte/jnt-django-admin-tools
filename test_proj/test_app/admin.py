@@ -1,9 +1,11 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
+from jnt_admin_tools.admin.base import (
+    AutocompleteBaseModelAdminMixin,
+    BaseModelAdmin,
+)
 
 from jnt_admin_tools.mixins import (
-    AdminAutocompleteChangelistFiltersMixin,
-    AdminAutocompleteFieldsMixin,
     AdminClickableLinksMixin,
     GenericForeignKeyAdminMixin,
     GenericForeignKeyInlineAdminMixin,
@@ -17,7 +19,7 @@ admin.site.unregister(Group)
 
 class BazInlineAdmin(
     GenericForeignKeyInlineAdminMixin,
-    AdminAutocompleteFieldsMixin,
+    AutocompleteBaseModelAdminMixin,
     admin.StackedInline,
 ):
     model = Baz
@@ -39,11 +41,7 @@ class TagAdmin(admin.ModelAdmin):
 
 
 @admin.register(Foo)
-class FooAdmin(
-    AdminAutocompleteChangelistFiltersMixin,
-    AdminAutocompleteFieldsMixin,
-    admin.ModelAdmin,
-):
+class FooAdmin(BaseModelAdmin):
     list_display = ("name",)
     fields = ("name", "bar")
     search_fields = ("name",)
@@ -51,21 +49,20 @@ class FooAdmin(
 
 
 @admin.register(Bar)
-class BarAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
+class BarAdmin(AutocompleteBaseModelAdminMixin, admin.ModelAdmin):
     fields = ("name",)
     search_fields = ("name",)
 
 
 @admin.register(Baz)
-class BazAdmin(AdminAutocompleteFieldsMixin, admin.ModelAdmin):
+class BazAdmin(AutocompleteBaseModelAdminMixin, admin.ModelAdmin):
     search_fields = ("name",)
 
 
 @admin.register(Blog)
 class BlogAdmin(  # noqa: WPS215
     GenericForeignKeyAdminMixin,
-    AdminAutocompleteChangelistFiltersMixin,
-    AdminAutocompleteFieldsMixin,
+    AutocompleteBaseModelAdminMixin,
     AdminClickableLinksMixin,
     admin.ModelAdmin,
 ):
@@ -78,7 +75,9 @@ class BlogAdmin(  # noqa: WPS215
 
 @admin.register(Comment)
 class CommentAdmin(
-    GenericForeignKeyAdminMixin, AdminAutocompleteFieldsMixin, admin.ModelAdmin
+    GenericForeignKeyAdminMixin,
+    AutocompleteBaseModelAdminMixin,
+    admin.ModelAdmin,
 ):
     fieldsets = (
         (None, {"fields": ("title", "content")}),
