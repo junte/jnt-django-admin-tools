@@ -3,7 +3,7 @@ from django.contrib import admin
 from jnt_admin_tools.mixins import (
     AdminAutocompleteChangelistFiltersMixin,
     AdminAutocompleteFieldsMixin,
-    AdminClickableLinksMixin,
+    ClickableLinksAdminMixin,
 )
 
 
@@ -15,7 +15,7 @@ class AutocompleteAdminMixin(
 
 
 class BaseModelAdmin(
-    AdminClickableLinksMixin,
+    ClickableLinksAdminMixin,
     AutocompleteAdminMixin,
     admin.ModelAdmin,
 ):

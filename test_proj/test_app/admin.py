@@ -6,7 +6,7 @@ from jnt_admin_tools.admin.base import (
 )
 
 from jnt_admin_tools.mixins import (
-    AdminClickableLinksMixin,
+    ClickableLinksAdminMixin,
     GenericForeignKeyAdminMixin,
     GenericForeignKeyInlineAdminMixin,
 )
@@ -63,7 +63,7 @@ class BazAdmin(AutocompleteAdminMixin, admin.ModelAdmin):
 class BlogAdmin(  # noqa: WPS215
     GenericForeignKeyAdminMixin,
     AutocompleteAdminMixin,
-    AdminClickableLinksMixin,
+    ClickableLinksAdminMixin,
     admin.ModelAdmin,
 ):
     list_display = ("title", "author", "tags")
