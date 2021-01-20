@@ -7,7 +7,7 @@ from jnt_admin_tools.mixins import (
 )
 
 
-class AutocompleteBaseModelAdminMixin(
+class AutocompleteAdminMixin(
     AdminAutocompleteFieldsMixin,
     AdminAutocompleteChangelistFiltersMixin,
 ):
@@ -16,7 +16,7 @@ class AutocompleteBaseModelAdminMixin(
 
 class BaseModelAdmin(
     AdminClickableLinksMixin,
-    AutocompleteBaseModelAdminMixin,
+    AutocompleteAdminMixin,
     admin.ModelAdmin,
 ):
     """Base model admin."""

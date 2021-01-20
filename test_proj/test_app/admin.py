@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from jnt_admin_tools.admin.base import (
-    AutocompleteBaseModelAdminMixin,
+    AutocompleteAdminMixin,
     BaseModelAdmin,
 )
 
@@ -19,7 +19,7 @@ admin.site.unregister(Group)
 
 class BazInlineAdmin(
     GenericForeignKeyInlineAdminMixin,
-    AutocompleteBaseModelAdminMixin,
+    AutocompleteAdminMixin,
     admin.StackedInline,
 ):
     model = Baz
@@ -49,20 +49,20 @@ class FooAdmin(BaseModelAdmin):
 
 
 @admin.register(Bar)
-class BarAdmin(AutocompleteBaseModelAdminMixin, admin.ModelAdmin):
+class BarAdmin(AutocompleteAdminMixin, admin.ModelAdmin):
     fields = ("name",)
     search_fields = ("name",)
 
 
 @admin.register(Baz)
-class BazAdmin(AutocompleteBaseModelAdminMixin, admin.ModelAdmin):
+class BazAdmin(AutocompleteAdminMixin, admin.ModelAdmin):
     search_fields = ("name",)
 
 
 @admin.register(Blog)
 class BlogAdmin(  # noqa: WPS215
     GenericForeignKeyAdminMixin,
-    AutocompleteBaseModelAdminMixin,
+    AutocompleteAdminMixin,
     AdminClickableLinksMixin,
     admin.ModelAdmin,
 ):
@@ -76,7 +76,7 @@ class BlogAdmin(  # noqa: WPS215
 @admin.register(Comment)
 class CommentAdmin(
     GenericForeignKeyAdminMixin,
-    AutocompleteBaseModelAdminMixin,
+    AutocompleteAdminMixin,
     admin.ModelAdmin,
 ):
     fieldsets = (
