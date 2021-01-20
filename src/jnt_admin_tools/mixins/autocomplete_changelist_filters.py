@@ -1,7 +1,7 @@
 from django.template.response import TemplateResponse
 
 
-class AdminAutocompleteChangelistFiltersMixin:
+class AutocompleteChangelistFiltersMixinAdmin:
     def changelist_view(self, request, extra_context=None) -> TemplateResponse:
         changelist_view = super().changelist_view(
             request, extra_context=extra_context

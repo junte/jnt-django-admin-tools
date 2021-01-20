@@ -1,15 +1,15 @@
 from django.contrib import admin
 
 from jnt_admin_tools.mixins import (
-    AdminAutocompleteChangelistFiltersMixin,
-    AdminAutocompleteFieldsMixin,
+    AutocompleteChangelistFiltersMixinAdmin,
+    AutocompleteFieldsAdminMixin,
     ClickableLinksAdminMixin,
 )
 
 
 class AutocompleteAdminMixin(
-    AdminAutocompleteFieldsMixin,
-    AdminAutocompleteChangelistFiltersMixin,
+    AutocompleteFieldsAdminMixin,
+    AutocompleteChangelistFiltersMixinAdmin,
 ):
     """Autocomplete model admin."""
 

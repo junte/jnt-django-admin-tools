@@ -5,7 +5,7 @@ from django.contrib.admin.utils import flatten_fieldsets
 from django.db.models import ForeignKey, ManyToManyField
 
 
-class AdminAutocompleteFieldsMixin:
+class AutocompleteFieldsAdminMixin:
     def get_autocomplete_fields(self, request):
         autocomplete_fields = super().get_autocomplete_fields(request)
 
