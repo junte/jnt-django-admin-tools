@@ -46,6 +46,8 @@ def get_present_admin_readonly_field(  # noqa: WPS212
     if isinstance(field_value, str):
         if getattr(field, "choices", None):
             field_value = _get_choice_present(field, field_value)
+        elif not field_value:
+            field_value = admin_readonly_field.empty_value_display
         return field_value
 
     if field.is_relation:
