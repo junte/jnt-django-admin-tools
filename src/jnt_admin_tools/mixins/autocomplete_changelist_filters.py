@@ -12,7 +12,7 @@ class AutocompleteChangelistFiltersAdminMixin:
     def _update_changelist_media(
         self, changelist_view: TemplateResponse
     ) -> None:
-        if not "cl" in changelist_view.context_data:
+        if "cl" not in changelist_view.context_data:
             return
 
         for filter_spec in changelist_view.context_data["cl"].filter_specs:
