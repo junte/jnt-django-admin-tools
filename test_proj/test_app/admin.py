@@ -1,15 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from jnt_admin_tools.admin.base import (
-    AutocompleteAdminMixin,
-    BaseModelAdmin,
-)
 
 from jnt_admin_tools.mixins import (
     ClickableLinksAdminMixin,
     GenericForeignKeyAdminMixin,
     GenericForeignKeyInlineAdminMixin,
 )
+from jnt_admin_tools.mixins.autocomplete import AutocompleteAdminMixin
+from jnt_admin_tools.mixins.base import BaseModelAdmin
 from test_app.filters import BarAutocompleteFilter, TagsAutocompleteFilter
 from test_app.forms import GroupAdminForm
 from test_app.models import Bar, Baz, Blog, Comment, Foo, Tag
