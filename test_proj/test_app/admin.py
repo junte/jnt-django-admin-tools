@@ -6,7 +6,7 @@ from jnt_admin_tools.mixins import (
     GenericForeignKeyAdminMixin,
     GenericForeignKeyInlineAdminMixin,
 )
-from jnt_admin_tools.mixins.autocomplete import AutocompleteAdminMixin
+from jnt_admin_tools.mixins import AutocompleteAdminMixin
 from jnt_admin_tools.mixins.base import BaseModelAdmin
 from test_app.filters import BarAutocompleteFilter, TagsAutocompleteFilter
 from test_app.forms import GroupAdminForm
