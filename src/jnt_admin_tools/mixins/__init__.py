@@ -5,3 +5,4 @@ from .clickable_links import ClickableLinksAdminMixin
 from .autocomplete_changelist_filters import (
     AutocompleteChangelistFiltersAdminMixin,
 )
+from .autocomplete import AutocompleteAdminMixin
