@@ -440,36 +440,60 @@ class AppList(DashboardModule, AppListElementMixin):
         self.exclude_list = kwargs.pop("exclude_list", [])  # deprecated
         super(AppList, self).__init__(title, **kwargs)
 
-    def init_with_context(self, context):
+    def init_with_context(self, context) -> None:
+        """Init with context."""
         if self._initialized:
             return
-        items = self._visible_models(context["request"])
-        apps = {}
-        for model, perms in items:
-            app_label = model._meta.app_label
-            if app_label not in apps:
-                apps[app_label] = {
-                    "title": django_apps.get_app_config(
-                        app_label
-                    ).verbose_name,
-                    "url": self._get_admin_app_list_url(model, context),
-                    "models": [],
-                }
-            model_dict = {}
-            model_dict["title"] = model._meta.verbose_name_plural
-            if perms["change"] or perms.get("view", False):
-                model_dict["change_url"] = self._get_admin_change_url(
-                    model, context
-                )
-            if perms["add"]:
-                model_dict["add_url"] = self._get_admin_add_url(model, context)
-            apps[app_label]["models"].append(model_dict)
+
+        apps = self.get_apps(context)
 
         for app in sorted(apps.keys()):
             # sort model list alphabetically
             apps[app]["models"].sort(key=lambda x: x["title"])
             self.children.append(apps[app])
+
         self._initialized = True
+
+    def get_apps(self, context) -> dict[str, object]:
+        """Get apps for representation."""
+        visible_models = self._visible_models(context["request"])
+
+        apps = {}
+        for model, perms in visible_models:
+            app_label = model._meta.app_label
+            if app_label not in apps:
+                apps[app_label] = self.get_app_label_dict(model, context)
+
+            apps[app_label]["models"].append(
+                self.get_model_dict(model, perms, context),
+            )
+
+        return apps
+
+    def get_app_label_dict(self, model, context) -> dict[str, str]:
+        """Get application label dict."""
+        return {
+            "title": django_apps.get_app_config(
+                model._meta.app_label,
+            ).verbose_name,
+            "url": self._get_admin_app_list_url(model, context),
+            "models": [],
+        }
+
+    def get_model_dict(self, model, perms, context) -> dict[str, str]:
+        """Get model dict."""
+        model_dict = {
+            "title": model._meta.verbose_name_plural,
+        }
+        if perms["change"] or perms.get("view", False):
+            model_dict["change_url"] = self._get_admin_change_url(
+                model,
+                context,
+            )
+        if perms["add"]:
+            model_dict["add_url"] = self._get_admin_add_url(model, context)
+
+        return model_dict
 
 
 class ModelList(DashboardModule, AppListElementMixin):
@@ -534,31 +558,47 @@ class ModelList(DashboardModule, AppListElementMixin):
         super(ModelList, self).__init__(title, **kwargs)
 
     def init_with_context(self, context):
+        """Init with context."""
         if self._initialized:
             return
+
         items = self._visible_models(context["request"])
         if not items:
             return
-        for model, perms in items:
-            model_dict = {}
-            model_dict["title"] = model._meta.verbose_name_plural
-            if perms["change"] or perms.get("view", False):
-                model_dict["change_url"] = self._get_admin_change_url(
-                    model, context
-                )
-            if perms["add"]:
-                model_dict["add_url"] = self._get_admin_add_url(model, context)
-            self.children.append(model_dict)
-        if self.extra:
-            # TODO - permissions support
-            for extra_url in self.extra:
-                model_dict = {}
-                model_dict["title"] = extra_url["title"]
-                model_dict["change_url"] = extra_url["change_url"]
-                model_dict["add_url"] = extra_url.get("add_url", None)
-                self.children.append(model_dict)
 
+        for model, perms in items:
+            self.children.append(self.get_model_dict(model, perms, context))
+
+        self.fill_extra()
         self._initialized = True
+
+    def get_model_dict(self, model, perms, context) -> dict[str, object]:
+        """Get model dict."""
+        model_dict = {"title": model._meta.verbose_name_plural}
+        if perms["change"] or perms.get("view"):
+            model_dict["change_url"] = self._get_admin_change_url(
+                model,
+                context,
+            )
+        if perms["add"]:
+            model_dict["add_url"] = self._get_admin_add_url(model, context)
+
+        return model_dict
+
+    def fill_extra(self) -> None:
+        """Fill extra."""
+        if not self.extra:
+            return
+
+        # TODO - permissions support
+        for extra_url in self.extra:
+            self.children.append(
+                {
+                    "title": extra_url["title"],
+                    "change_url": extra_url["change_url"],
+                    "add_url": extra_url.get("add_url", None),
+                },
+            )
 
 
 class RecentActions(DashboardModule):
