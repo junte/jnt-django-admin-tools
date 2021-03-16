@@ -7,11 +7,13 @@ class PermissionSelectMultipleReadonlyWidget(PermissionSelectMultipleWidget):
 
     def __init__(self, *args, **kwargs):
         """Initializing."""
-        self._formfield = kwargs.pop("formfield")
+        self._formfield = kwargs.pop("formfield", None)
         super().__init__(*args, **kwargs)
 
         self.extra_data["is_readonly"] = True
-        self.choices = ModelChoiceIterator(self._formfield)
+
+        if self._formfield:
+            self.choices = ModelChoiceIterator(self._formfield)
 
     def render(self, name, value, *args, **kwargs):
         """Render html-string."""
