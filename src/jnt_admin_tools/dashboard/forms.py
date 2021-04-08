@@ -12,12 +12,10 @@ class DashboardPreferencesForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user", None)
         self.dashboard_id = kwargs.pop("dashboard_id", None)
-        super(DashboardPreferencesForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        preferences = super(DashboardPreferencesForm, self).save(
-            commit=False, *args, **kwargs
-        )
+        preferences = super().save(commit=False, *args, **kwargs)
         preferences.user = self.user
         preferences.dashboard_id = self.dashboard_id
         preferences.save()
