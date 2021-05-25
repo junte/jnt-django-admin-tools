@@ -27,7 +27,9 @@ def get_present_admin_readonly_field(  # noqa: WPS212
 
     try:
         field, attr, field_value = lookup_field(
-            field_name, instance, model_admin
+            field_name,
+            instance,
+            model_admin,
         )
         if field is None:
             field = instance._meta.get_field(field_name)
@@ -38,6 +40,7 @@ def get_present_admin_readonly_field(  # noqa: WPS212
         model_admin,
         field_name,
         field_value,
+        admin_readonly_field,
     )
 
     if present:
@@ -57,29 +60,41 @@ def get_present_admin_readonly_field(  # noqa: WPS212
 
 
 def _get_from_readonly_widget(
-    model_admin, field_name, field_value
+    model_admin,
+    field_name,
+    field_value,
+    admin_readonly_field,
 ) -> Optional[str]:
     if not model_admin:
         return None
 
+    readonly_widget = None
     formfield = model_admin.form.base_fields.get(field_name)
+
+    if not formfield:
+        formfield = admin_readonly_field.form.fields.get(field_name)
+        readonly_widget = getattr(formfield, "readonly_widget", None)
+        if not formfield or not readonly_widget:
+            return None
 
     if not formfield:
         return None
 
-    readonly_widgets = getattr(
-        model_admin.form.Meta,
-        "readonly_widgets",
-        {},
-    )
-    readonly_widget = readonly_widgets.get(field_name)
+    if not readonly_widget:
+        readonly_widgets = getattr(
+            model_admin.form.Meta,
+            "readonly_widgets",
+            {},
+        )
+        readonly_widget = readonly_widgets.get(field_name)
 
     if not readonly_widget:
         readonly_widget = getattr(formfield, "readonly_widget", None)
 
     if readonly_widget:
         return readonly_widget(formfield=formfield).render(
-            field_name, field_value
+            field_name,
+            field_value,
         )
 
     return None
