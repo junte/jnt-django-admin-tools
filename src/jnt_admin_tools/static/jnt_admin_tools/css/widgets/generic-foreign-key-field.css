@@ -1,0 +1,8 @@
+.gfk-related-widget-wrapper {
+  max-width: 520px;
+  float: none;
+}
+
+.gfk-related-widget-wrapper .select2-container--admin-autocomplete.select2-container {
+  width: 49% !important;
+}

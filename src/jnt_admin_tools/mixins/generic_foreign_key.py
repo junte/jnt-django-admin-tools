@@ -1,71 +1,165 @@
-from jnt_admin_tools.mixins.base_generic_foreign_key import (
-    BaseGenericForeignKeyMixin,
-)
+from django import forms
+from django.contrib.contenttypes.models import ContentType
+from django.template.response import TemplateResponse
+
+from jnt_admin_tools.db.fields import GenericForeignKey
+from jnt_admin_tools.widgets import ContentTypeAutocompleteSelect
 
 
-class GenericForeignKeyAdminMixin(BaseGenericForeignKeyMixin):
-    def get_fieldsets(self, request, obj=None):
-        fieldsets = super().get_fieldsets(request, obj=obj)
-
-        if fieldsets:
-            fieldsets = self._update_gfk_fieldsets(fieldsets)
-
-        return fieldsets
-
+class GenericForeignKeyAdminMixin:
     def get_form(self, request, obj=None, change=False, **kwargs):
-        self._set_declared_gfk_to_form(self.form)
         form = super().get_form(request, obj=obj, change=change, **kwargs)
-        self._set_present_gfk(form, obj)
-        self._set_validators_gfk(form)
-
+        self._update_gr_fields(form, obj)
         return form
 
-    def _set_present_gfk(self, form, obj):
-        for field in self._get_generic_foreign_keys(self.model):
-            if field.fk_field in form.base_fields:
-                form.base_fields[field.fk_field].widget.attrs[
-                    "data-present"
-                ] = str(getattr(obj, field.name, ""))
+    def get_fields(self, *args, **kwargs):
+        fields = super().get_fields(*args, **kwargs)
+        return self._update_fields(fields)
 
-    def get_inline_formsets(
-        self, request, formsets, inline_instances, obj=None
-    ):
-        self.set_present_for_inlines(request, formsets, inline_instances, obj)
+    def get_fieldsets(self, *args, **kwargs):
+        fieldsets = super().get_fieldsets(*args, **kwargs)
+        for _, fieldset_fields in fieldsets:
+            fieldset_fields["fields"] = self._update_fields(
+                fieldset_fields["fields"]
+            )
+        return fieldsets
 
-        return super().get_inline_formsets(
-            request, formsets, inline_instances, obj=obj
+    def changeform_view(self, *args, **kwargs):
+        changeform_view = super().changeform_view(*args, **kwargs)
+
+        self._update_gfk_in_inlines(changeform_view)
+        return changeform_view
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        form_field = super().formfield_for_foreignkey(
+            db_field,
+            request,
+            **kwargs,
+        )
+        generic_relation_fields = self._get_generic_relation_fields(self.model)
+        current_generic_field = None
+        for generic_field in generic_relation_fields:
+            if generic_field.ct_field == db_field.name:
+                current_generic_field = generic_field
+                break
+
+        if not current_generic_field:
+            return form_field
+
+        form_field.widget = ContentTypeAutocompleteSelect(
+            db_field.remote_field,
+            self.admin_site,
+            using=kwargs.get("using"),
+            attrs=self._get_content_type_autocomplete_attrs(
+                current_generic_field
+            ),
         )
 
-    def set_present_for_inlines(
-        self, request, formsets, inline_instances, obj
-    ):
-        for formset, inline in zip(formsets, inline_instances):
-            generic_foreign_keys = self._get_generic_foreign_keys(
-                formset.model
-            )
+        return form_field
 
-            if not generic_foreign_keys:
+    def _update_fields(self, fields):
+        generic_relation_fields = self._get_generic_relation_fields(self.model)
+        if not generic_relation_fields:
+            return fields
+
+        fields = list(fields)
+
+        for generic_field in generic_relation_fields:
+            if generic_field.name not in fields:
                 continue
 
-            inline_fields = inline.get_fields(request, obj)
+            if generic_field.ct_field not in fields:
+                fields[
+                    fields.index(generic_field.name)
+                ] = generic_field.ct_field
 
-            for form in formset.forms:
-                for gfk in generic_foreign_keys:
-                    if gfk.ct_field not in inline_fields:
-                        continue
+            if generic_field.fk_field not in fields:
+                fields.append(generic_field.fk_field)
 
-                    form.fields[gfk.fk_field].widget.attrs[
-                        "data-present"
-                    ] = str(getattr(form.instance, gfk.name, ""))
+            if generic_field.name in fields:
+                fields.pop(fields.index(generic_field.name))
 
-    def _update_gfk_fieldsets(self, fieldsets):
-        gfk_fields = self._get_generic_foreign_keys(self.model)
+        return tuple(fields)
 
-        if not gfk_fields:
-            return fieldsets
+    def _update_gr_fields(self, form, instance) -> None:
+        if not instance:
+            return
 
-        for fieldset in fieldsets:
-            fields = fieldset[1].get("fields")
-            if fields:
-                fieldset[1]["fields"] = self._update_gfk_fields(fields)
-        return fieldsets
+        generic_relation_fields = self._get_generic_relation_fields(self.model)
+
+        for field in generic_relation_fields:
+            if (
+                field.ct_field in form.base_fields
+                and field.fk_field in form.base_fields
+            ):
+                fk_present = getattr(instance, field.name)
+                fk_present = str(fk_present) if fk_present else ""
+                form.base_fields[field.fk_field].widget = forms.HiddenInput(
+                    attrs={
+                        "data-present": fk_present,
+                    },
+                )
+
+    def _get_generic_relation_fields(self, model):
+        return [
+            field
+            for field in model._meta.get_fields()
+            if self._is_generic_relation_field(field)
+        ]
+
+    def _is_generic_relation_field(self, field) -> bool:
+        return (
+            not field.auto_created
+            and field.is_relation
+            and isinstance(field, GenericForeignKey)
+        )
+
+    def _get_content_type_autocomplete_attrs(self, generic_field):
+        return {
+            "class": "generic-foreign-key-field",
+            "data-ct--field": generic_field.ct_field,
+            "data-fk--field": generic_field.fk_field,
+            "data-gf--name": generic_field.name,
+            "data-gfk--models": ",".join(
+                str(model_id)
+                for model_id in self._get_gfk_ids_related_models(generic_field)
+            ),
+        }
+
+    def _get_gfk_ids_related_models(self, gfk):
+        related_models = gfk.get_related_models()
+
+        content_types = ContentType.objects.get_for_models(*related_models)
+
+        return [x.id for x in content_types.values()]
+
+    def _update_gfk_in_inlines(self, changeform_view) -> None:
+        if not isinstance(changeform_view, TemplateResponse):
+            return
+        inline_formsets = changeform_view.context_data.get(
+            "inline_admin_formsets"
+        )
+        if not inline_formsets:
+            return
+
+        for inline_formset in inline_formsets:
+            generic_fields = self._get_generic_relation_fields(
+                inline_formset.opts.model
+            )
+            if not generic_fields:
+                continue
+
+            for inline_form in inline_formset.forms:
+                instance = inline_form.instance
+
+                for generic_field in generic_fields:
+                    if generic_field.fk_field in inline_form.fields:
+                        hidden_widget = inline_form.fields[
+                            generic_field.fk_field
+                        ].widget
+                        generic_value = getattr(
+                            instance, generic_field.name, ""
+                        )
+                        hidden_widget.attrs["data-present"] = str(
+                            generic_value
+                        )

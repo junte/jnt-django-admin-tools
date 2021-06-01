@@ -63,14 +63,13 @@
 
 (function($) {
     $(document).ready(function() {
-      var STACKED_INLINE = 'stacked';
-      var TABULAR_INLINE = 'tabular';
+      var GFK_SELECTOR = ".generic-foreign-key-field";
 
-      $('.generic-foreign-key-field').on('change', function(e){
+      $(GFK_SELECTOR).on('change', function(e){
         select2Handle(e.target);
       });
 
-      hideFkFields();
+      wrapGFKClass();
       updateGFKLabels();
       initSelect2();
 
@@ -79,7 +78,7 @@
       };
 
       function initSelect2(){
-        var fields = $('.generic-foreign-key-field');
+        var fields = $(GFK_SELECTOR);
 
         for (var i = 0; i < fields.length; i++) {
           var $field = $(fields[i]);
@@ -116,21 +115,28 @@
         }
       };
 
-      function hideFkFields() {
-        var fields = $('.generic-foreign-key-field');
-        for (var i = 0; i < fields.length; i++) {
-          $('fieldset.module.aligned div.form-row.field-' + $(fields[i]).data('fk-Field')).hide();
-        };
-      };
-
       function updateGFKLabels() {
-        var fields = $('.generic-foreign-key-field');
+        var fields = $(GFK_SELECTOR);
         for (var i = 0; i < fields.length; i++) {
           var $field = $(fields[i]);
           var name = $field.data('gf-Name');
           name = name.substr(0, 1).toUpperCase() + name.substr(1);
           var ctField = $field.data('ct-Field');
           $('div.form-row.field-' + ctField + ' label').text(name + ':');
+
+          if ($field.closest("div.tabular.inline-related").length) {
+            var $currentCell = $field.closest("td");
+            var cellIndex = $currentCell.closest("tr").find("td").index($currentCell);
+            $($currentCell.closest("table").find("thead th")[cellIndex]).text(name);
+          }
+        };
+      };
+
+      function wrapGFKClass(){
+        var fields = $(GFK_SELECTOR);
+
+        for (var i = 0; i < fields.length; i++) {
+          $(fields[i]).closest("div.related-widget-wrapper").addClass("gfk-related-widget-wrapper");
         };
       };
 
@@ -221,7 +227,7 @@
           },
           minimumInputLength: 0,
           placeholder: 'Select the ' + selected.text(),
-          width: '280px',
+          width: 'auto',
         };
 
         $sel.addClass(selectClass);
@@ -236,7 +242,5 @@
           $('#' + prefixId + fkField).val(newValue.val());
         });
       };
-
     });
-
 }(django.jQuery));

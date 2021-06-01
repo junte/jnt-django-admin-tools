@@ -18,11 +18,11 @@ admin.site.unregister(Group)
 class BazInlineAdmin(
     GenericForeignKeyInlineAdminMixin,
     AutocompleteAdminMixin,
-    admin.StackedInline,
+    admin.TabularInline,
 ):
     model = Baz
     extra = 0
-    fields = ("name", "owner")
+    fields = ("name", "foos", "owner")
 
 
 @admin.register(Group)
