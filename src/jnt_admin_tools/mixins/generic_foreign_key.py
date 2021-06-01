@@ -121,9 +121,8 @@ class GenericForeignKeyAdminMixin:
             "data-fk--field": generic_field.fk_field,
             "data-gf--name": generic_field.name,
             "data-gfk--models": ",".join(
-                str(model_id) 
-                for model_id 
-                in self._get_gfk_ids_related_models(generic_field)
+                str(model_id)
+                for model_id in self._get_gfk_ids_related_models(generic_field)
             ),
         }
 
