@@ -1,2 +1,3 @@
 from .permissions import PermissionSelectMultipleWidget
 from .permissions_readonly import PermissionSelectMultipleReadonlyWidget
+from .autocomplete import ContentTypeAutocompleteSelect

@@ -13,6 +13,10 @@ class ContentTypeAutocompleteSelect(BaseAutocompleteSelect):
 
         media_js = media._js if media else []
         media_css = media._css if media else {}
+        media_css["screen"] = list(media_css["screen"])
+        media_css["screen"].append(
+            "jnt_admin_tools/css/widgets/generic-foreign-key-field.css",
+        )
 
         return forms.Media(
             js=tuple(
