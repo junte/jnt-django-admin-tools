@@ -1,3 +1,5 @@
+from functools import partialmethod
+
 from django import forms
 
 from jnt_admin_tools.mixins import GenericForeignKeyAdminMixin
@@ -19,5 +21,16 @@ class GenericForeignKeyInlineAdminMixin(GenericForeignKeyAdminMixin):
                 formset.form.base_fields[
                     generic_relation_field.fk_field
                 ].widget = forms.HiddenInput()
+
+                clean_func = partialmethod(
+                    self._clean_fk_field,
+                    fk_field=generic_relation_field.fk_field,
+                    ct_field=generic_relation_field.ct_field,
+                )
+                setattr(
+                    formset.form,
+                    "clean_{0}".format(generic_relation_field.fk_field),
+                    clean_func,
+                )
 
         return formset

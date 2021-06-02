@@ -1,3 +1,5 @@
+from functools import partialmethod
+
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.template.response import TemplateResponse
@@ -46,6 +48,7 @@ class GenericForeignKeyAdminMixin:
         if not current_generic_field:
             return form_field
 
+        is_required = form_field.widget.is_required
         form_field.widget = ContentTypeAutocompleteSelect(
             db_field.remote_field,
             self.admin_site,
@@ -54,6 +57,7 @@ class GenericForeignKeyAdminMixin:
                 current_generic_field
             ),
         )
+        form_field.widget.is_required = is_required
 
         return form_field
 
@@ -99,6 +103,12 @@ class GenericForeignKeyAdminMixin:
                         "data-present": fk_present,
                     },
                 )
+                clean_func = partialmethod(
+                    self._clean_fk_field,
+                    fk_field=field.fk_field,
+                    ct_field=field.ct_field,
+                )
+                setattr(form, "clean_{0}".format(field.fk_field), clean_func)
 
     def _get_generic_relation_fields(self, model):
         return [
@@ -163,3 +173,14 @@ class GenericForeignKeyAdminMixin:
                         hidden_widget.attrs["data-present"] = str(
                             generic_value
                         )
+
+    def _clean_fk_field(self, current_form, **kwargs):
+        fk_value = current_form.cleaned_data[kwargs["fk_field"]]
+        ct_value = current_form.cleaned_data[kwargs["ct_field"]]
+
+        if ct_value and not fk_value:
+            current_form.add_error(
+                kwargs["ct_field"],
+                forms.Field.default_error_messages["required"],
+            )
+        return fk_value
