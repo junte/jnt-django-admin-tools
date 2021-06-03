@@ -20,6 +20,7 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.8"
 django = ">=3"
+pip = "^21.1.2"
 
 [tool.poetry.dev-dependencies]
 mypy = "*"
