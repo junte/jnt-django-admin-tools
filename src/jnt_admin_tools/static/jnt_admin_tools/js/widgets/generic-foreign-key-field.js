@@ -3,7 +3,7 @@
 
     function overrideDjangoSelect2() {
       function getIds(targetTag) {
-        return encodeURI($(targetTag).data('gfk-Models'));
+        return $(targetTag).data('gfk-Models').split(",");
       }
 
       var init = function($element, options) {
