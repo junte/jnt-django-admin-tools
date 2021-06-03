@@ -1060,7 +1060,7 @@ extras = ["flake8"]
 version = ">=4,<5"
 
 [metadata]
-content-hash = "102e1d0c475805760c9490f2a33c86fbd4ecf4e7a5f776f34bcd91e2fc0a2198"
+content-hash = "c550fb2824eccc2d83d6d649ba355799a75552c4fcb22b1a441be690c21c7c69"
 python-versions = "^3.8"
 
 [metadata.files]
