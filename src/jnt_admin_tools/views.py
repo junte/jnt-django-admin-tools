@@ -1,7 +1,7 @@
 from django.contrib.admin.views.autocomplete import AutocompleteJsonView
 from django.http import Http404, JsonResponse
 from django.utils.text import capfirst
-
+from django.urls import reverse
 from jnt_admin_tools.services.urls import admin_autocomplete_url
 
 
@@ -20,16 +20,24 @@ class ContentTypeAutocompleteView(AutocompleteJsonView):
         self.paginator_class = self.model_admin.paginator
         self.object_list = self.filter_queryset(self.get_queryset())
         context = self.get_context_data()
+
         return JsonResponse(
             {
                 "results": [
                     {
-                        "id": str(obj.pk),
-                        "text": capfirst(obj.model),
+                        "id": str(content_type.pk),
+                        "text": capfirst(content_type.model),
                         # modify
-                        "autocompleteUrl": self.get_autocomplete_ul(obj),
+                        "autocompleteUrl": self.get_autocomplete_ul(
+                            content_type
+                        ),
+                        "data-app": content_type.app_label,
+                        "data-model": content_type.model,
+                        "data-change-url": self._get_change_url_template(
+                            content_type
+                        ),
                     }
-                    for obj in context["object_list"]
+                    for content_type in context["object_list"]
                 ],
                 "pagination": {"more": context["page_obj"].has_next()},
             }
@@ -46,3 +54,12 @@ class ContentTypeAutocompleteView(AutocompleteJsonView):
         if ids:
             queryset = queryset.filter(id__in=ids)
         return queryset
+
+    def _get_change_url_template(self, content_type):
+        list_url = reverse(
+            "admin:{0}_{1}_changelist".format(
+                content_type.app_label,
+                content_type.model,
+            ),
+        )
+        return "{0}{{id}}/change/".format(list_url)

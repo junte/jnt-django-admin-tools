@@ -1,3 +1,3 @@
 from .permissions import PermissionSelectMultipleWidget
 from .permissions_readonly import PermissionSelectMultipleReadonlyWidget
-from .autocomplete import ContentTypeAutocompleteSelect
+from .generic_foreign_key import GenericForeignKeyWidget
