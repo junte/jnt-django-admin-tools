@@ -3,7 +3,7 @@
 
     function overrideDjangoSelect2() {
       function getIds(targetTag) {
-        return encodeURI($(targetTag).data('gfk-Models'));
+        return $(targetTag).data('gfk-Models').split(",");
       }
 
       var init = function($element, options) {
@@ -49,9 +49,20 @@
 
         ExtendedAjaxAdapter.prototype.option = function(data){
           result = originalOption.call(this, data);
-          if (result && data.autocompleteUrl) {
-            result.data('autocompleteUrl', data.autocompleteUrl);
-          }
+          if (result) {
+            if (data.autocompleteUrl) {
+              result.data("autocompleteUrl", data.autocompleteUrl);
+            };
+            if (data["data-app"]) {
+              result.data("app", data["data-app"]);
+            };
+            if (data["data-model"]) {
+              result.data("model", data["data-model"]);
+            };
+            if (data["data-change-url"]) {
+              result.data("change-url", data["data-change-url"]);
+            };
+          };
           return result;
         }
         return ExtendedAjaxAdapter;
@@ -163,6 +174,7 @@
       }
 
       function addForeignField(target, data) {
+        var fkFieldPlaceSelector = ".generic-foreign-key-fk-field";
         var selectClass = 'updated-foreign-field';
         var selectForeignField = $(target).parent().find('.' + selectClass).first();
 
@@ -231,7 +243,7 @@
         };
 
         $sel.addClass(selectClass);
-        $sel.appendTo($(target).parent());
+        $sel.appendTo($(target).parent().find(fkFieldPlaceSelector));
         $sel.data('fk-Field', $(target).data('fk-Field'));
         $sel.select2(settings);
         $sel.parent().find('.select2-container').addClass('select2-container--admin-autocomplete');
@@ -242,5 +254,24 @@
           $('#' + prefixId + fkField).val(newValue.val());
         });
       };
+
+      $("a.clear-generic-field").on("click", function(event) {
+          event.preventDefault();
+          $(event.target).closest(".gfk-related-widget-wrapper").find("select").first().val(null).trigger("change");
+      });
+
+      $("a.generic-foreign-field-wrapper-href").on("click", function (event) {
+        event.preventDefault();
+
+        var $target = $(event.target);
+        var editId = $target.closest(".gfk-related-widget-wrapper").find(".generic-foreign-key-fk-field select").val();
+        var changeUrlTemplate = $target.closest(".gfk-related-widget-wrapper").find(".generic-foreign-key-field").find("option:selected").data("change-url");
+        if (!changeUrlTemplate) {
+          return;
+        };
+        var changeUrl = changeUrlTemplate.replace("{id}", editId);
+        changeUrl = changeUrl + "?_to_field=id&_popup=1";
+        $("a.generic-foreign-field-wrapper-href").attr({"href": changeUrl});
+      });
     });
 }(django.jQuery));

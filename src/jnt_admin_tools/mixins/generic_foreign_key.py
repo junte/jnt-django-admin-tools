@@ -5,7 +5,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.template.response import TemplateResponse
 
 from jnt_admin_tools.db.fields import GenericForeignKey
-from jnt_admin_tools.widgets import ContentTypeAutocompleteSelect
+from jnt_admin_tools.widgets import GenericForeignKeyWidget
+from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 
 
 class GenericForeignKeyAdminMixin:
@@ -49,7 +50,7 @@ class GenericForeignKeyAdminMixin:
             return form_field
 
         is_required = form_field.widget.is_required
-        form_field.widget = ContentTypeAutocompleteSelect(
+        form_field.widget = GenericForeignKeyWidget(
             db_field.remote_field,
             self.admin_site,
             using=kwargs.get("using"),
