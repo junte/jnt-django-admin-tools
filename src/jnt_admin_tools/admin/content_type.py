@@ -1,11 +1,9 @@
 from django.contrib import admin
-from django.contrib.contenttypes.models import ContentType
 
 from jnt_admin_tools.views import ContentTypeAutocompleteView
 
 
-@admin.register(ContentType)
-class ContentTypeAdmin(admin.ModelAdmin):
+class BaseContentTypeAdmin(admin.ModelAdmin):
     search_fields = ("model",)
 
     def has_add_permission(self, request):

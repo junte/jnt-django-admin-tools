@@ -50,17 +50,17 @@
         ExtendedAjaxAdapter.prototype.option = function(data){
           result = originalOption.call(this, data);
           if (result) {
-            if (data.autocompleteUrl) {
-              result.data("autocompleteUrl", data.autocompleteUrl);
+            if (data.autocomplete_url) {
+              result.data("autocompleteUrl", data.autocomplete_url);
             };
-            if (data["data-app"]) {
-              result.data("app", data["data-app"]);
+            if (data.data_app) {
+              result.data("app", data.data_app);
             };
-            if (data["data-model"]) {
-              result.data("model", data["data-model"]);
+            if (data.data_model) {
+              result.data("model", data.data_model);
             };
-            if (data["data-change-url"]) {
-              result.data("change-url", data["data-change-url"]);
+            if (data.data_change_url) {
+              result.data("change-url", data.data_change_url);
             };
           };
           return result;

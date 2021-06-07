@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
+from django.contrib.contenttypes.models import ContentType
 
 from jnt_admin_tools.mixins import (
     ClickableLinksAdminMixin,
@@ -8,11 +9,17 @@ from jnt_admin_tools.mixins import (
 )
 from jnt_admin_tools.mixins import AutocompleteAdminMixin
 from jnt_admin_tools.mixins.base import BaseModelAdmin
+from jnt_admin_tools.admin.content_type import BaseContentTypeAdmin
 from test_app.filters import BarAutocompleteFilter, TagsAutocompleteFilter
 from test_app.forms import GroupAdminForm
 from test_app.models import Bar, Baz, Blog, Comment, Foo, Tag
 
 admin.site.unregister(Group)
+
+
+@admin.register(ContentType)
+class ContentTypeAdmin(BaseContentTypeAdmin):
+    """Register content type."""
 
 
 class BazInlineAdmin(
