@@ -28,12 +28,12 @@ class ContentTypeAutocompleteView(AutocompleteJsonView):
                         "id": str(content_type.pk),
                         "text": capfirst(content_type.model),
                         # modify
-                        "autocompleteUrl": self.get_autocomplete_ul(
+                        "autocomplete_url": self.get_autocomplete_url(
                             content_type
                         ),
-                        "data-app": content_type.app_label,
-                        "data-model": content_type.model,
-                        "data-change-url": self._get_change_url_template(
+                        "data_app": content_type.app_label,
+                        "data_model": content_type.model,
+                        "data_change_url": self._get_change_url_template(
                             content_type
                         ),
                     }
@@ -43,7 +43,7 @@ class ContentTypeAutocompleteView(AutocompleteJsonView):
             }
         )
 
-    def get_autocomplete_ul(self, content_type):
+    def get_autocomplete_url(self, content_type):
         return admin_autocomplete_url(content_type.model_class())
 
     def filter_queryset(self, queryset):
