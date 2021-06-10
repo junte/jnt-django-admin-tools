@@ -1,3 +1,2 @@
 from .permissions import PermissionSelectMultipleWidget
-from .permissions_readonly import PermissionSelectMultipleReadonlyWidget
 from .generic_foreign_key import GenericForeignKeyWidget

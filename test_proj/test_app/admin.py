@@ -3,9 +3,9 @@ from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 
 from jnt_admin_tools.mixins import (
-    ClickableLinksAdminMixin,
     GenericForeignKeyAdminMixin,
     GenericForeignKeyInlineAdminMixin,
+    ReadonlyWidgetsMixin,
 )
 from jnt_admin_tools.mixins import AutocompleteAdminMixin
 from jnt_admin_tools.mixins.base import BaseModelAdmin
@@ -22,7 +22,8 @@ class ContentTypeAdmin(BaseContentTypeAdmin):
     """Register content type."""
 
 
-class BazInlineAdmin(
+class BazInlineAdmin(  # noqa: WPS215
+    ReadonlyWidgetsMixin,
     GenericForeignKeyInlineAdminMixin,
     AutocompleteAdminMixin,
     admin.TabularInline,
@@ -33,13 +34,13 @@ class BazInlineAdmin(
 
 
 @admin.register(Group)
-class GroupAdmin(admin.ModelAdmin):
+class GroupAdmin(BaseModelAdmin):
     form = GroupAdminForm
     readonly_fields = ("permissions",)
 
 
 @admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(BaseModelAdmin, admin.ModelAdmin):
     list_display = ("title",)
     fields = ("title",)
     search_fields = ("title",)
@@ -54,22 +55,20 @@ class FooAdmin(BaseModelAdmin):
 
 
 @admin.register(Bar)
-class BarAdmin(AutocompleteAdminMixin, admin.ModelAdmin):
+class BarAdmin(BaseModelAdmin):
     fields = ("name",)
     search_fields = ("name",)
 
 
 @admin.register(Baz)
-class BazAdmin(AutocompleteAdminMixin, admin.ModelAdmin):
+class BazAdmin(BaseModelAdmin):
     search_fields = ("name",)
 
 
 @admin.register(Blog)
 class BlogAdmin(  # noqa: WPS215
     GenericForeignKeyAdminMixin,
-    AutocompleteAdminMixin,
-    ClickableLinksAdminMixin,
-    admin.ModelAdmin,
+    BaseModelAdmin,
 ):
     list_display = ("title", "author", "tags")
     readonly_fields = ("author", "tags")
@@ -81,8 +80,7 @@ class BlogAdmin(  # noqa: WPS215
 @admin.register(Comment)
 class CommentAdmin(
     GenericForeignKeyAdminMixin,
-    AutocompleteAdminMixin,
-    admin.ModelAdmin,
+    BaseModelAdmin,
 ):
     fieldsets = (
         (None, {"fields": ("title", "content")}),
