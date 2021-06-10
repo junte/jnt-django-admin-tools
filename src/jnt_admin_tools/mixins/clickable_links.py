@@ -1,3 +1,6 @@
+import typing
+import types
+from django.db import models
 from django.contrib.admin.helpers import AdminReadonlyField
 from django.core.exceptions import FieldDoesNotExist
 
@@ -7,6 +10,8 @@ from jnt_admin_tools.services.object_links import (
 from jnt_admin_tools.services.readonly_form_field import (
     get_present_admin_readonly_field,
 )
+from jnt_admin_tools.mixins import ReadonlyWidgetsMixin
+
 
 # Patching AdminReadonlyField
 orig_contents = AdminReadonlyField.contents
@@ -19,7 +24,7 @@ def contents(self):
 AdminReadonlyField.contents = contents
 
 
-class ClickableLinksAdminMixin:
+class ClickableLinksAdminMixin(ReadonlyWidgetsMixin):
     def get_list_display(self, request):
         list_display = super().get_list_display(request)
         return self._updating_list_display(list_display, request)
