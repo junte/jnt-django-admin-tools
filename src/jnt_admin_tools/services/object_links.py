@@ -84,7 +84,9 @@ def get_display_for_many(objects, field_present=None) -> str:
             map(
                 object_change_link,
                 (
-                    getattr(instance, field_present) if field_present else instance
+                    getattr(instance, field_present)
+                    if field_present
+                    else instance
                     for instance in objects
                 ),
             ),
