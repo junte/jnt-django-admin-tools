@@ -1,7 +1,7 @@
 import types
-import typing
+import typing as ty
 
-from django.contrib.admin.helpers import AdminReadonlyField
+from django.core.exceptions import FieldDoesNotExist
 from django.db import models
 
 from jnt_admin_tools.db.fields import GenericForeignKey
@@ -22,21 +22,26 @@ READONLY_WIDGETS = types.MappingProxyType(
         models.CharField: CharChoiceReadonlyWidget(),
         models.TextField: CharChoiceReadonlyWidget(),
         GenericForeignKey: GenericForeignKeyReadonlyWidget(),
-    }
+    },
 )
 
 
 class ReadonlyWidgetsMixin:
     def readonly_widget(
         self,
-        admin_readonly_field: AdminReadonlyField,
-    ) -> typing.Optional[BaseReadOnlyWidget]:
+        field_name: str,
+    ) -> ty.Optional[BaseReadOnlyWidget]:
         """Return readonly widget for admin readonly field."""
+        if callable(field_name) or getattr(self, field_name, None):
+            return None
+
         try:
-            db_field = self.model._meta.get_field(
-                admin_readonly_field.field["field"],
-            )
+            model_field = self.model._meta.get_field(field_name)
         except FieldDoesNotExist:
             return None
 
-        return READONLY_WIDGETS.get(db_field.__class__)
+        return self.readonly_widgets().get(model_field.__class__)
+
+    def readonly_widgets(self) -> ty.Dict[models.Field, BaseReadOnlyWidget]:
+        """Return available readonly_widgets."""
+        return dict(READONLY_WIDGETS)

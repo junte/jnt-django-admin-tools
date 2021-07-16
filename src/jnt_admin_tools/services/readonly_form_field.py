@@ -40,7 +40,7 @@ def get_present_admin_readonly_field(  # noqa: WPS212
     if not func_readonly_widget:
         return None
 
-    readonly_widget = func_readonly_widget(admin_readonly_field)
+    readonly_widget = func_readonly_widget(admin_readonly_field.field["field"])
 
     if readonly_widget:
         return readonly_widget.render(field_value, field_name, db_field=field)

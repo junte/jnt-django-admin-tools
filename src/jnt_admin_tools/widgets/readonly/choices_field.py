@@ -20,4 +20,4 @@ class CharChoiceReadonlyWidget(BaseReadOnlyWidget):
             if choice:
                 return choice[0]
 
-        return None
+        return field_value
