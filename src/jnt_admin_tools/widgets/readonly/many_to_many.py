@@ -10,4 +10,7 @@ class ManyToManyReadonlyWidget(BaseReadOnlyWidget):
         if isinstance(field_value, str):
             return field_value
 
-        return get_display_for_many(field_value.all())
+        return get_display_for_many(
+            field_value.all(),
+            field_present=kwargs.get("field_present"),
+        )

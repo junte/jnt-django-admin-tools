@@ -21,6 +21,9 @@ class ClickableLinksAdminMixin(ReadonlyWidgetsMixin):
     def get_list_display(self, *args, **kwargs):
         list_display = super().get_list_display(*args, **kwargs)
 
+        if len(list_display) < 2:
+            return list_display
+
         updated_list = [list_display[0]]
         updated_list.extend(
             [
@@ -32,12 +35,19 @@ class ClickableLinksAdminMixin(ReadonlyWidgetsMixin):
         return tuple(updated_list)
 
     def _update_column_field(self, column_field):
-        readonly_widget = self.readonly_widget(column_field)
+        """Update column field."""
+        field_present = None
+        field_name = column_field
+        if "__" in field_name:
+            field_name, field_present = field_name.split("__")
+
+        readonly_widget = self.readonly_widget(field_name)
         if not readonly_widget:
             return column_field
 
         return AdminChangeListField(
             model_admin=self,
-            field_name=column_field,
+            field_name=field_name,
             readonly_widget=readonly_widget,
+            field_present=field_present,
         )

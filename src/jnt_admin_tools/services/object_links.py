@@ -75,7 +75,7 @@ def _get_display_related_field(target_obj, attr):
     return object_change_link(obj)
 
 
-def get_display_for_many(objects, field_name=None) -> str:
+def get_display_for_many(objects, field_present=None) -> str:
     if not objects.exists():
         return EMPTY_VALUE
 
@@ -84,7 +84,7 @@ def get_display_for_many(objects, field_name=None) -> str:
             map(
                 object_change_link,
                 (
-                    getattr(instance, field_name) if field_name else instance
+                    getattr(instance, field_present) if field_present else instance
                     for instance in objects
                 ),
             ),
