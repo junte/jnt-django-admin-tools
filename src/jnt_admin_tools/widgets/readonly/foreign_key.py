@@ -10,4 +10,7 @@ class ForeignKeyReadonlyWidget(BaseReadOnlyWidget):
         if isinstance(field_value, str):
             return field_value
 
-        return object_change_link(field_value)
+        return object_change_link(
+            field_value,
+            field_present=kwargs.get("field_present"),
+        )
