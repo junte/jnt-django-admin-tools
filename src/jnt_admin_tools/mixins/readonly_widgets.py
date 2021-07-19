@@ -50,7 +50,6 @@ class ReadonlyWidgetsMixin:
         ):
             return PermissionSelectMultipleReadonlyWidget()
 
-
         return self.readonly_widgets().get(field_class)
 
     def readonly_widgets(self) -> ty.Dict[models.Field, BaseReadOnlyWidget]:
