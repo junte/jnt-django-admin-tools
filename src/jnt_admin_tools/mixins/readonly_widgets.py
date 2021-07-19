@@ -10,8 +10,10 @@ from jnt_admin_tools.widgets.readonly import (
     ForeignKeyReadonlyWidget,
     GenericForeignKeyReadonlyWidget,
     ManyToManyReadonlyWidget,
+    PermissionSelectMultipleReadonlyWidget,
 )
 from jnt_admin_tools.widgets.readonly.base import BaseReadOnlyWidget
+from django.contrib.auth.models import Permission
 
 READONLY_WIDGETS = types.MappingProxyType(
     {
@@ -40,7 +42,15 @@ class ReadonlyWidgetsMixin:
         except FieldDoesNotExist:
             return None
 
-        return self.readonly_widgets().get(model_field.__class__)
+        field_class = model_field.__class__
+
+        if issubclass(field_class, models.ManyToManyField) and issubclass(
+            model_field.related_model,
+            Permission,
+        ):
+            return PermissionSelectMultipleReadonlyWidget()
+
+        return self.readonly_widgets().get(field_class)
 
     def readonly_widgets(self) -> ty.Dict[models.Field, BaseReadOnlyWidget]:
         """Return available readonly_widgets."""
