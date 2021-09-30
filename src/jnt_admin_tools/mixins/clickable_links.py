@@ -1,4 +1,5 @@
 from django.contrib.admin.helpers import AdminReadonlyField
+from django.core.handlers.asgi import ASGIRequest
 
 from jnt_admin_tools.admin.fields.changelist import AdminChangeListField
 from jnt_admin_tools.mixins import ReadonlyWidgetsMixin
@@ -18,8 +19,8 @@ AdminReadonlyField.contents = contents
 
 
 class ClickableLinksAdminMixin(ReadonlyWidgetsMixin):
-    def get_list_display(self, *args, **kwargs):
-        list_display = super().get_list_display(*args, **kwargs)
+    def get_list_display(self, request: ASGIRequest, *args, **kwargs):
+        list_display = super().get_list_display(request, *args, **kwargs)
 
         if len(list_display) < 2:
             return list_display
@@ -27,21 +28,21 @@ class ClickableLinksAdminMixin(ReadonlyWidgetsMixin):
         updated_list = [list_display[0]]
         updated_list.extend(
             [
-                self._update_column_field(column_field)
+                self._update_column_field(column_field, request)
                 for column_field in list_display[1:]
             ],
         )
 
         return tuple(updated_list)
 
-    def _update_column_field(self, column_field):
+    def _update_column_field(self, column_field, request=None):
         """Update column field."""
         field_present = None
         field_name = column_field
         if "__" in field_name:
             field_name, field_present = field_name.split("__")
 
-        readonly_widget = self.readonly_widget(field_name)
+        readonly_widget = self.readonly_widget(field_name, request)
         if not readonly_widget:
             return column_field
 
