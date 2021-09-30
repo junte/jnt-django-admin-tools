@@ -2,6 +2,7 @@ import types
 import typing as ty
 
 from django.core.exceptions import FieldDoesNotExist
+from django.core.handlers.asgi import ASGIRequest
 from django.db import models
 
 from jnt_admin_tools.db.fields import GenericForeignKey
@@ -32,6 +33,7 @@ class ReadonlyWidgetsMixin:
     def readonly_widget(
         self,
         field_name: str,
+        request: ASGIRequest = None,
     ) -> ty.Optional[BaseReadOnlyWidget]:
         """Return readonly widget for admin readonly field."""
         if callable(field_name) or getattr(self, field_name, None):
@@ -50,8 +52,11 @@ class ReadonlyWidgetsMixin:
         ):
             return PermissionSelectMultipleReadonlyWidget()
 
-        return self.readonly_widgets().get(field_class)
+        return self.readonly_widgets(request).get(field_class)
 
-    def readonly_widgets(self) -> ty.Dict[models.Field, BaseReadOnlyWidget]:
+    def readonly_widgets(
+        self,
+        request: ASGIRequest = None,
+    ) -> ty.Dict[models.Field, BaseReadOnlyWidget]:
         """Return available readonly_widgets."""
         return dict(READONLY_WIDGETS)
