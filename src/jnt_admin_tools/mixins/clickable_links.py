@@ -1,5 +1,5 @@
 from django.contrib.admin.helpers import AdminReadonlyField
-from django.core.handlers.asgi import ASGIRequest
+from django.http import HttpRequest
 
 from jnt_admin_tools.admin.fields.changelist import AdminChangeListField
 from jnt_admin_tools.mixins import ReadonlyWidgetsMixin
@@ -19,7 +19,7 @@ AdminReadonlyField.contents = contents
 
 
 class ClickableLinksAdminMixin(ReadonlyWidgetsMixin):
-    def get_list_display(self, request: ASGIRequest, *args, **kwargs):
+    def get_list_display(self, request: HttpRequest, *args, **kwargs):
         list_display = super().get_list_display(request, *args, **kwargs)
 
         if len(list_display) < 2:
