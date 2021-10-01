@@ -2,16 +2,16 @@ import types
 import typing as ty
 
 from django.core.exceptions import FieldDoesNotExist
-from django.core.handlers.asgi import ASGIRequest
 from django.db import models
+from django.http import HttpRequest
 
 from jnt_admin_tools.db.fields import GenericForeignKey
 from jnt_admin_tools.widgets.readonly import (
-    CharChoiceReadonlyWidget,
     ForeignKeyReadonlyWidget,
     GenericForeignKeyReadonlyWidget,
     ManyToManyReadonlyWidget,
     PermissionSelectMultipleReadonlyWidget,
+    StringReadonlyWidget,
 )
 from jnt_admin_tools.widgets.readonly.base import BaseReadOnlyWidget
 from django.contrib.auth.models import Permission
@@ -22,8 +22,8 @@ READONLY_WIDGETS = types.MappingProxyType(
         models.OneToOneField: ForeignKeyReadonlyWidget(),
         models.ManyToManyField: ManyToManyReadonlyWidget(),
         models.ManyToOneRel: ManyToManyReadonlyWidget(),
-        models.CharField: CharChoiceReadonlyWidget(),
-        models.TextField: CharChoiceReadonlyWidget(),
+        models.CharField: StringReadonlyWidget(),
+        models.TextField: StringReadonlyWidget(),
         GenericForeignKey: GenericForeignKeyReadonlyWidget(),
     },
 )
@@ -33,7 +33,7 @@ class ReadonlyWidgetsMixin:
     def readonly_widget(
         self,
         field_name: str,
-        request: ASGIRequest = None,
+        request: HttpRequest = None,
     ) -> ty.Optional[BaseReadOnlyWidget]:
         """Return readonly widget for admin readonly field."""
         if callable(field_name) or getattr(self, field_name, None):
@@ -56,7 +56,7 @@ class ReadonlyWidgetsMixin:
 
     def readonly_widgets(
         self,
-        request: ASGIRequest = None,
+        request: HttpRequest = None,
     ) -> ty.Dict[models.Field, BaseReadOnlyWidget]:
         """Return available readonly_widgets."""
         return dict(READONLY_WIDGETS)

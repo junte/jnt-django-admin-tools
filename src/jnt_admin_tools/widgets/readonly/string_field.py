@@ -2,7 +2,7 @@ from jnt_admin_tools.widgets.readonly.base import BaseReadOnlyWidget
 import typing
 
 
-class CharChoiceReadonlyWidget(BaseReadOnlyWidget):
+class StringReadonlyWidget(BaseReadOnlyWidget):
     def render(
         self,
         field_value,
