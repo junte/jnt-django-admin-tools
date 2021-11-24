@@ -50,11 +50,13 @@ class DeprecationTest(TestCase):
         self.assertNotDeprecated(modules.Feed)
 
     def test_menu(self):
-        self.assertDeprecated(menu.models.Menu)
-        self.assertDeprecated(menu.models.DefaultMenu)
-        self.assertDeprecated(menu.models.MenuItem)
-        self.assertDeprecated(menu.models.AppListMenuItem)
-        self.assertDeprecated(menu.models.BookmarkMenuItem)
+        from jnt_admin_tools.menu import models  # noqa: WPS458
+
+        self.assertDeprecated(models.Menu)
+        self.assertDeprecated(models.DefaultMenu)
+        self.assertDeprecated(models.MenuItem)
+        self.assertDeprecated(models.AppListMenuItem)
+        self.assertDeprecated(models.BookmarkMenuItem)
 
     def test_menu_new(self):
         self.assertNotDeprecated(menu.Menu)
