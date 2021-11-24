@@ -27,13 +27,12 @@ build:
     - docker push $DOCKER_TEST_IMAGE
     - docker push $DOCKER_CACHE_IMAGE
 
-quality:
+lint:
   stage: test
   image: $DOCKER_TEST_IMAGE
   script:
     - cd /app
-    - make check_quality
-
+    - make lint
 
 publish_pypi:
   stage: publish
