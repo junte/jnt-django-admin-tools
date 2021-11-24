@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from jnt_admin_tools.menu import items, Menu
 
+from jnt_admin_tools.menu import Menu, items
 
 # to activate your custom menu add the following to your settings.py:
 #

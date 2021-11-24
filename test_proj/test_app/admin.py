@@ -1,18 +1,18 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
+from test_app.filters import BarAutocompleteFilter, TagsAutocompleteFilter
+from test_app.forms import GroupAdminForm
+from test_app.models import Bar, Baz, Blog, Comment, Foo, Tag
 
+from jnt_admin_tools.admin.content_type import BaseContentTypeAdmin
 from jnt_admin_tools.mixins import (
+    AutocompleteAdminMixin,
     GenericForeignKeyAdminMixin,
     GenericForeignKeyInlineAdminMixin,
     ReadonlyWidgetsMixin,
 )
-from jnt_admin_tools.mixins import AutocompleteAdminMixin
 from jnt_admin_tools.mixins.base import BaseModelAdmin
-from jnt_admin_tools.admin.content_type import BaseContentTypeAdmin
-from test_app.filters import BarAutocompleteFilter, TagsAutocompleteFilter
-from test_app.forms import GroupAdminForm
-from test_app.models import Bar, Baz, Blog, Comment, Foo, Tag
 
 admin.site.unregister(Group)
 

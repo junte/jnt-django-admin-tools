@@ -4,7 +4,6 @@ This module contains the base classes for menu and menu items.
 # for backward-compatibility
 from jnt_admin_tools import menu
 from jnt_admin_tools.deprecate_utils import import_path_is_changed
-from jnt_admin_tools.menu import items
 from django.conf import settings
 from django.db import models
 
@@ -62,7 +61,7 @@ class AppListMenuItem(
         "jnt_admin_tools.menu.models.AppListMenuItem",
         "jnt_admin_tools.menu.items.AppList",
     ),
-    items.AppList,
+    menu.items.AppList,
 ):
     pass
 
@@ -72,6 +71,6 @@ class BookmarkMenuItem(
         "jnt_admin_tools.menu.models.BookmarkMenuItem",
         "jnt_admin_tools.menu.items.Bookmarks",
     ),
-    items.Bookmarks,
+    menu.items.Bookmarks,
 ):
     pass

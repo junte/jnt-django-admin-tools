@@ -2,9 +2,7 @@ from django import forms
 from django.contrib.auth.models import Permission
 from django.db.models import QuerySet
 
-from jnt_admin_tools.widgets import (
-    PermissionSelectMultipleWidget,
-)
+from jnt_admin_tools.widgets import PermissionSelectMultipleWidget
 from jnt_admin_tools.widgets.readonly import (
     PermissionSelectMultipleReadonlyWidget,
 )

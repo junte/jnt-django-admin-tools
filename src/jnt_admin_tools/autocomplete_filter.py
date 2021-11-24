@@ -133,7 +133,7 @@ class AutocompleteFilter(admin.SimpleListFilter):
     def get_remote_field(self, model):
         return model._meta.get_field(self.field_name).remote_field
 
-    def get_rendered_widget(self, field, attrs):
+    def get_rendered_widget(self, field, attrs):  # noqa: WPS615
         return field.widget.render(
             name=self.parameter_name,
             value=self.value(),

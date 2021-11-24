@@ -113,7 +113,7 @@ class Dashboard:
         return "dashboard"
 
     def _prepare_children(self):
-        """ Enumerates children without explicit id """
+        """Enumerates children without explicit id"""
         seen = set()
         for id, module in enumerate(self.children):
             module.id = uniquify(module.id or str(id + 1), seen)

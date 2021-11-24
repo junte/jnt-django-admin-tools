@@ -2,10 +2,7 @@ from tempfile import mktemp
 from django.test import TestCase
 from django.core import management
 
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.models import User
 
 from jnt_admin_tools.menu.items import AppList

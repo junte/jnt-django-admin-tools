@@ -4,10 +4,8 @@ This module contains the base classes for the dashboard and dashboard modules.
 from django.conf import settings
 from django.db import models
 
-# warnings for deprecated imports
+from jnt_admin_tools.dashboard import dashboards, modules
 from jnt_admin_tools.deprecate_utils import import_path_is_changed
-from jnt_admin_tools.dashboard import dashboards
-from jnt_admin_tools.dashboard import modules
 
 user_model = getattr(settings, "AUTH_USER_MODEL", "auth.User")
 

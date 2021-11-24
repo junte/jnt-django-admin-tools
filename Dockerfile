@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.9.7-slim
 
 ENV PYTHONFAULTHANDLER=1 \
   PYTHONUNBUFFERED=1 \
@@ -9,7 +9,7 @@ ENV PYTHONFAULTHANDLER=1 \
   PIPENV_COLORBLIND=true \
   PIPENV_NOSPIN=true \
   C_FORCE_ROOT=true \
-  POETRY_VERSION=1.0.9 \
+  POETRY_VERSION=1.1.11 \
   PATH="/root/.poetry/bin:${PATH}"
 
 WORKDIR /app

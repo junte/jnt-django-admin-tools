@@ -1,5 +1,5 @@
-check_quality:
-	@./scripts/quality.sh
+lint:
+	@./scripts/lint.sh
 
 build:
 	poetry build

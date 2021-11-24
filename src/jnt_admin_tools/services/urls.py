@@ -1,6 +1,6 @@
 from contextlib import suppress
 
-from django.urls import reverse, NoReverseMatch
+from django.urls import NoReverseMatch, reverse
 
 
 def admin_change_url(obj):

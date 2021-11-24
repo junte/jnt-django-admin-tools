@@ -12,7 +12,7 @@ class FakeField:
 
 
 class PermissionSelectMultipleReadonlyWidget(PermissionSelectMultipleWidget):
-    """Permissions multiple readonly widget. """
+    """Permissions multiple readonly widget."""
 
     def __init__(self, *args, **kwargs) -> None:
         """Initializing."""

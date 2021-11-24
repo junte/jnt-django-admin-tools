@@ -5,11 +5,9 @@ from django.urls import re_path
 urlpatterns = []
 
 if "jnt_admin_tools.menu" in settings.INSTALLED_APPS:
-    urlpatterns.append(
-        re_path(r"^menu/", include("jnt_admin_tools.menu.urls"))
-    )
+    urlpatterns.append(re_path("^menu/", include("jnt_admin_tools.menu.urls")))
 
 if "jnt_admin_tools.dashboard" in settings.INSTALLED_APPS:
     urlpatterns.append(
-        re_path(r"^dashboard/", include("jnt_admin_tools.dashboard.urls")),
+        re_path("^dashboard/", include("jnt_admin_tools.dashboard.urls")),
     )

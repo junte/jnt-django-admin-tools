@@ -1,8 +1,7 @@
-from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
-from jnt_admin_tools.dashboard import Dashboard, AppIndexDashboard
-from jnt_admin_tools.dashboard import modules
+from django.utils.translation import gettext_lazy as _
 
+from jnt_admin_tools.dashboard import AppIndexDashboard, Dashboard, modules
 
 # to activate your index dashboard add the following to your settings.py:
 #

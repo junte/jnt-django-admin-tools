@@ -10,10 +10,12 @@ class GenericForeignKey(BaseGenericForeignKey):
         self.related_models = kwargs.pop("related_models", None)
         super().__init__(*args, **kwargs)
 
-    def get_related_models(self):
+    def get_related_models(self):  # noqa: WPS615
         if self.related_models is None:
             self.related_models = [
-                m for m in apps.get_models() if self.has_autocomplete_url(m)
+                model
+                for model in apps.get_models()
+                if self.has_autocomplete_url(model)
             ]
         elif callable(self.related_models):
             self.related_models = list(self.related_models())

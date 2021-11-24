@@ -11,7 +11,7 @@ from django.urls import reverse
 
 
 def uniquify(value, seen_values):
-    """ Adds value to seen_values set and ensures it is unique """
+    """Adds value to seen_values set and ensures it is unique"""
     id = 1
     new_value = value
     while new_value in seen_values:
@@ -49,7 +49,7 @@ def get_admin_site_name(context):
 
 
 def get_avail_models(request):
-    """ Returns (model, perm,) for all models user can possibly see """
+    """Returns (model, perm,) for all models user can possibly see"""
     items = []
     admin_site = get_admin_site(request=request)
 
@@ -160,7 +160,8 @@ class AppListElementMixin:
         """
         app_label = model._meta.app_label
         return reverse(
-            f"{get_admin_site_name(context)}:app_list", args=(app_label,)
+            "{0}:app_list".format(get_admin_site_name(context)),
+            args=(app_label,),
         )
 
     def _get_admin_change_url(self, model, context):
@@ -169,7 +170,11 @@ class AppListElementMixin:
         """
         app_label = model._meta.app_label
         return reverse(
-            f"{get_admin_site_name(context)}:{app_label}_{model.__name__.lower()}_changelist"
+            "{0}:{1}_{2}_changelist".format(
+                get_admin_site_name(context),
+                app_label,
+                model.__name__.lower(),
+            )
         )
 
     def _get_admin_add_url(self, model, context):
@@ -178,5 +183,9 @@ class AppListElementMixin:
         """
         app_label = model._meta.app_label
         return reverse(
-            f"{get_admin_site_name(context)}:{app_label}_{model.__name__.lower()}_add"
+            "{0}:{1}_{2}_add".format(
+                get_admin_site_name(context),
+                app_label,
+                model.__name__.lower(),
+            )
         )
