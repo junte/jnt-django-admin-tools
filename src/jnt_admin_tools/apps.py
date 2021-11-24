@@ -3,6 +3,7 @@ from django.apps import AppConfig
 
 class AdminToolsConfig(AppConfig):
     name = "jnt_admin_tools"
+    default = True
 
     def ready(self):
         super().ready()
