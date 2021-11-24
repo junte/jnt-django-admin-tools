@@ -51,7 +51,7 @@ class MenuItem(
         "jnt_admin_tools.menu.models.MenuItem",
         "jnt_admin_tools.menu.items.MenuItem",
     ),
-    items.MenuItem,
+    menu.items.MenuItem,
 ):
     pass
 
