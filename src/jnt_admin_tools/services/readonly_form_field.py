@@ -34,7 +34,12 @@ def get_present_admin_readonly_field(  # noqa: WPS212
         if field is None:
             field = instance._meta.get_field(field_name)
     except (AttributeError, ValueError, ObjectDoesNotExist, FieldDoesNotExist):
-        return None
+        # custom values can be present at "form.initial"
+        field_name = admin_readonly_field.field["name"]
+        field_value = admin_readonly_field.form.initial.get(field_name)
+        field = None
+        if all((not field_value, not isinstance(field_value, bool))):
+            return None
 
     func_readonly_widget = getattr(model_admin, "readonly_widget", None)
     if not func_readonly_widget:
