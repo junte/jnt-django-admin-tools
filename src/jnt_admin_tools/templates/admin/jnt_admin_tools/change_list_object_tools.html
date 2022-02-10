@@ -1,0 +1,8 @@
+{% extends "admin/change_list_object_tools.html" %}
+
+{% block object-tools-items %}
+{% for changelist_tool in changelist_tools %}
+  <li>{{ changelist_tool }}</li>
+{% endfor %}
+{{ block.super }}
+{% endblock %}

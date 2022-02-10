@@ -1,0 +1,8 @@
+{% extends "admin/submit_line.html" %}
+
+<div class="submit-row">
+{% block submit-row %}
+  {% for changeform_submit in changeform_submits %}{{ changeform_submit }}{% endfor %}
+  {{ block.super }}
+{% endblock %}
+</div>

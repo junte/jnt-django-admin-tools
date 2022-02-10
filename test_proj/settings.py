@@ -156,3 +156,4 @@ ADMIN_TOOLS_INDEX_DASHBOARD = "test_proj.dashboard.CustomIndexDashboard"
 ADMIN_TOOLS_MENU = "test_proj.menu.CustomMenu"
 
 SILENCED_SYSTEM_CHECKS = ("admin.E109",)
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

@@ -1,4 +1,3 @@
-from jnt_admin_tools.db.fields import GenericForeignKey
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -49,7 +48,6 @@ class Baz(models.Model):
     content_type = models.ForeignKey(
         ContentType, models.CASCADE, related_name="+", null=True, blank=True
     )
-    owner = GenericForeignKey(related_models=get_related_models)
 
     blog = models.ForeignKey(Blog, models.SET_NULL, null=True, blank=True)
 
@@ -72,15 +70,11 @@ class Comment(models.Model):
     content_type = models.ForeignKey(
         ContentType, models.CASCADE, related_name="+", null=True, blank=True
     )
-    owner = GenericForeignKey(related_models=get_related_models)
 
     link_content_type = models.ForeignKey(
         ContentType, models.CASCADE, related_name="+", null=True, blank=True
     )
     link_object_id = models.IntegerField(null=True, blank=True)
-    link = GenericForeignKey(
-        ct_field="link_content_type", fk_field="link_object_id"
-    )
 
     def __str__(self):
         return self.title
