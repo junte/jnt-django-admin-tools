@@ -6,7 +6,7 @@ from importlib import import_module
 
 from django.db.models import Model
 from django.template.defaultfilters import slugify
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
 
 from jnt_admin_tools.dashboard import modules
@@ -216,7 +216,7 @@ class AppIndexDashboard(Dashboard):
     def get_id(self):
         """Internal method used to distinguish different
         dashboards in js code."""
-        return "{0}-dashboard".format(slugify(force_text(self.app_title)))
+        return "{0}-dashboard".format(slugify(force_str(self.app_title)))
 
 
 class DefaultIndexDashboard(Dashboard):
