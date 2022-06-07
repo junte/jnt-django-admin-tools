@@ -49,6 +49,7 @@ exclude = '''
     | \.git          # root of the project
     | \.mypy_cache
     | \.pytest_cache
+    | \.venv
     | .*\/migrations
   )/
 )

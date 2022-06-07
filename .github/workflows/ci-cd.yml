@@ -5,17 +5,15 @@ on: [ pull_request, push ]
 jobs:
   build:
     runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        python-version: [ '3.10' ]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup python ${{ matrix.python-version }}
+      - name: Setup python
         uses: actions/setup-python@v3
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.10
+
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
