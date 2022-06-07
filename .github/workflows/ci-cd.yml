@@ -18,6 +18,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install Poetry
         uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
 
       - name: Load cached venv
         id: cached-poetry-dependencies
@@ -31,12 +35,14 @@ jobs:
         run: poetry install --no-interaction --no-root
 
       - name: Lint
-        run: make lint
+        run: |
+          source .venv/bin/activate
+          make lint
 
       - name: Publish
         continue-on-error: true
         run: |
-          poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }} \
-          && poetry build \
-          && poetry publish
+          poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }}
+          poetry build
+          poetry publish
 
