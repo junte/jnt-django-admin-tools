@@ -38,7 +38,7 @@ class BaseChangeformTool(BaseAdminTool):
         self.instance = instance
         super().__init__(model_admin)
 
-    def get_content(self, request) -> ty.Optional[str]:
+    def get_content(self, request) -> str | None:
         """Get content."""
         url = self.get_url(request)
         if not url:
@@ -66,7 +66,7 @@ class BaseChangeformTool(BaseAdminTool):
 class BaseChangelistTool(BaseAdminTool):
     """Base changelist tool."""
 
-    def _get_content(self, *args, **kwargs) -> ty.Optional[str]:
+    def _get_content(self, *args, **kwargs) -> str | None:
         """Get content."""
         url = self.get_url(*args, **kwargs)
         if not url:
