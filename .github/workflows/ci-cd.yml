@@ -30,7 +30,11 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
 
+      - name: Lint
+        run: make lint
+
       - name: Publish
+        continue-on-error: true
         run: |
           poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }} \
           && poetry build \
