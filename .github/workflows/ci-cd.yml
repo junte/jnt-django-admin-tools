@@ -32,12 +32,12 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
 
-      - name: Lint
+      - name: Run lint
         run: |
           source .venv/bin/activate
           make lint
 
-      - name: Publish
+      - name: Run publication
         continue-on-error: true
         run: |
           poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }}
