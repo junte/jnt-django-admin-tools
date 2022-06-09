@@ -22,7 +22,7 @@ class ChangeformSubmitsSet:
     def handle_submit(
         self,
         instance: models.Model,
-    ) -> ty.Optional[HttpResponse]:
+    ) -> HttpResponse | None:
         for submit in self._get_submits(instance):
             if submit.name in self.request.POST:
                 response = submit.handle_submit(self.request, instance)
@@ -36,7 +36,7 @@ class ChangeformSubmitsSet:
     def _get_submits(
         self,
         instance: models.Model,
-    ) -> ty.List[BaseChangeformSubmit]:
+    ) -> list[BaseChangeformSubmit]:
         if not self._submits:
             excluded = self.model_admin.get_exclude_changeform_submits(
                 self.request,

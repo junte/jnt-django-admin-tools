@@ -1,11 +1,8 @@
 import abc
-import typing as ty
 
 from django.contrib import admin
-from django.contrib.admin.utils import unquote
-from django.contrib.auth.admin import csrf_protect_m
 from django.db import models
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import HttpRequest
 from django.utils.html import format_html
 
 
