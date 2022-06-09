@@ -68,4 +68,7 @@ class AdminToolsMixin:
             if route:
                 urls.append(route)
 
-        return (*urls, *super().get_urls())
+        return (
+            *urls,
+            *super().get_urls(),
+        )

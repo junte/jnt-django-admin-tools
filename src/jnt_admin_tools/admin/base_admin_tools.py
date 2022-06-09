@@ -1,9 +1,9 @@
 import abc
+import contextlib
 from functools import update_wrapper
 
 from django.contrib import admin
 from django.contrib.admin.utils import unquote
-from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse
 from django.urls import path, reverse
 from django.utils.html import format_html
@@ -72,9 +72,6 @@ def _changeform_view_wrapper(
             object_id,
         )
 
-    if not model_admin.has_change_permission(request):
-        raise PermissionDenied()
-
     return view.as_view(
         model_admin=model_admin,
         instance=instance,
@@ -111,6 +108,21 @@ class BaseChangeformTool(BaseAdminTool):
             "admin:{0}".format(self.get_route_name(self.model_admin)),
             args=[self.instance.pk],
         )
+
+    def has_permission(self) -> bool:
+        if not self.view:
+            return True
+
+        view = self.view.as_view(
+            model_admin=self.model_admin,
+            instance=self.instance,
+        )
+        view.request = self.request
+
+        with contextlib.suppress(AttributeError):
+            return view.has_permission()
+
+        return True
 
     @property
     def link_html(self) -> str | None:
@@ -167,6 +179,20 @@ class BaseChangelistTool(BaseAdminTool):
         return reverse(
             "admin:{0}".format(self.get_route_name(self.model_admin)),
         )
+
+    def has_permission(self) -> bool:
+        if not self.view:
+            return True
+
+        view = self.view.as_view(
+            model_admin=self.model_admin,
+        )
+        view.request = self.request
+
+        with contextlib.suppress(AttributeError):
+            return view.has_permission()
+
+        return True
 
     @property
     def link_html(self) -> str | None:
