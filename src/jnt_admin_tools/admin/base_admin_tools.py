@@ -1,13 +1,16 @@
 import abc
 import contextlib
-from functools import update_wrapper
 
 from django.contrib import admin
-from django.contrib.admin.utils import unquote
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
 from django.urls import path, reverse
 from django.utils.html import format_html
 from django.views import View
+
+from jnt_admin_tools.helpers.views import (
+    wrap_model_instance_admin_view,
+    wrap_model_list_admin_view,
+)
 
 
 class BaseAdminTool(abc.ABC):
@@ -56,36 +59,6 @@ class BaseAdminTool(abc.ABC):
             model_admin.model._meta.model_name,
             cls.route_postfix,
         )
-
-
-def _changeform_view_wrapper(
-    request: HttpRequest,
-    model_admin: admin.ModelAdmin,
-    view: View,
-    object_id: str,
-) -> HttpResponse:
-    instance = model_admin.get_object(request, unquote(object_id))
-    if instance is None:
-        return model_admin._get_obj_does_not_exist_redirect(
-            request,
-            model_admin.model._meta,
-            object_id,
-        )
-
-    return view.as_view(
-        model_admin=model_admin,
-        instance=instance,
-    )(request)
-
-
-def _changelist_view_wrapper(
-    request: HttpRequest,
-    model_admin: admin.ModelAdmin,
-    view: View,
-) -> HttpResponse:
-    return view.as_view(
-        model_admin=model_admin,
-    )(request)
 
 
 class BaseChangeformTool(BaseAdminTool):
@@ -149,23 +122,12 @@ class BaseChangeformTool(BaseAdminTool):
 
     @classmethod
     def get_route(cls, model_admin):
-        def wrap(view):
-            def wrapper(*args, **kwargs):
-                return model_admin.admin_site.admin_view(view)(
-                    *args,
-                    model_admin=model_admin,
-                    view=cls.view,
-                    **kwargs,
-                )
-
-            return update_wrapper(wrapper, view)
-
         if not cls.view:
             return None
 
         return path(
             cls.route_path,
-            wrap(_changeform_view_wrapper),
+            wrap_model_instance_admin_view(model_admin, cls.view),
             name=cls.get_route_name(model_admin),
         )
 
@@ -219,22 +181,11 @@ class BaseChangelistTool(BaseAdminTool):
 
     @classmethod
     def get_route(cls, model_admin):
-        def wrap(view):
-            def wrapper(*args, **kwargs):
-                return model_admin.admin_site.admin_view(view)(
-                    *args,
-                    model_admin=model_admin,
-                    view=cls.view,
-                    **kwargs,
-                )
-
-            return update_wrapper(wrapper, view)
-
         if not cls.view:
             return None
 
         return path(
             cls.route_path,
-            wrap(_changelist_view_wrapper),
+            wrap_model_list_admin_view(model_admin, cls.view),
             name=cls.get_route_name(model_admin),
         )
