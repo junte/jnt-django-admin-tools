@@ -91,8 +91,6 @@ def _changelist_view_wrapper(
 class BaseChangeformTool(BaseAdminTool):
     """Base admin tool."""
 
-    code: str
-
     def __init__(
         self,
         model_admin: admin.ModelAdmin,
