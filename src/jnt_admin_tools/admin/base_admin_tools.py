@@ -85,11 +85,11 @@ class BaseChangeformTool(BaseAdminTool):
         if not self.view:
             return True
 
-        view = self.view.as_view(
+        view = self.view(
             model_admin=self.model_admin,
             instance=self.instance,
         )
-        view.request = self.request
+        view.setup(self.request)
 
         with contextlib.suppress(AttributeError):
             return view.has_permission()
@@ -145,10 +145,10 @@ class BaseChangelistTool(BaseAdminTool):
         if not self.view:
             return True
 
-        view = self.view.as_view(
+        view = self.view(
             model_admin=self.model_admin,
         )
-        view.request = self.request
+        view.setup(self.request)
 
         with contextlib.suppress(AttributeError):
             return view.has_permission()
