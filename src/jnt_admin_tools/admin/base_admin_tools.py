@@ -1,5 +1,6 @@
 import abc
 import contextlib
+import typing as ty
 
 from django.contrib import admin
 from django.http import HttpRequest
@@ -19,7 +20,7 @@ class BaseAdminTool(abc.ABC):
     label: str
     label_class: str | None = None
     link_target: str | None = None
-    view: View | None = None
+    view: ty.Type[View] | None = None
     route_postfix: str | None = None
     route_path: str | None = None
 
