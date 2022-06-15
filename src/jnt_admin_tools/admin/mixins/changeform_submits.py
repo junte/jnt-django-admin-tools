@@ -78,7 +78,7 @@ class ChangeFormSubmitsMixin:
                 continue
 
             submit = submit_class(self)
-            if submit.has_permission(self, instance):
+            if submit.has_permission(request, instance):
                 submits.append(submit)
 
         return submits
