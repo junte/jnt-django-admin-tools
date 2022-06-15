@@ -34,7 +34,7 @@ class BaseAdminTool(abc.ABC):
         self.request = request
 
     @property
-    def link_html(self) -> str | None:
+    def html(self) -> str | None:
         raise NotImplementedError()
 
     def get_url(self) -> str:
@@ -97,7 +97,7 @@ class BaseChangeformTool(BaseAdminTool):
         return True
 
     @property
-    def link_html(self) -> str | None:
+    def html(self) -> str | None:
         """Get content."""
         url = self.get_url()
         if not url:
@@ -156,7 +156,7 @@ class BaseChangelistTool(BaseAdminTool):
         return True
 
     @property
-    def link_html(self) -> str | None:
+    def html(self) -> str | None:
         """Get content."""
         url = self.get_url()
         if not url:

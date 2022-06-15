@@ -2,7 +2,7 @@
 
 {% block object-tools-items %}
   {% for tool in changelist_tools %}
-    <li>{{ tool.link_html }}</li>
+    <li>{{ tool.html }}</li>
   {% endfor %}
   {{ block.super }}
 {% endblock %}

@@ -1,14 +1,9 @@
-import abc
-import typing as ty
-
-from django.contrib import admin
 from django.contrib.admin.utils import unquote
 from django.contrib.auth.admin import csrf_protect_m
 from django.db import models
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
-from django.utils.html import format_html
 
-from jnt_admin_tools.admin.changeform_submits_set import ChangeformSubmitsSet
+from jnt_admin_tools.admin.base_changeform_submit import BaseChangeformSubmit
 
 
 class ChangeFormSubmitsMixin:
@@ -23,10 +18,8 @@ class ChangeFormSubmitsMixin:
         form_url="",
         obj=None,  # noqa: WPS110
     ):
-
-        context["changeform_submits"] = ChangeformSubmitsSet(
+        context["changeform_submits"] = self._get_submits_for_instance(
             request,
-            self,
             obj,
         )
 
@@ -39,29 +32,31 @@ class ChangeFormSubmitsMixin:
             obj,
         )
 
-    def get_exclude_changeform_submits(self, request):
+    def get_exclude_changeform_submits(self, request: HttpRequest):
         return ()
 
-    def get_changeform_submits(self, request, instance):  # noqa: WPS615
+    def get_changeform_submits(  # noqa: WPS615
+        self,
+        request: HttpRequest,
+        instance,
+    ):
         return self.changeform_submits
 
     @csrf_protect_m
     def changeform_view(
         self,
-        request,
+        request: HttpRequest,
         object_id=None,
         form_url="",
         extra_context=None,
-    ):
+    ) -> HttpResponse:
         if request.method == "POST" and object_id:
             instance = self.get_object(request, unquote(object_id))
-            response_view = ChangeformSubmitsSet(
-                request,
-                self,
-                instance,
-            ).handle_submit(instance)
-            if response_view:
-                return response_view
+
+            for submit in self._get_submits_for_instance(request, instance):
+                if submit.name in request.POST:
+                    response = submit.handle_submit(request, instance)
+                    return response or HttpResponseRedirect(request.path)
 
         return super().changeform_view(
             request,
@@ -69,3 +64,21 @@ class ChangeFormSubmitsMixin:
             form_url,
             extra_context,
         )
+
+    def _get_submits_for_instance(
+        self,
+        request: HttpRequest,
+        instance: models.Model,
+    ) -> list[BaseChangeformSubmit]:
+        excluded = self.get_exclude_changeform_submits(request)
+        changeform_submits = self.get_changeform_submits(request, instance)
+        submits = []
+        for submit_class in changeform_submits:
+            if submit_class in excluded:
+                continue
+
+            submit = submit_class(self)
+            if submit.has_permission(self, instance):
+                submits.append(submit)
+
+        return submits

@@ -2,7 +2,9 @@
 
 <div class="submit-row">
 {% block submit-row %}
-  {% for changeform_submit in changeform_submits %}{{ changeform_submit }}{% endfor %}
+  {% for submit in changeform_submits %}
+    {{ submit.html }}
+  {% endfor %}
   {{ block.super }}
 {% endblock %}
 </div>

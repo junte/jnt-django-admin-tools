@@ -15,9 +15,14 @@ class BaseChangeformSubmit(abc.ABC):
 
     name: str
     title: str
-    confirm: str = ""
+    confirm_text: str = ""
 
     def __init__(self, model_admin: admin.ModelAdmin) -> None:
+        if self.name[0] != "_":
+            raise ValueError(
+                '"name" must be prepended with underscore. Example, "_save"'
+            )
+
         self.model_admin = model_admin
 
     def has_permission(
@@ -35,10 +40,11 @@ class BaseChangeformSubmit(abc.ABC):
     ) -> None:
         """Handle submit."""
 
-    def get_content(self) -> str:
+    @property
+    def html(self) -> str:
         onclick = (
-            "return confirm('{0}')".format(self.confirm)
-            if self.confirm
+            "return confirm('{0}')".format(self.confirm_text)
+            if self.confirm_text
             else None
         )
 
