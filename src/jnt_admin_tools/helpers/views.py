@@ -24,17 +24,15 @@ def wrap_model_instance_admin_view(
                     object_id,
                 )
 
-            return model_admin.admin_site.admin_view(
-                view.as_view(
-                    model_admin=model_admin,
-                    instance=instance,
-                    **view_kwargs,
-                )
+            return view.as_view(
+                model_admin=model_admin,
+                instance=instance,
+                **view_kwargs,
             )(request, **kwargs)
 
         return update_wrapper(wrapper, view)
 
-    return wrap()
+    return model_admin.admin_site.admin_view(wrap())
 
 
 def wrap_model_list_admin_view(
@@ -46,13 +44,11 @@ def wrap_model_list_admin_view(
 
     def wrap():
         def wrapper(request: HttpRequest, **kwargs) -> HttpResponse:
-            return model_admin.admin_site.admin_view(
-                view.as_view(
-                    model_admin=model_admin,
-                    **view_kwargs,
-                )
+            return view.as_view(
+                model_admin=model_admin,
+                **view_kwargs,
             )(request, **kwargs)
 
         return update_wrapper(wrapper, view)
 
-    return wrap()
+    return model_admin.admin_site.admin_view(wrap())
