@@ -5,7 +5,7 @@ Based on https://github.com/django-admin-tools/django-admin-tools
 
 `docs <https://junte.gitlab.io/packages/public/django/jnt-django-admin-tools>`_
 
-django-admin-tools is a collection of extensions/tools for the default django
+jnt-django-admin-tools is a collection of extensions/tools for the default django
 administration interface, it includes:
 
 * a full featured and customizable dashboard;
