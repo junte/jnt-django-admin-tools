@@ -128,23 +128,6 @@ class AppListElementMixin:
     def _visible_models(self, request):
         # compatibility layer: generate models/exclude patterns
         # from include_list/exclude_list args
-
-        if self.include_list:
-            warnings.warn(
-                "`include_list` is deprecated for ModelList and AppList and "
-                "will be removed in future releases. Please use `models` "
-                "instead.",
-                DeprecationWarning,
-            )
-
-        if self.exclude_list:
-            warnings.warn(
-                "`exclude_list` is deprecated for ModelList and AppList and "
-                "will be removed in future releases. Please use `exclude` "
-                "instead.",
-                DeprecationWarning,
-            )
-
         included = self.models[:]
         included.extend([elem + "*" for elem in self.include_list])
 
