@@ -128,14 +128,7 @@ class AppListElementMixin:
     def _visible_models(self, request):
         # compatibility layer: generate models/exclude patterns
         # from include_list/exclude_list args
-        included = self.models[:]
-        included.extend([elem + "*" for elem in self.include_list])
-
-        excluded = self.exclude[:]
-        excluded.extend([elem + "*" for elem in self.exclude_list])
-        if self.exclude_list and not included:
-            included = ["*"]
-        return filter_models(request, included, excluded)
+        return filter_models(request, self.models[:], self.exclude[:])
 
     def _get_admin_app_list_url(self, model, context):
         """
