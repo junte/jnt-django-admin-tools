@@ -76,6 +76,7 @@ class BaseChangeformTool(BaseAdminTool):
         super().__init__(model_admin, request)
 
     def get_url(self) -> str:
+        """Get url."""
         return reverse(
             "{0}:{1}".format(
                 self.model_admin.admin_site.name,
