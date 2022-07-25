@@ -1,10 +1,10 @@
 {% extends "admin/submit_line.html" %}
 
 <div class="submit-row">
-{% block submit-row %}
-  {% for submit in changeform_submits %}
-    {{ submit.html }}
-  {% endfor %}
-  {{ block.super }}
-{% endblock %}
+  {% block submit-row %}
+    {% for submit in changeform_submits %}
+      {{ submit.html }}
+    {% endfor %}
+    {{ block.super }}
+  {% endblock %}
 </div>
