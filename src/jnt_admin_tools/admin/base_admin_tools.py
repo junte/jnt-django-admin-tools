@@ -141,7 +141,10 @@ class BaseChangelistTool(BaseAdminTool):
 
     def get_url(self) -> str:
         return reverse(
-            "admin:{0}".format(self.get_route_name(self.model_admin)),
+            "{0}:{1}".format(
+                self.model_admin.admin_site.name,
+                self.get_route_name(self.model_admin),
+            ),
         )
 
     def has_permission(self) -> bool:
