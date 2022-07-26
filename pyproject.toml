@@ -33,11 +33,10 @@ pytest-xdist = "*"
 factory-boy = "*"
 flake8 = "*"
 flake8-pytest-style = "*"
-flake8-coding = "*"
+flake8-class-attributes-order = "*"
 pytest-freezegun = "*"
 wemake-python-styleguide = "*"
 black = "*"
-flake8-class-attributes-order = "*"
 
 [tool.black]
 line-length = 79

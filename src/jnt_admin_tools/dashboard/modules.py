@@ -144,7 +144,7 @@ class DashboardModule:
         return (
             self.pre_content is None
             and self.post_content is None
-            and len(self.children) == 0
+            and not len(self.children)
         )
 
     def render_css_classes(self):

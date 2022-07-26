@@ -46,7 +46,7 @@ class BaseAdminTool(abc.ABC):
         return self.label
 
     @classmethod
-    def get_route(cls, model_admin):
+    def get_route(cls, model_admin: admin.ModelAdmin):
         return None  # noqa: WPS324
 
     def has_permission(self) -> bool:

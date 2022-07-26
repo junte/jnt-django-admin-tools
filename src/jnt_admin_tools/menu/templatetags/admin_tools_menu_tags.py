@@ -33,12 +33,13 @@ def admin_tools_render_menu(context, menu=None):
     menu.init_with_context(context)
     has_bookmark_item = False
     bookmark = None
-    if len([c for c in menu.children if isinstance(c, items.Bookmarks)]) > 0:
+    if [c for c in menu.children if isinstance(c, items.Bookmarks)]:
         has_bookmark_item = True
         url = context["request"].get_full_path()
         try:
             bookmark = Bookmark.objects.filter(
-                user=context["request"].user, url=url
+                user=context["request"].user,
+                url=url,
             )[0]
         except:
             pass

@@ -67,10 +67,9 @@ def admin_tools_render_dashboard(context, location="index", dashboard=None):
             "split_at": math.ceil(
                 float(len(dashboard.children)) / float(dashboard.columns)
             ),
-            "has_disabled_modules": len(
-                [m for m in dashboard.children if not m.enabled]
-            )
-            > 0,
+            "has_disabled_modules": bool(
+                len([m for m in dashboard.children if not m.enabled])
+            ),
             "admin_url": reverse("%s:index" % get_admin_site_name(context)),
         }
     )

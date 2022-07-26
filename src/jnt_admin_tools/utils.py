@@ -11,11 +11,11 @@ from django.urls import reverse
 
 def uniquify(value, seen_values):
     """Adds value to seen_values set and ensures it is unique"""
-    id = 1
+    index = 1
     new_value = value
     while new_value in seen_values:
-        new_value = "%s%s" % (value, id)
-        id += 1
+        new_value = "{0}{1}".format(value, index)
+        index += 1
     seen_values.add(new_value)
     return new_value
 
@@ -82,9 +82,7 @@ def filter_models(request, models, exclude):
     # performance is not a bottleneck. If it is not the case then the code
     # should be optimized.
 
-    if len(models) == 0:
-        included = items
-    else:
+    if models:
         for pattern in models:
             wildcard_models = []
             for item in items:
@@ -105,6 +103,8 @@ def filter_models(request, models, exclude):
                     key=lambda x: x[0]._meta.verbose_name_plural
                 )
                 included += wildcard_models
+    else:
+        included = items
 
     result = included[:]
     for pattern in exclude:

@@ -1,7 +1,8 @@
-from jnt_admin_tools.utils import AppListElementMixin
 from django.apps import apps as django_apps
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+
+from jnt_admin_tools.utils import AppListElementMixin
 
 
 class MenuItem:
@@ -116,9 +117,8 @@ class MenuItem:
         descendants URL is equals to the current URL.
         """
         current_url = request.get_full_path()
-        return (
-            self.url == current_url
-            or len([c for c in self.children if c.is_selected(request)]) > 0
+        return self.url == current_url or len(
+            [c for c in self.children if c.is_selected(request)]
         )
 
     def is_empty(self):
@@ -235,7 +235,7 @@ class AppList(MenuItem, AppListElementMixin):
         >>> item.is_empty()
         True
         """
-        return len(self.children) == 0
+        return not len(self.children)
 
 
 class ModelList(MenuItem, AppListElementMixin):
@@ -317,7 +317,7 @@ class ModelList(MenuItem, AppListElementMixin):
         >>> item.is_empty()
         True
         """
-        return len(self.children) == 0
+        return not len(self.children)
 
 
 class Bookmarks(MenuItem, AppListElementMixin):
