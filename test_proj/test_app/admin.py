@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
+
+from jnt_admin_tools.admin.base_admin import BaseModelAdmin
 from test_app.admin_tools import (
     BbcSiteChangelistTool,
     GoogleSiteChangeformTool,
@@ -23,19 +25,19 @@ class BazInlineAdmin(admin.TabularInline):
 
 
 @admin.register(Group)
-class GroupAdmin(admin.ModelAdmin):
+class GroupAdmin(BaseModelAdmin):
     readonly_fields = ("permissions",)
 
 
 @admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(BaseModelAdmin):
     list_display = ("title",)
     fields = ("title",)
     search_fields = ("title",)
 
 
 @admin.register(Foo)
-class FooAdmin(admin.ModelAdmin):
+class FooAdmin(BaseModelAdmin):
     list_display = ("name",)
     fields = ("name", "bar")
     search_fields = ("name",)
@@ -43,7 +45,7 @@ class FooAdmin(admin.ModelAdmin):
 
 
 @admin.register(Bar)
-class BarAdmin(AdminToolsMixin, ChangeFormSubmitsMixin, admin.ModelAdmin):
+class BarAdmin(BaseModelAdmin):
     fields = ("name",)
     search_fields = ("name",)
     changeform_tools = (GoogleSiteChangeformTool, YandexSiteChangeformTool)
@@ -52,12 +54,12 @@ class BarAdmin(AdminToolsMixin, ChangeFormSubmitsMixin, admin.ModelAdmin):
 
 
 @admin.register(Baz)
-class BazAdmin(admin.ModelAdmin):
+class BazAdmin(BaseModelAdmin):
     search_fields = ("name",)
 
 
 @admin.register(Blog)
-class BlogAdmin(admin.ModelAdmin):
+class BlogAdmin(BaseModelAdmin):
     list_display = ("title", "author", "tags")
     readonly_fields = ("author", "tags")
     search_fields = ("title",)
@@ -65,7 +67,7 @@ class BlogAdmin(admin.ModelAdmin):
 
 
 @admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
+class CommentAdmin(BaseModelAdmin):
     fieldsets = (
         (None, {"fields": ("title", "content")}),
         (
