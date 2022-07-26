@@ -9,7 +9,7 @@ from jnt_admin_tools.menu import items
 from jnt_admin_tools.utils import get_admin_site_name
 
 
-class Menu(object):
+class Menu:
     """
     This is the base class for creating custom navigation menus.
     A menu can have the following properties:

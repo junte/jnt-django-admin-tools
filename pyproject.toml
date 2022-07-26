@@ -18,7 +18,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-django = ">=3.2"
+django = "3.*"
 
 [tool.poetry.dev-dependencies]
 mypy = "*"

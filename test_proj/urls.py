@@ -1,14 +1,20 @@
 from django.conf import settings
-from django.conf.urls import include, url
+from django.conf.urls import include
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.views.static import serve
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.urls import path
 
-admin.autodiscover()
+admin.site.site_header = "Django admin tools demo"
+admin.site.site_title = "Django admin tools demo"
+admin.site.index_title = "Welcome to Django admin tools demo"
 
 urlpatterns = [
-    url("^admin/", admin.site.urls),
-    url("^jnt_admin_tools/", include("jnt_admin_tools.urls")),
-    url(
-        "^static/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}
-    ),
+    path("admin/", admin.site.urls),
+    path("admin_tools/", include("jnt_admin_tools.urls")),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns = staticfiles_urlpatterns() + urlpatterns

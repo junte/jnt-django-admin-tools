@@ -1,7 +1,8 @@
 from urllib.parse import unquote
 
-from jnt_admin_tools.menu.models import Bookmark
 from django import forms
+
+from jnt_admin_tools.menu.models import Bookmark
 
 
 class BookmarkForm(forms.ModelForm):
@@ -10,8 +11,12 @@ class BookmarkForm(forms.ModelForm):
     It expects the user to be passed in from the view.
     """
 
+    class Meta:
+        fields = ("url", "title")
+        model = Bookmark
+
     def __init__(self, user, *args, **kwargs):
-        super(BookmarkForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.user = user
 
     def clean_url(self):
@@ -19,13 +24,11 @@ class BookmarkForm(forms.ModelForm):
         return unquote(url)
 
     def save(self, *args, **kwargs):
-        bookmark = super(BookmarkForm, self).save(
-            commit=False, *args, **kwargs
+        bookmark = super().save(
+            commit=False,
+            *args,
+            **kwargs,
         )
         bookmark.user = self.user
         bookmark.save()
         return bookmark
-
-    class Meta:
-        fields = ("url", "title")
-        model = Bookmark

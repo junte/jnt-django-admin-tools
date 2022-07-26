@@ -93,9 +93,6 @@ WSGI_APPLICATION = "test_proj.wsgi.application"
 import django
 from distutils.version import LooseVersion
 
-version = django.get_version()
-
-
 MIDDLEWARE = (
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -137,7 +134,6 @@ INSTALLED_APPS = [
     "jnt_admin_tools",
     "jnt_admin_tools.dashboard",
     "jnt_admin_tools.menu",
-    "jnt_admin_tools.theming",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -150,7 +146,6 @@ INSTALLED_APPS = [
     "django.contrib.admindocs",
     "test_app",
 ]
-
 
 ADMIN_TOOLS_INDEX_DASHBOARD = "test_proj.dashboard.CustomIndexDashboard"
 ADMIN_TOOLS_MENU = "test_proj.menu.CustomMenu"

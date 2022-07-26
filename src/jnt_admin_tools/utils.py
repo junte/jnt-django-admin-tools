@@ -1,7 +1,6 @@
 """
 Admin ui common utilities.
 """
-import warnings
 from fnmatch import fnmatch
 from importlib import import_module
 
@@ -75,7 +74,7 @@ def filter_models(request, models, exclude):
     included = []
 
     def full_name(model):
-        return "%s.%s" % (model.__module__, model.__name__)
+        return "{0}.{1}".format(model.__module__, model.__name__)
 
     # I beleive that that implemented
     # O(len(patterns)*len(matched_patterns)*len(all_models))
