@@ -5,7 +5,7 @@
   <script type="text/javascript" charset="utf-8">
     // Load js files syncronously and conditionally
 
-    var js_files = [
+    var dashboardJsFiles = [
       {
         src: '{% static "admin/js/vendor/jquery/jquery.min.js" %}',
         test: function () {
@@ -50,7 +50,7 @@
         }{% endfor %}
     ];
 
-    loadScripts(js_files, function () {
+    loadScripts(dashboardJsFiles, function () {
       jQuery(function ($) {
         init_dashboard(
           '{{ dashboard.get_id }}',

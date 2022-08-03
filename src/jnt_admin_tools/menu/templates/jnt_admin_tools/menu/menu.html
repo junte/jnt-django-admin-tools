@@ -4,7 +4,7 @@
   <script type="text/javascript" charset="utf-8">
 
     // Load js files syncronously and conditionally
-    const js_files = [
+    const menuJsFiles = [
       {
         src: '{% static "admin/js/vendor/jquery/jquery.min.js" %}',
         test: function () {
@@ -31,7 +31,7 @@
         }{% endfor %}
     ];
 
-    loadScripts(js_files, function () {
+    loadScripts(menuJsFiles, function () {
       jQuery(function ($) {
         {% if has_bookmark_item %}
           process_bookmarks(
