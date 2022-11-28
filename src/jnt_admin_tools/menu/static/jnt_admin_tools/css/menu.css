@@ -43,11 +43,11 @@ div.breadcrumbs {
 }
 
 #header #navigation-menu {
-  height: 35px;
+  height: 30px;
   z-index: 9999;
-  background: #f8f8f8;
-  border-bottom: 1px solid #ddd;
+  border-top: 1px solid var(--primary);
   clear: both;
+  display: flex;
 }
 
 #header #bookmark-button {
@@ -70,16 +70,16 @@ div.breadcrumbs {
 
 #header ul#navigation-menu li {
   float: left;
-  line-height: 16px;
+  line-height: 14px;
+  padding: 0;
 }
 
 #header ul#navigation-menu li a {
   display: block;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 8px 30px 9px 15px;
-  border-right: 1px solid #ededed;
-  color: #555;
+  padding: 8px 30px 8px 15px;
+  border-right: 1px solid var(--primary);
 }
 
 #header ul#navigation-menu li a.has-icon:after {
@@ -99,13 +99,13 @@ div.breadcrumbs {
 #header ul#navigation-menu li.first a {
   margin: 0 0 0 12px;
   text-indent: 14px;
-  background: transparent url(../images/admin-tools.png) no-repeat 0 -380px;
+  background: transparent url(../images/admin-tools.png) no-repeat 0 -382px;
 }
 
 #header ul#navigation-menu li:hover,
 #header ul#navigation-menu li.over,
 #header ul#navigation-menu li.selected {
-  background: #fff;
+  background: var(--header-bg);
 }
 
 #header ul#navigation-menu li ul {
@@ -114,7 +114,6 @@ div.breadcrumbs {
   top: auto;
   left: auto;
   margin-left: -1px;
-  margin-top: -1px;
 }
 
 #header ul#navigation-menu li ul li {
@@ -126,7 +125,7 @@ div.breadcrumbs {
 
 #header ul#navigation-menu li ul li a {
   display: block;
-  border: 1px solid #ededed;
+  border: 1px solid var(--border-color);
   border-width: 0 1px 1px 1px;
   text-transform: none;
 }
@@ -138,7 +137,7 @@ div.breadcrumbs {
 #header ul#navigation-menu li ul li ul {
   left: 100%;
   top: 0;
-  border-top: 1px solid #ededed;
+  border-top: 1px solid var(--border-color);
 }
 
 #header ul#navigation-menu li ul li ul li a {
@@ -161,14 +160,14 @@ div.breadcrumbs {
 #header ul#navigation-menu li.over > ul li,
 #header ul#navigation-menu li ul li:hover > ul li,
 #header ul#navigation-menu li ul li.over > ul li {
-  background: #fff;
+  background: var(--button-bg);
 }
 
 #header ul#navigation-menu li ul li:hover,
 #header ul#navigation-menu li ul li.over,
 #header ul#navigation-menu li ul li ul li:hover,
 #header ul#navigation-menu li ul li ul li.over {
-  background: #fafafa;
+  background: var(--button-hover-bg);
 }
 
 #header ul#navigation-menu li.disabled a:hover,

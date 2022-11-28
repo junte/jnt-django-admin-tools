@@ -1,0 +1,22 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-prettier"
+  ],
+  "ignoreFiles": [
+    "server/apps/core/static/vendor/**",
+    "server/apps/media/static/vendor/cropper/css/media/cropper.min.css"
+  ],
+  "rules": {
+    "max-empty-lines": 1,
+    "selector-list-comma-newline-after": "always-multi-line",
+    "property-no-vendor-prefix": [
+      true,
+      {
+        "ignoreProperties": [
+          "mask-image"
+        ]
+      }
+    ]
+  }
+}

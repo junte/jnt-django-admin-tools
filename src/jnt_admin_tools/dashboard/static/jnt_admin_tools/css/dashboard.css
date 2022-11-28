@@ -1,11 +1,6 @@
-/* Utilities {{{ */
-
 .float-right {
   float: right;
 }
-
-/* }}} */
-/* Dashboard general styles {{{ */
 
 .warning {
   color: red;
@@ -16,7 +11,6 @@
 .dashboard #content {
   display: block;
   width: auto;
-!important;
   margin: 15px 5px;
 }
 
@@ -40,9 +34,7 @@ h1.dashboard-title {
   min-width: 100px;
   display: block;
   text-align: center;
-  border: 1px solid #e5e5e5;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+  border: 1px solid var(--border-color);
 }
 
 #dashboard-panel ul {
@@ -55,8 +47,8 @@ h1.dashboard-title {
 
 #dashboard-panel ul li {
   padding: 5px;
-  border: 1px solid #e5e5e5;
-  background-color: white;
+  border: 1px solid var(--border-color);
+  background-color: var(--body-bg);
 }
 
 #dashboard-panel ul li a {
@@ -84,17 +76,14 @@ h1.dashboard-title {
 }
 
 .dashboard-module {
-  margin: 10px 10px 5px 10px;
+  margin: 10px 10px 5px;
   padding: 0;
-  border: 1px solid #e5e5e5;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+  border: 1px solid var(--border-color);
 }
 
 .dashboard-placeholder {
-  border: 2px dashed #cbe0ff;
-  background-color: #f8f8f8;
-  margin: 10px 10px 5px 10px;
+  background-color: var(--body-bg);
+  margin: 10px 10px 5px;
 }
 
 .dashboard-module h2 {
@@ -102,9 +91,9 @@ h1.dashboard-title {
   padding: 7px 5px 8px 8px;
   text-align: left;
   font-weight: normal;
-  background: #f8f8f8;
+  background: var(--header-bg);
   height: 20px;
-  color: #555;
+  color: var(--primary-fg);
 }
 
 .dashboard-module.draggable h2 {
@@ -156,23 +145,20 @@ h1.dashboard-title {
 .dashboard-module h3 {
   padding: 5px 8px;
   margin: 0;
-  background: #fafafa;
+  background: var(--primary);
   height: 22px;
+  color: var(--header-link-color);
 }
 
 .dashboard-module h3 a {
   margin: 0;
-  color: #666;
+  color: var(--header-link-color);
   font-size: 13px;
   font-weight: normal;
 }
 
 .dashboard-module-content {
-  border-top: 1px solid #ececec;
-}
-
-.dashboard-module-content a {
-  color: #5B80B2;
+  border-top: 1px solid var(--border-color);
 }
 
 .dashboard-module-content p {
@@ -183,14 +169,7 @@ h1.dashboard-title {
   vertical-align: top;
   padding: 5px 8px;
   line-height: 20px;
-}
-
-.dashboard-module ul li.odd {
-  background: #f5f5f5;
-}
-
-.dashboard-module ul li.even {
-  background: #ffffff;
+  background: var(--body-bg);
 }
 
 .dashboard-module ul li a.external-link {
@@ -211,16 +190,7 @@ h1.dashboard-title {
   padding: 0 5px;
   vertical-align: top;
   height: auto;
-  line-height: auto;
 }
-
-.dashboard-module ul li:hover {
-  background: #fffff4;
-}
-
-/* }}} */
-/* link list specific styles {{{ */
-
 
 .dashboard-module ul.inline {
   display: block;
@@ -239,8 +209,6 @@ h1.dashboard-title {
   background: none;
 }
 
-/* }}} */
-/* Dashboard groups {{{ */
 
 .group {
   border: 0;
@@ -250,12 +218,9 @@ h1.dashboard-title {
 
 .group ul {
   background: none;
-  background-color: #fafafa;
-  border-width: 0 0 1px 0;
-  border-color: #d3d3d3;
-  -moz-border-radius: 0;
-  -webkit-border-radius: 0;
-  border-radius: 0;
+  background-color: var(--body-bg);
+  border-width: 0 0 1px;
+  border-color: var(--border-color);
 }
 
 .group ul li.group-tabs-link {
@@ -276,23 +241,12 @@ h1.dashboard-title {
 .group-accordion .group-accordion-header {
   display: block;
   clear: both;
-  border: none;
-  -moz-border-radius: 0;
-  -webkit-border-radius: 0;
-  border-radius: 0;
-  border-bottom: 1px solid #d3d3d3;
+  border-bottom: 1px solid var(--border-color);
   margin: 0;
   background: none;
-  background-color: #f6f6f6;
-}
-
-.group-accordion .group-accordion-header.ui-state-default {
-  background-color: #f0f0f0;
 }
 
 .group-accordion .dashboard-module {
   border: 0;
 }
 
-
-/* }}} */

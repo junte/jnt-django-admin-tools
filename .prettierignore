@@ -1,0 +1,6 @@
+server/apps/core/static/vendor
+server/apps/media/static/vendor
+*min.js
+server/apps/core/djangoql/static/djangoql
+server/apps/core/static/admin/js/core/websocketbridge.js
+server/apps/core/static/admin/js/core/widgets/codemirror/beautify.js
