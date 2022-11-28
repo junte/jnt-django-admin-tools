@@ -14,7 +14,7 @@ from jnt_admin_tools.helpers.views import (
 )
 
 
-class BaseAdminTool(abc.ABC):
+class BaseAdminTool(abc.ABC):  # noqa: B024
     """Base admin tool."""
 
     label: str
