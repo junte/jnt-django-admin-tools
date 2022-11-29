@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jnt-django-admin-tools"
-version = "0.12.19"
+version = "0.12.20"
 description="Improved django admin interface"
 authors = ["Junte <tech@junte.ru>"]
 classifiers=[
@@ -8,8 +8,6 @@ classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-        'Framework :: Django :: 3',
-        'Framework :: Django :: 4',
         'Topic :: Software Development :: Libraries :: Python Modules'
 ]
 
@@ -19,7 +17,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-django = ">=3"
+django = ">=4"
 jnt-django-toolbox = "*"
 
 [tool.poetry.dev-dependencies]

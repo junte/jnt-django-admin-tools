@@ -29,11 +29,11 @@ def set_preferences(request, dashboard_id):
             instance=preferences,
         )
         if form.is_valid():
-            preferences = form.save()
-            if request.is_ajax():
+            form.save()
+            if request.accepts("application/json"):
                 return HttpResponse("true")
             messages.success(request, "Preferences saved")
-        elif request.is_ajax():
+        elif request.accepts("application/json"):
             return HttpResponse("false")
     else:
         form = DashboardPreferencesForm(

@@ -1,19 +1,22 @@
 lint:
-	@./scripts/lint.sh
+	black --check .
+#  mypy .
+	flake8 .
+#  xenon --max-absolute A --max-modules A --max-average A .
+	poetry check
+	pip check
 
 build:
-	poetry build
+	@poetry build
 
 publish:
-	poetry publish
+	@poetry publish
 
 release: build publish
 
-pre_commit:
-	@ pre-commit
+pre-commit:
+	@pre-commit
 
-pre_commit_install:
-	@ pre-commit install && pre-commit install --hook-type commit-msg
-
-pre_commit_update:
-	@ pre-commit autoupdate
+pre-commit-install:
+	@pre-commit install
+	@pre-commit install --hook-type commit-msg
