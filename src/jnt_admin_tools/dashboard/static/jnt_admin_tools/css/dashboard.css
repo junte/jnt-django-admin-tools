@@ -146,7 +146,6 @@ h1.dashboard-title {
   padding: 5px 8px;
   margin: 0;
   background: var(--primary);
-  height: 22px;
   color: var(--header-link-color);
 }
 
@@ -249,4 +248,3 @@ h1.dashboard-title {
 .group-accordion .dashboard-module {
   border: 0;
 }
-
