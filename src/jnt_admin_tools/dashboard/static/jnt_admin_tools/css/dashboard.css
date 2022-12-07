@@ -165,10 +165,7 @@ h1.dashboard-title {
 }
 
 .dashboard-module ul li {
-  vertical-align: top;
   padding: 5px 8px;
-  line-height: 20px;
-  background: var(--body-bg);
 }
 
 .dashboard-module ul li a.external-link {
