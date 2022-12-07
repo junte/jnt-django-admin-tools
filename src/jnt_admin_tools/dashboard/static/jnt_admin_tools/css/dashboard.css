@@ -78,7 +78,6 @@ h1.dashboard-title {
 .dashboard-module {
   margin: 10px 10px 5px;
   padding: 0;
-  border: 1px solid var(--border-color);
 }
 
 .dashboard-placeholder {
@@ -137,7 +136,7 @@ h1.dashboard-title {
 .dashboard-module h3 {
   padding: 5px 8px;
   margin: 0;
-  background: var(--secondary);
+  background: var(--primary);
   color: var(--header-link-color);
 }
 
@@ -150,6 +149,7 @@ h1.dashboard-title {
 
 .dashboard-module-content {
   border-top: 1px solid var(--border-color);
+  background: var(--darkened-bg);
 }
 
 .dashboard-module-content p {
