@@ -125,7 +125,7 @@ div.breadcrumbs {
 
 #header ul#navigation-menu li ul li a {
   display: block;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--secondary);
   border-width: 0 1px 1px 1px;
   text-transform: none;
 }
@@ -137,7 +137,7 @@ div.breadcrumbs {
 #header ul#navigation-menu li ul li ul {
   left: 100%;
   top: 0;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--secondary);
 }
 
 #header ul#navigation-menu li ul li ul li a {
