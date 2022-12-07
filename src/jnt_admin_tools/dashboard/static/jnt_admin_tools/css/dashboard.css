@@ -91,9 +91,9 @@ h1.dashboard-title {
   padding: 7px 5px 8px 8px;
   text-align: left;
   font-weight: normal;
-  background: var(--header-bg);
+  background: var(--darkened-bg);
   height: 20px;
-  color: var(--primary-fg);
+  color: var(--body-quiet-color);
 }
 
 .dashboard-module.draggable h2 {
@@ -133,10 +133,6 @@ h1.dashboard-title {
   background-position: 0 -125px;
 }
 
-.dashboard-module h2 a.close-icon:hover {
-  background-position: 0 -145px;
-}
-
 .fixed h2 span.toggle-icon,
 .fixed h2 span.close-icon {
   display: none;
@@ -145,7 +141,7 @@ h1.dashboard-title {
 .dashboard-module h3 {
   padding: 5px 8px;
   margin: 0;
-  background: var(--primary);
+  background: var(--secondary);
   color: var(--header-link-color);
 }
 
