@@ -53,6 +53,10 @@ def get_avail_models(request):
     admin_site = get_admin_site(request=request)
 
     for model, model_admin in admin_site._registry.items():
+        has_module_perms = model_admin.has_module_permission(request)
+        if not has_module_perms:
+            continue
+
         perms = model_admin.get_model_perms(request)
         if True not in perms.values():
             continue
