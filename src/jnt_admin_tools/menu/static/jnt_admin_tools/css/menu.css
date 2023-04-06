@@ -1,8 +1,8 @@
 #header {
   overflow: visible;
   min-height: 67px;
-  display: block;
   padding: 0;
+  flex-wrap: wrap;
 }
 
 div.breadcrumbs {
@@ -49,6 +49,7 @@ div.breadcrumbs {
   border-bottom: 1px solid var(--primary);
   clear: both;
   display: flex;
+  flex-basis: 100%;
 }
 
 #header #bookmark-button {
