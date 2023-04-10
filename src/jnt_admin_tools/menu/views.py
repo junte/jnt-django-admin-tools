@@ -3,6 +3,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
+from jnt_django_toolbox.helpers.requests import is_ajax
 
 from .forms import BookmarkForm
 from .models import Bookmark
@@ -20,7 +21,7 @@ def add_bookmark(request):
         form = BookmarkForm(user=request.user, data=request.POST)
         if form.is_valid():
             bookmark = form.save()
-            if not request.is_ajax():
+            if not is_ajax(request):
                 messages.success(request, "Bookmark added")
                 if request.POST.get("next"):
                     return HttpResponseRedirect(request.POST.get("next"))
@@ -49,7 +50,7 @@ def edit_bookmark(request, id):
         )
         if form.is_valid():
             form.save()
-            if not request.is_ajax():
+            if not is_ajax(request):
                 messages.success(request, "Bookmark updated")
                 if request.POST.get("next"):
                     return HttpResponseRedirect(request.POST.get("next"))
@@ -73,7 +74,7 @@ def remove_bookmark(request, id):
     bookmark = get_object_or_404(Bookmark, id=id, user=request.user)
     if request.method == "POST":
         bookmark.delete()
-        if not request.is_ajax():
+        if not is_ajax(request):
             messages.success(request, "Bookmark removed")
             if request.POST.get("next"):
                 return HttpResponseRedirect(request.POST.get("next"))
