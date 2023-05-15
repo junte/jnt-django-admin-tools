@@ -16,6 +16,7 @@ class BaseChangeformSubmit(abc.ABC):
     name: str
     title: str
     confirm_text: str = ""
+    color: str = ""
 
     def __init__(self, model_admin: admin.ModelAdmin) -> None:
         if self.name[0] != "_":
@@ -48,11 +49,16 @@ class BaseChangeformSubmit(abc.ABC):
             else None
         )
 
+        style = []
+        if self.color:
+            style.append("background-color: {0}".format(self.color))
+
         button_attrs = {
             "type": "submit",
             "value": self.title,
             "name": self.name,
             "onclick": onclick,
+            "style": ";".join(style),
         }
 
         return format_html(
