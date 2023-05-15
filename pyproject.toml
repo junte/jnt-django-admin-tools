@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jnt-django-admin-tools"
-version = "0.12.27"
+version = "0.12.28"
 description="Improved django admin interface"
 authors = ["Junte <tech@junte.ru>"]
 classifiers=[
