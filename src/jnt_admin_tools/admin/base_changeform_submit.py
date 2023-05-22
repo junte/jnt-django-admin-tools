@@ -1,9 +1,15 @@
 import abc
+from enum import StrEnum
 
 from django.contrib import admin
 from django.db import models
 from django.http import HttpRequest
 from django.utils.html import format_html
+
+
+class SubmitPosition(StrEnum):
+    LEFT = "left"
+    RIGHT = "right"
 
 
 class BaseChangeformSubmit(abc.ABC):
@@ -17,6 +23,7 @@ class BaseChangeformSubmit(abc.ABC):
     title: str
     confirm_text: str = ""
     style: str = ""
+    position: SubmitPosition = SubmitPosition.RIGHT
 
     def __init__(self, model_admin: admin.ModelAdmin) -> None:
         if self.name[0] != "_":
