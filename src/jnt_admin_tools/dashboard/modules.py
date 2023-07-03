@@ -442,12 +442,17 @@ class AppList(DashboardModule, AppListElementMixin):
 
     def init_with_context(self, context) -> None:
         """Init with context."""
+        if self._initialized:
+            return
+
         apps = self.get_apps(context)
 
         for app in sorted(apps.keys()):
             # sort model list alphabetically
             apps[app]["models"].sort(key=lambda x: x["title"])
             self.children.append(apps[app])
+
+        self._initialized = True
 
     def get_apps(self, context) -> dict[str, object]:
         """Get apps for representation."""
