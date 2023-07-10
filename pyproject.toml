@@ -16,7 +16,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 django = ">=4"
 jnt-django-toolbox = "*"
 
@@ -40,7 +40,7 @@ black = "*"
 
 [tool.black]
 line-length = 79
-target-version = ['py310']
+target-version = ['py311']
 include = '\.pyi?$'
 exclude = '''
 (

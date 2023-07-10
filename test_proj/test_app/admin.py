@@ -2,6 +2,9 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 
 from jnt_admin_tools.admin.base_admin import BaseModelAdmin
+from jnt_admin_tools.list_filters.model_autocomplete import (
+    ModelAutocompleteChangeListFilter,
+)
 from test_app.admin_tools import (
     BbcSiteChangelistTool,
     GoogleSiteChangeformTool,
@@ -16,6 +19,11 @@ from jnt_admin_tools.admin.mixins import (
 )
 
 admin.site.unregister(Group)
+
+
+class BarListFilter(ModelAutocompleteChangeListFilter):
+    title = "bar"
+    parameter_name = "bar"
 
 
 class BazInlineAdmin(admin.TabularInline):
@@ -41,7 +49,7 @@ class FooAdmin(BaseModelAdmin):
     list_display = ("name",)
     fields = ("name", "bar")
     search_fields = ("name",)
-    list_filter = ("name",)
+    list_filter = ("name", BarListFilter)
 
 
 @admin.register(Bar)

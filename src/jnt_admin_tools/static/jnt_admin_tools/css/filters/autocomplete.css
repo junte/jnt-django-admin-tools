@@ -1,0 +1,23 @@
+#changelist-filter .select2-container {
+    width: 100% !important;
+}
+
+#changelist-filter .select2-container a {
+    display: inline-block;
+    color: var(--link-fg);
+}
+
+/* stylelint-disable selector-class-pattern */
+#changelist-filter span.select2-selection__choice__remove {
+    margin-left: 5px;
+}
+
+#changelist-filter
+.select2-container
+.select2-dropdown
+.select2-results
+.select2-results__options {
+    overflow-wrap: break-word;
+}
+
+/* stylelint-enable */
